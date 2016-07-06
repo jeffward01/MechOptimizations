@@ -1131,6 +1131,8 @@ function () {
         recording.licensePRWriterCount = 0;
         angular.forEach(recording.licensePRWriters,
             function (writer, i_writer) {
+
+
                 if ($scope.writerFilter(writer)) {
                     recording.licensePRWriterCount += 1;
                     if (writer.controlled) {

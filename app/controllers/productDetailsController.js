@@ -10,18 +10,33 @@ app.controller('productDetailsController',
         $stateParams,
         localStorageService,
         contactDefaultsService) {
+
+        //Start Contoller
+
+
+
         $scope.productDetail = {};
         $scope.productDetail.recordings = [];
         $scope.isCollapsed = true;
         var productId = $stateParams.productId;
         productsService.getProductDetailsHeader(productId)
             .then(function(result) {
-                    $scope.productDetail = result.data;
-                    getRecordings();
+                $scope.productDetail = result.data;
+
+                getRecordings();
+                angular.forEach($scope.productDetail.recordings,
+                function (recording) {
+                    alert(JSON.stringify($scope.selectedWriterFilter));
+                    recording.filteredWriterCount = $scope.getFilteredWriterCount(recording);
+                });
                 },
                 function(error) {
                     alert(error.data.message);
                 });
+
+
+
+
         $scope.productsForCreateLicense = [];
         $scope.licenses = [];
 
@@ -45,6 +60,105 @@ app.controller('productDetailsController',
             }
         }
 
+        //This counts the number of filterd writers on a recording
+        $scope.getFilteredWriterCount = function(recording) {
+            var count = 0;
+            angular.forEach(recording.writers,
+                function(writer) {
+                    if ($scope.writerFilter(writer)) {
+                        count++;
+                    };
+                });
+            return count;
+        }
+
+
+
+       
+
+
+
+
+        $scope.writerFilter = function (writer) {
+            if ($scope.selectedWriterFilter.Name == "Controlled Writers") {
+                if (writer.controlled == true) {
+        
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            if ($scope.selectedWriterFilter.Name == "Uncontrolled Writers") {
+                if (writer.controlled == false) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            if ($scope.selectedWriterFilter.Name == "Licensed Writers") {
+                
+                if (writer.licenseProductRecordingWriter.isLicensed) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            if ($scope.selectedWriterFilter.Name == "Unlicensed Writers") {
+                if (!writer.licenseProductRecordingWriter.isLicensed) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        //The code from the licenseDetail page includes on the writer property 'writer.licenseProductRecordingWriter.isLicensed.'.  ProductDetails does not have that property.
+        //This catches the error and prints out to console.
+        function errorCatchWriter(writer) {
+            if (writer.licenseProductRecordingWriter == null) {
+                console.log("Writer ipCode: " +
+                    writer.ipCode +
+                    " Name: " +
+                    writer.name +
+                    " has NULL for licenseProductRecordingWriter.  and therefore licenseProductRecordingWriter is not accessable from NULL");
+                return false;
+            }
+        }
+
+        $scope.selectWriterFilter = function (f) {
+            $scope.selectedWriterFilter = f;
+            switch (f.Id) {
+                case 1:
+                    angular.forEach($scope.productDetail.recordings, function (recording) {
+                        recording.filteredWriterCount = $scope.getFilteredWriterCount(recording);
+                    });
+               
+                    break;
+                case 2:
+                    angular.forEach($scope.productDetail.recordings, function (recording) {
+                        recording.filteredWriterCount = $scope.getFilteredWriterCount(recording);
+                    });
+                    break;
+                case 3:
+                    angular.forEach($scope.productDetail.recordings, function (recording) {
+                        recording.filteredWriterCount = $scope.getFilteredWriterCount(recording);
+                    });
+                    break;
+                case 4:
+                    angular.forEach($scope.productDetail.recordings, function (recording) {
+                        recording.filteredWriterCount = $scope.getFilteredWriterCount(recording);
+                    });
+                    break;
+                case 5:
+                    angular.forEach($scope.productDetail.recordings, function (recording) {
+                        recording.filteredWriterCount = $scope.getFilteredWriterCount(recording);
+                    });
+                    break;
+                default: break;
+            }
+        };
 
      $scope.dropdownHandler = function() {
 
@@ -144,6 +258,9 @@ app.controller('productDetailsController',
             
             angular.forEach($scope.productDetail.recordings,
                 function (recording) {
+               
+
+
                     productsService.getWorksWriters(recording.track.copyrights[0].workCode)
                         .then(function (result) {
                             angular.forEach(result.data,
@@ -166,6 +283,8 @@ app.controller('productDetailsController',
 
                             var response = result.data;
                             recording.writers = result.data;
+                            //get writer count on load
+                            recording.filteredWriterCount = $scope.getFilteredWriterCount(recording);
                         });
                 });
             $scope.productsForCreateLicense.push({ licenseId: null, product_id: $scope.productDetail.id, title: $scope.productDetail.title, recsArtist: $scope.productDetail.artist, recsLabel: $scope.productDetail.recordLabel, licensesNo: $scope.productDetail.relatedLicensesNo, recordingsNo: $scope.productDetail.recordings.length })

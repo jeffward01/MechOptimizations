@@ -2,7 +2,7 @@
     <section class="license-overview shadow">
         <section class="license-header">
             <span class="priority-report">
-                <input type="checkbox" securitydisable actions="ProductPriorityReport" ng-model="productDetail.mechsPriority" ng-click="updateProductPriority(productDetail.id, productDetail.mechsPriority)" /><label>Priority Report</label>
+                <input type="checkbox" securitydisable actions="ProductPriorityReport" ng-model="productDetail.mechsPriority" ng-click="updateProductPriority(productDetail.id, productDetail.mechsPriority)" /><label>Priority1 Report</label>
             </span>
             <span class="product-icon"></span>
             <h2><span ng-bind="productDetail.title"></span></h2>
@@ -204,7 +204,7 @@
                         </td>
 
                         <td class="twentyfive-percent top"><span ng-bind="recording.track.artist.name"></span></td>
-                        <td class="five-percent top"><button class="btn-default" ng-disabled="recording.track.writerCount == 0" ng-click="collapseWriters(recording)"><span ng-bind="recording.track.writerCount"></span><span class="{{setCaret(recording.writersCollapsed)}}"></span></button></td>
+                        <td class="five-percent top"><button class="btn-default" ng-disabled="recording.track.writerCount == 0" ng-click="collapseWriters(recording)"><span>{{recording.filteredWriterCount}}</span><span class="{{setCaret(recording.writersCollapsed)}}"></span></button></td>
                         <td class="five-percent top"><span ng-bind="recording.track.duration | limitTo:-5"></span></td>
                         <td class="five-percent top"><span ng-bind="recording.umpgPercentageRollup | percentage:2"></span></td>
                         <td class="five-percent top"><span ng-repeat="copyright in recording.track.copyrights"><span ng-bind="copyright.workCode"></span><br /></span></td>
@@ -224,7 +224,7 @@
                                         <th class="twenty-percent">Recent Writer Note</th>
                                     </tr>
                                 </thead>
-                                <tbody ng-repeat="writer in recording.writers">
+                                <tbody ng-repeat="writer in recording.writers | filter: writerFilter">
                                     <tr class="details-writer-row" ng-style="{{writerBackground(writer.controlled)}}">
                                         <td class="ten-percent top"><span ng-bind="writer.name"></span></td>
                                         <td class="ten-percent centered top">
