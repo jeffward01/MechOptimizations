@@ -1,0 +1,218 @@
+﻿<button ng-click="xxx()">TEST(none)</button>
+<!--<pre>{{writerRateConfig | json }}</pre>-->
+
+<tr ng-style="{{$parent.writerBackground(writer.controlled)}}" class="details-writer-row">
+    <td class="ten-percent top">
+        <span bo-text="writer.name"></span>
+    </td>
+    <td class="one-percent top">
+        <!--<span bo-if="isSampleWriter(writer.name, recording.track.copyrights)" class="badge sample pull-right">SAMPLE</span>-->
+        <span bo-if="isSampleWriter(writer.name, recordingCopyrights)" class="badge sample pull-right">SAMPLE</span>
+        <!--<span bo-if="isSampleWriter(writer.name, recording.track.copyrights[0].sampledWorks[0].writers)" class="badge sample pull-right">SAMPLE</span>-->
+    </td>
+    <!--<td class="five-percent top"> Jeff Commented this out. I added a Badge (line 251) instead.
+        <span class="badge">{{writer.sample}}</span>
+    </td>-->
+    <td class="twentyfive-percent top">
+        <span bindonce ng-repeat="originalPublisher in writer.originalPublishers | filter:{zeroValue:false} track by $index">
+            <span class="float-left-subpub" bindonce ng-repeat="administrator in originalPublisher.administrators  track by $index">
+                <span bo-if='!originalPublisher.SeExists && administrator.capacityCode=="AM" && !originalPublisher.zeroValue'>
+                    <span bo-text="administrator.name"></span><span style="margin-left: 4px; margin-right: 4px">/</span>
+                    <span bo-text="administrator.pub.name"></span>
+                    <span bindonce ng-repeat='affiliation in administrator.pub.affiliations | filter:{incomeGroup:"Performance"} track by $index'>
+                        <span bindonce ng-repeat='a in affiliation.affiliations track by $index'>
+                            (<span bo-text="a.societyAcronym"></span>)
+                        </span>
+                    </span>
+                </span>
+                <span bo-if='originalPublisher.SeExists && administrator.capacityCode=="SE" && !originalPublisher.zeroValue'>
+                    <span bo-text="administrator.name"></span>
+                    <span bindonce ng-repeat='affiliation in administrator.affiliations  | filter:{incomeGroup:"Performance"}'>
+                        <span bindonce ng-repeat='a in affiliation.affiliations  track by $index'>
+                            (<span bo-text="a.societyAcronym"></span>)
+                        </span> <span style="margin-left: 4px; margin-right: 4px">/</span>
+                        <span bo-text="administrator.pub.name"></span>
+                    </span>
+                </span>
+            </span>
+            <br />
+        </span>
+        <div><!--num pubs:{{writer.originalPublishers.length}},controlled:{{writer.controlled}}}--></div>
+    </td>
+    <td class="ten-percent top" bo-if="recordingClaimException==true">
+        <!-- Override -->
+        <span bo-if="writeriter.licenseProductRecordingWriter.claimExceptionOverride != null">
+            <span bo-text="writer.licenseProductRecordingWriter.claimExceptionOverride | percentage:2"></span>
+        </span>
+    </td>
+    <td class="ten-percent top">
+        <!-- Override -->
+        <span bo-if="writer.licenseProductRecordingWriter.splitOverride >= 0 && writer.licenseProductRecordingWriter.splitOverride !=null" class="strike-through">
+            <span bo-text="writer.contribution | percentage:2"></span>
+        </span>
+        <span bo-if="writer.licenseProductRecordingWriter.splitOverride >= 0 && writer.licenseProductRecordingWriter.splitOverride !=null" class="override"> <span bo-text="writer.licenseProductRecordingWriter.splitOverride | percentage:2"></span></span>
+        <!-- No Override -->
+        <span bo-if="writer.licenseProductRecordingWriter.splitOverride==null"> <span bo-text="writer.contribution | percentage:2"></span></span>
+    </td>
+    <td class="ten-percent top" bo-if="licenseDetail == 5 ||licenseDetailStatusId== 7">
+        <div bo-if="writer.licenseProductRecordingWriter.executedSplit>=0"><span bo-text="writer.licenseProductRecordingWriter.executedSplit | percentage:2"></span></div>
+    </td>
+    <td class="twentyeight-percent top">
+        <span bo-text="writer.licenseProductRecordingWriter.mostRecentNote"></span>
+    </td>
+    <td class="one-percent top">
+        <button bo-show="buttons.writerNoteBtn && writer.controlled" security actions="LicenseDetailWriterNote" class="btn btn-default btn-sm" bo-if="writer.licenseProductRecordingWriter.writerNoteCount > 0" ng-click="$parent.collapseWriterNotes(writer)"><span bo-text="writer.licenseProductRecordingWriter.writerNoteCount"></span><span class="caret"></span></button>
+        <button bo-show="buttons.writerNoteBtn && writer.controlled" security actions="LicenseDetailWriterNote" class="btn btn-default btn-sm notes-btn" bo-if="writer.licenseProductRecordingWriter.writerNoteCount == 0" ng-click="$parent.collapseWriterNotes(writer)">New Note<span class="caret"></span></button>
+    </td>
+    <td class="one-percent top">
+        <!--<button bo-show="buttons.editIndividualRates && writer.controlled" class="btn btn-default btn-sm" security actions="LicenseDetailEditIndivdualRate" ng-click="$parent.editWriterRate(licenseDetail, licenseDetailTypeId, licenseDetail.licenseId, writer, product.productId, recording.id, recording.track.duration,recording.track.claimException,licenseDetail.statusesRollup,recording.licenseRecording.statusRollup)">Edit Rates</button>-->
+        <!--<button bo-show="buttons.editIndividualRates && writer.controlled" class="btn btn-default btn-sm" security actions="LicenseDetailEditIndivdualRate" ui-sref="SearchMyView.DetailLicense.StepsModal.EditWriterRate({license:licenseDetail, licenseTypeId: licenseDetailTypeId, licenseId: licenseDetail.licenseId, writer: writer, productId: product.productId, recordingId: recording.id,songDuration:recording.track.duration,claimException:recording.track.claimException,statsRollup:licenseDetail.statusesRollup,trackStatsRollup:recording.licenseRecording.statusRollup})">Edit Rates</button>-->
+        <button bo-show="buttons.editIndividualRates && writer.controlled" class="btn btn-default btn-sm" security actions="LicenseDetailEditIndivdualRate" ui-sref="SearchMyView.DetailLicense.StepsModal.EditWriterRate({license:licenseDetail, licenseTypeId: licenseDetailTypeId, licenseId: licenseDetail.licenseId, writer: writer, productId: product.productId, recordingId: recordingId,songDuration:trackDuration,claimException:recordingClaimException,statsRollup:licenseDetail.statusesRollup,trackStatsRollup: trackStatsRollup})">Edit Rates</button>
+
+        
+    </td>
+</tr>
+<tr>
+    <td colspan="12" class="table writer-notes" collapse="!writer.writerNotesCollapsed">
+        <table class="table" bo-show="writer.licenseProductRecordingWriter.writerNotes.length == 0" security actions="LicenseDetailWriterNote">
+            <tr>
+                <td><textarea class="writer-note" ng-model-options="{debounce:1000}" ng-model="writer.newWriterNote"></textarea></td>
+                <td class="one-percent top no-wrap">
+                    <button class="btn btn-default btn-sm narrow" ng-click="$parent.saveWriterNote(writer, 43, {}, writer.newWriterNote, -1)" bo-disabled="writer.newWriterNote | isEmpty"><span class="icon save"></span></button>
+                </td>
+            </tr>
+        </table>
+        <table class="table" bo-show="writer.licenseProductRecordingWriter.writerNotes.length > 0" security actions="LicenseDetailWriterNote">
+            <thead>
+                <tr>
+                    <th class="ten-percent">Created Date</th>
+                    <th class="fifteen-percent">Created By</th>
+                    <th class="seventyfive-percent">Note</th>
+                    <th class="ten-percent centered">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr bindonce ng-repeat-start="writernote in writer.licenseProductRecordingWriter.writerNotes">
+                    <td class="ten-percent top"><span bo-text="writernote.createdDate | timezone | date:'MM/dd/yyyy'"></span><!--({{writernote.licenseWriterId}})--></td>
+                    <td class="fifteen-percent top"><span bo-text="writernote.createdBy"></span></td>
+                    <td class="seventyfive-percent top"><span bo-text="writernote.note"></span></td>
+                    <td class="ten-percent top no-wrap">
+                        <button bo-show="buttons.writerNoteBtn && writer.controlled" class="btn btn-default btn-sm narrow" title="New Note" ng-click="$parent.collapseWriterAddNotes(writer, writernote)"><span class="icon add-note"></span></button>
+                        <button bo-show="buttons.writerNoteBtn && writer.controlled" class="btn btn-default btn-sm narrow" title="Edit Note" ng-click="$parent.collapseEditNote(writer, writernote)"><span class="icon edit"></span></button>
+                        <button bo-show="buttons.writerNoteBtn && writer.controlled" class="btn btn-default btn-sm narrow" title="Delete Note" ng-click="$parent.removeWriterNote(writer, writernote.licenseWriterNoteId)"><span class="icon delete"></span></button>
+                        <input type="hidden" ng-model="currentWriteNoteId" />
+                    </td>
+                </tr>
+                <tr bindonce ng-repeat-end="writernote in writer.licenseProductRecordingWriter.writerNotes">
+
+                    <td class="writer-add-note" colspan="12" bo-show="writernote.editNoteVisible">
+                        <table class="table writer-notes">
+                            <tr>
+                                <td class="onehundred-percent"><textarea class="writer-note" ng-model-options="{debounce:1000}" ng-model="writernote.editNoteValue"></textarea></td>
+                                <td class="one-percent no-wrap">
+                                    <button class="btn btn-default btn-sm narrow" ng-click="$parent.saveWriterNote(writer, 43, writernote, writernote.editNoteValue,writernote.licenseWriterNoteId)" bo-disabled="writernote.editNoteValue | isEmpty"><span class="icon save"></span></button>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+
+                    <td class="writer-add-note" colspan="12" bo-show="writer.addNewNoteVisible">
+                        <table class="table writer-notes">
+                            <tr>
+                                <td class="onehundred-percent"><textarea class="writer-note" ng-model-options="{debounce:1000}" ng-model="writer.newWriterNote"></textarea></td>
+                                <td class="one-percent no-wrap">
+                                    <button class="btn btn-default btn-sm narrow" ng-click="$parent.saveWriterNote(writer, 43,{}, writer.newWriterNote, -1)" bo-disabled="writer.newWriterNote | isEmpty"><span class="icon save"></span></button>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="12" class="nested light shadow">
+        <table class="table nested light">
+            <thead>
+                <tr>
+                    <th class="one-percent no-wrap centered">License</th>
+                    <th class="fifteen-percent"> <span>Configuration (UPC)</span></th>
+                    <th class="one-percent">Consent</th>
+                    <th class="fifteen-percent no-wrap">Writer Status</th>
+                    <th class="fifteen-percent">Rate Type</th>
+                    <th class="five-percentage nowrap top centered" bo-show="writer.statPrcentageVisible == true">% of Stat</th>
+                    <th class="ten-percent" bo-show="writer.escalatedRateVisible == true">Threshold</th>
+                    <th class="five-percent" bo-show="writer.escalatedRateVisible == true">Rate</th>
+                    <th class="five-percent">Pro-Rata Rate</th>
+                    <th class="five-percent">Per Song Rate</th>
+                    <!--Not: NOI, Advice Letter or Gratis-->
+                    <th bo-if="licenseDetailTypeId!=2 && licenseDetailTypeId!=3 && licenseDetailTypeId!=4" class="ten-percent no-wrap">License Date</th>
+                    <th bo-if="(licenseDetailTypeId==4 && licenseDetailStatusId==5 ) || licenseDetailStatusId ==6" class="ten-percent no-wrap">License Date</th>
+                    <!--License NOI type-->
+                    <th bo-if="licenseDetailTypeId==2" class="ten-percent no-wrap">Effective Date</th>
+                    <!--License Advice Letter or Gratis type-->
+                    <th bo-if="licenseDetailTypeId==3 || (licenseDetailTypeId==4 && licenseDetailStatusId != 5 && licenseDetailStatusId != 6)" class="ten-percent no-wrap">Signed Date</th>
+                    <th class="ten-percent no-wrap centered">Paid Quarter</th>
+                </tr>
+            </thead>
+            <tbody bindonce ng-repeat="rateConfiguration in writerRateConfig track by $index">
+            <!--<tbody bindonce ng-repeat="rateConfiguration in  writerSkinnyRate  track by $index">-->
+           <tr bindonce ng-repeat="rate in ::rateConfiguration.rates">
+           
+                    <td class="one-percent no-wrap centered">
+                        <span bo-show="writer.controlled && $index == 0" title="" data-toggle="tooltip">
+                            <button bo-disabled="licenseDetail != 2" securitydisable actions="LicenseDetailsIncludeExclude" class="btn btn-default btn-icon narrow" data-toggle="modal" ui-sref="SearchMyView.DetailLicense.StepsModal.WritersIsIncluded({config:rate,files:licenseAttachments,recording:recording,writer:writer,product:product,modalSize:'sm',rate:rateConfiguration })">
+                                <span class="icon include" bo-show="rate.writerRateInclude"></span>
+                                <span class="icon exclude" bo-show="!rate.writerRateInclude"></span>
+                            </button>
+                        </span>
+                    </td>
+                    <td class="fifteen-percent"><span bo-show="$index == 0"><span ng-class="rate.configuration_id | returnConfigurationIcon"></span><span bo-text="rate.configuration_name"></span><span ng_if="rate.configuration_upc">(<span bo-text="rate.configuration_upc"></span>)</span></span></td>
+                    <td>
+                        <span bo-show="writer.controlled && $index == 0" title="{{rate.writersConsentType.description}}" data-toggle="tooltip" data-placement="right">
+                            <button bo-disabled="!buttons.writerConsentBtn" securitydisable actions="LicenseDetailWriterConsent" class="btn btn-default btn-sm" data-toggle="modal" ui-sref="SearchMyView.DetailLicense.StepsModal.WritersConsent({config:rate,files:licenseAttachments,recording:recording,writer:writer,product:product,modalSize:'md' })">
+                                <span bo-text="rate.writersConsentType.writersConsentType"></span>
+                            </button>
+                        </span>
+                    </td>
+                    <td class="fifteen-percent top">
+                        <span bo-show="$index == 0">
+                            <span bindonce ng-repeat="status in ::rateConfiguration.specialStatusList" class="badge">
+                                <span bo-if="status.lU_SpecialStatuses"><span bo-text="status.lU_SpecialStatuses.specialStatus"></span></span>
+                                <span bo-if="!status.lU_SpecialStatuses"><span bo-text="status.specialStatus"></span></span>
+                            </span>
+                        </span>
+                    </td>
+                    <td class="fifteen-percent" bo-if="writer.controlled == true"><span bo-show="$index == 0"><span bo-text="rate.rateType.rateType"></span></span></td>
+                    <td class="fifteen-percent" bo-if="writer.controlled == false"><span bo-show="$index == 0">N/A</span></td>
+                    <td class="five-percent" bo-if="writer.controlled == false">N/A</td>
+                    <td class="five-percent centered" bo-if="writer.controlled == true" bo-show="writer.statPrcentageVisible == true"><span bo-text="rate.percentOfStat"></span></td>
+                    <td class="ten-percent" bo-if="writer.controlled == true" bo-show="writer.escalatedRateVisible == true"><span bo-text="rate.escalatedRate"></span></td>
+                    <td class="five-percent" bo-if="writer.controlled == false">N/A</td>
+                    <td class="five-percent" bo-if="writer.controlled == true" bo-show="writer.escalatedRateVisible == true"><span bo-text="rate.rate"></span></td>
+                    <td class="five-percent" bo-if="writer.controlled == true"><span bo-text="rate.proRataRate"></span></td>
+                    <td class="five-percent" bo-if="writer.controlled == false">N/A</td>
+                    <td class="five-percent" bo-if="writer.controlled == true"><span bo-text="rate.perSongRate"></span></td>
+                    <td class="ten-percent centered" bo-if="writer.controlled == false">N/A</td>
+                    <!--Display License Date, Signed Date or Effective Date-->
+                    <td class="ten-percent" bo-show="writer.controlled == true && $index==0"><span bo-text="rate.licenseDate | timezone | date:'MM/dd/yyyy'"></span></td>
+
+                    <td class="ten-percent centered" bo-show="writer.controlled == true">
+                        <span bo-show="$index==0">
+                            <button bo-disabled="paidQuarterDisabled" securitydisable actions="LicenseDetailsPaidQuarter" class="btn btn-default btn-sm" ui-sref="SearchMyView.DetailLicense.StepsModal.PaidQuarter({licenseId:licenseDetail.licenseId,config:rate,recording:recording,writer:writer,product:product, modalSize:'sm' })">
+                                <span bo-text="rateConfiguration.paidQuarter"></span>
+                            </button>
+                        </span>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+</tr>
+</tbody>
+
+<!-- if(thisdata == that){$scope.showthis = whatever} -->

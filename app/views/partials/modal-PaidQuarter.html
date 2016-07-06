@@ -1,0 +1,41 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Set Paid Quarter</h3>
+    <button class="btn btn-default narrow close-modal" ng-click="$parent.cancel()"><span class="icon cancel"></span></button>
+</div>
+<div class="modal-body paid-quarter">
+
+    <label>Paid Quarter</label>
+
+    <div class="dropdown">
+       <button class="dropdown-toggle btn btn-default" type="button" id="Button2" data-toggle="dropdown" aria-expanded="true" ng-click="getQuarters()">
+            <span ng-if="EditData.paidQuarter == null">Please Select</span>
+           <span ng-if="EditData.paidQuarter != null"><span ng-bind="EditData.paidQuarter"></span></span>
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+            <li ng-repeat="qtr in quarters">
+                <a href="" ng-click="selectQuarter(qtr)"><span ng-bind="qtr.paidQuarter"></span></a><!-- Rolling 10 year range // No Default Value -->
+            </li>
+        </ul>
+    </div>
+    <br />
+    <br />
+    <label>Set to</label>
+
+    <div class="dropdown" dropdown is-open="status.isopen">
+        <button type="button" class="dropdown-toggle btn btn-default" id="consentType" data-toggle="dropdown" ng-disabled="disabled" ng-click="getConsentTypes()" ng-class="{'field-error': !is_valid_field(selectedConsentType.writersConsentType) && modal_submit}">
+           <span ng-bind="selectedConsentType.writersConsentType"></span><span class="caret"></span>
+        </button><label>&nbsp;&nbsp;<span ng-bind="selectedConsentType.description"></span></label>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="consentType">
+            <li ng-repeat="consentType in consentTypes">
+            <a href="#" ng-click="selectConsentType(consentType);$event.preventDefault()"><span ng-bind="consentType.writersConsentType"></span>&nbsp;<span ng-bind="consentType.description"></span></a>
+            </li>
+        </ul>
+    </div>
+    <br /><br />
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="ok()">Save</button>
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>

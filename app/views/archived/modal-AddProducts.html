@@ -1,0 +1,220 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Add Products</h3>
+</div>
+<div class="modal-body add-products">
+
+    <carousel interval="0">
+        <slide>
+            <section class="search-wrapper" ng-include="'app/views/partials/search-SearchBar.html'"></section>
+            <section class="modal-search-wrapper" ng-include="'app/views/partials/search-GridAddProducts.html'"></section>
+        </slide>
+        <slide>
+            <button><span class="icon add-configurations"></span>Add Configurations</button>
+            <section class="select-configurations">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="product-title">Product Title</th>
+                            <th class="artist">Artist</th>
+                            <th class="configurations">Select Configurations</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="product-title">Product Title Here</td>
+                            <td class="artist">Artist Name Here</td>
+                            <td class="configurations">
+                                <ul>
+                                    <li><input type="checkbox" /><label>Select All</label></li>
+                                    <li><input type="checkbox" /><span class="icon config-physical"></span><label>12&quot; Vinyl Album</label></li>
+                                    <li><input type="checkbox" /><span class="icon config-physical"></span><label>CD/DVD</label></li>
+                                    <li><input type="checkbox" /><span class="icon config-physical"></span><label>EP</label></li>
+                                    <li><input type="checkbox" /><span class="icon config-digital"></span><label>Interactive Streaming</label></li>
+                                    <li><input type="checkbox" /><span class="icon config-digital"></span><label>MP3</label></li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="product-title">Product Title Here</td>
+                            <td class="artist">Artist Name Here</td>
+                            <td class="configurations">
+                                <ul>
+                                    <li><input type="checkbox" /><label>Select All</label></li>
+                                    <li><input type="checkbox" /><span class="icon config-physical"></span><label>12&quot; Vinyl Album</label></li>
+                                    <li><input type="checkbox" /><span class="icon config-physical"></span><label>CD/DVD</label></li>
+                                    <li><input type="checkbox" /><span class="icon config-physical"></span><label>EP</label></li>
+                                    <li><input type="checkbox" /><span class="icon config-digital"></span><label>Interactive Streaming</label></li>
+                                    <li><input type="checkbox" /><span class="icon config-digital"></span><label>MP3</label></li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="product-title">Product Title Here</td>
+                            <td class="artist">Artist Name Here</td>
+                            <td class="configurations">
+                                <ul>
+                                    <li><input type="checkbox" /><label>Select All</label></li>
+                                    <li><input type="checkbox" /><span class="icon config-physical"></span><label>12&quot; Vinyl Album</label></li>
+                                    <li><input type="checkbox" /><span class="icon config-physical"></span><label>CD/DVD</label></li>
+                                    <li><input type="checkbox" /><span class="icon config-digital"></span><label>Interactive Streaming</label></li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </slide>
+        <slide>
+            <section class="create-license">
+                <ul>
+                    <li><label>License Name</label><input type="text" /></li>
+                    <li>
+                        <label>Assignee</label>
+                        <div class="dropdown" dropdown is-open="status.isopen">
+                            <button type="button" class="dropdown-toggle btn btn-default btn-sm" id="assign" data-toggle="dropdown">
+                                Assignee Name Here <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="assign">
+                                <li><a>Assignee Name 1</a></li>
+                                <li><a>Assignee Name 2</a></li>
+                                <li><a>Assignee Name 3</a></li>
+                                <li><a>Assignee Name 4</a></li>
+                                <li><a>Assignee Name 5</a></li>
+                                <li><a>Assignee Name 6</a></li>
+                                <li><a>Assignee Name 7</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <label>Status</label>
+                        <div class="dropdown">
+                            <button class="dropdown-toggle btn btn-default btn-sm" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                                <span class="status-icon verifying"></span>Verifying
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#"><span class="status-icon hold"></span>Hold</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#"><span class="status-icon pending"></span>Pending</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#"><span class="status-icon issued"></span>Issued</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#"><span class="status-icon executed"></span>Executed</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#"><span class="status-icon accepted"></span>Accepted</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#"><span class="status-icon verifying"></span>Verifying</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><label>License Type</label>
+                        <div class="dropdown">
+                            <button class="dropdown-toggle btn btn-default btn-sm" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                              Standard
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Standard (default)</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">NOI/Advice Letter</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Gratis</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Blanket</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><label>Licensee</label>
+                        <div class="dropdown">
+                            <button class="dropdown-toggle btn btn-default btn-sm" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                                Select Licensee
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Licensee 1</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Licensee 2</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Licensee 3</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Licensee 4</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+                <ul>
+                    <li><span><input type="checkbox" />Product Status Reports Received</span></li>
+                    <li><label>Contact</label><input type="text" /></li>
+                    <li>
+                        <label>Effective Date</label>
+                        <form class="form-horizontal" name="someForm9" role="form" novalidate>
+                            <p class="input-group" ng-class="{ 'has-error': someForm9.date9.$dirty && someForm9.date9.$invalid }">
+                                <input type="text" id="date9" name="date9" class="date-field form-control" show-button-bar="true" clear-text="Clear" datepicker-popup="{{format}}" ng-model="::dt" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close" />
+                                <button type="button" class="btn btn-default" ng-click="open($event)"><span class="icon calendar"></span></button>
+                            </p>
+                        </form>
+                    </li>
+                    <li><label>Signed Date</label>
+                        <!--<input type="text" class="date-field" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close" />
+                        <button type="button" class="btn btn-default" ng-click="open($event)"><span class="icon calendar"></span></button>-->
+                    </li>
+                    <li><label>Received Date</label>
+                        <!--<input type="text" class="date-field" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close" />
+                        <button type="button" class="btn btn-default" ng-click="open($event)"><span class="icon calendar"></span></button>-->
+                    </li>
+                </ul>
+            </section>
+        </slide>
+    </carousel>
+  
+</div>
+<div class="modal-footer">
+
+    <!-- ****** CREATE LICENSE FIRST WORKFLOW ****** -->
+
+    <!-- *** CREATE LICENSE *** -->
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-default"><span class="icon create-license"></span>Create License &amp; Close</button>
+    <button class="btn btn-default pull-right"><span class="icon add-product"></span>Add Products<span class="icon forward"></span></button>
+
+
+    <!-- *** ADD PRODUCTS *** -->
+    <!--
+    <button class="btn btn-default"><span class="icon back"></span>Back</button>
+    <button class="btn btn-default pull-right" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-default pull-right"><span class="icon add-products"></span>Add Products</button>
+    <button class="btn btn-default pull-right"><span class="icon add-configurations"></span>Select Configurations<span class="icon forward"></span></button>
+    -->
+
+
+    <!-- *** ADD CONFIGURATIONS *** -->
+    <!--
+    <button class="btn btn-default"><span class="icon back"></span>Back</button>
+    <button class="btn btn-default pull-right" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-default pull-right"><span class="icon add-configurations"></span>Add Configurations<span class="icon forward"></span></button>
+    -->
+
+    <!-- ////////////////////////////////////////////////////////////// -->
+
+    <!-- ****** ADD PRODUCTS FIRST WORKFLOW ****** -->
+
+    <!-- *** ADD PRODUCTS *** -->
+    <!--
+    <button class="btn btn-default pull-right" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-default pull-right"><span class="icon add-products"></span>Add Products</button>
+    <button class="btn btn-default pull-right"><span class="icon add-configurations"></span>Select Configurations<span class="icon forward"></span></button>
+    -->
+
+    <!-- *** ADD CONFIGURATIONS *** -->
+    <!--
+    <button class="btn btn-default"><span class="icon back"></span>Back</button>
+    <button class="btn btn-default pull-right" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-default pull-right"><span class="icon add-configurations"></span>Add Configurations<span class="icon forward"></span></button>
+    -->
+
+    <!-- ////////////////////////////////////////////////////////////// -->
+
+    <!-- ****** ADD CONFIRUATIONS FIRST WORKFLOW ****** -->
+    <!--
+    <button class="btn btn-default pull-right" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-default pull-right"><span class="icon add-configurations"></span>Add Configurations<span class="icon forward"></span></button>
+    -->
+
+    <!-- *** CREATE LICENSE *** -->
+    <!--
+    <button class="btn btn-default"><span class="icon back"></span>Back</button>
+    
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-default"><span class="icon create-license"></span>Create License<span class="icon forward"></span></button>
+    -->
+
+</div>

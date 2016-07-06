@@ -1,0 +1,28 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Login</h3>
+    <button class="btn btn-default narrow close-modal" ng-click="$parent.cancel()"><span class="icon cancel"></span></button>
+</div>
+<div class="modal-body register">
+    <ul>
+        <li><label>Windows Username <span>*</span></label><input type="text" data-ng-model="safeLogin.Username" required autofocus/></li>
+        <li><label>Password <span>*</span></label><input type="password" ng-enter="ok()" data-ng-model="safeLogin.Password" required autofocus /></li>
+    </ul>
+    <!--
+    <ul>
+        <li><label>Password <span>*</span></label><input type="password" data-ng-model="safeLogin.Password" required /></li>
+    </ul>
+     -->
+</div>
+<div ng-repeat="error in errors">
+    <div class="alert-danger"><span ng-bind="error.message"></span></div>
+</div>
+
+<div style="height: auto" class="alert-danger" data-ng-show="message"><span ng-bind="message"></span></div>
+
+<div class="modal-footer">
+    <button class="btn btn-default" type="submit" data-ng-click="ok()">Submit</button>
+    <!--
+    <button class="btn btn-default" ng-click="cancel()" ng-disabled="true">Cancel</button>
+    -->
+</div>
+

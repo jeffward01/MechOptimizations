@@ -1,0 +1,35 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Register</h3>
+    <button class="btn btn-default narrow close-modal" ng-click="cancel()"><span class="icon cancel"></span></button>
+</div>
+<div class="modal-body register">
+    <ul>
+        <li class="user-name"><label>Email Address <span>*</span></label><input type="text" data-ng-model="registration.EmailAddress" required autofocus /></li>
+        <li><label>First Name <span>*</span></label><input type="text" data-ng-model="registration.FirstName" required /></li>
+        <li><label>Last Name <span>*</span></label><input type="text" data-ng-model="registration.LastName" required /></li>
+        <li><label>Job Title <span>*</span></label><input type="text" data-ng-model="registration.JobTitle" required /></li>
+        <!--<li><label>Email Address <span>*</span></label><input type="text" data-ng-model="registration.EmailAddress"  required  /></li>-->
+        <li><label>Phone</label><input type="text" data-ng-model="registration.Phone" /></li>
+        <li><label>Cell</label><input type="text" data-ng-model="registration.Cell" /></li>
+    </ul>
+    <ul>
+        <li><label>Password <span>*</span></label><input type="password" data-ng-model="registration.Password" required /></li>
+        <li class="password"><label>Confirm Password <span>*</span></label><input type="password" data-ng-model="registration.ConfirmPassword" required /></li>
+        <li><label>Company Name <span>*</span></label><input type="text" data-ng-model="registration.CompanyName"  required /></li>
+        <li><label>Address 1 <span>*</span></label><input type="text" data-ng-model="registration.Address1" required /></li>
+        <li><label>Address 2</label><input type="text" data-ng-model="registration.Address2"  /></li>
+        <li><label>City <span>*</span></label><input type="text" data-ng-model="registration.City" required /></li>
+        <li><label>State <span>*</span></label><input type="text" data-ng-model="registration.State" required /></li>
+        <li><label>Zip Code</label><input type="text" data-ng-model="registration.ZipCode"  /></li>
+        <li><label>Country <span>*</span></label><input type="text" data-ng-model="registration.Country"  required /></li>
+    </ul>
+</div>
+<div ng-repeat="error in errors">
+    <div style="padding: 1px 10px 1px 10px" class="alert-danger"><span ng-bind="error.message"></span></div>
+</div>
+<div class="modal-footer">
+    <!-- <button class="btn btn-default" type="submit" data-ng-click="signUp()">Submit</button>-->
+    <button class="btn btn-default" type="submit" data-ng-click="ok()">Submit</button>
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>
+

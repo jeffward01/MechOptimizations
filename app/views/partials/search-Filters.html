@@ -1,0 +1,55 @@
+﻿<ul class="applied-filters" ng-if="$parent.showFilters">
+    <li><label>Selected Filters | </label></li>
+    <li ng-repeat="assignee in $parent.currentSearch.Asignees|filter: {selected: true}">
+        <span class="filter-wrapper"><label ng-if="$index == 0">Assignee:</label><span class="filter-item"><span ng-bind="assignee.fullName"></span><span class="icon icon-sm remove" ng-click="$parent.unselectFilter('Asignees', assignee, 'contactId');$event.preventDefault()"></span></span></span>
+    </li>
+    <li ng-repeat="licensee in $parent.currentSearch.Licensees|filter: {selected: true}">
+        <span class="filter-wrapper"><label ng-if="$index == 0">Licensee:</label><span class="filter-item"><span ng-bind="licensee.name"></span>{<span class="icon icon-sm remove" ng-click="$parent.unselectFilter('Licensees',licensee, 'contactId');$event.preventDefault()"></span></span></span>
+    </li>
+    <li ng-repeat="label in $parent.currentSearch.Labels|filter: {selected: true}">
+        <span class="filter-wrapper"><label ng-if="$index == 0">Label:</label><span class="filter-item"><span ng-bind="label.name"></span><span class="icon icon-sm remove" ng-click="$parent.unselectFilter('Labels', label, 'labelId');$event.preventDefault()"></span></span></span>
+    </li>
+    <li ng-repeat="label in $parent.currentSearch.LabelGroups|filter: {selected: true}">
+        <span class="filter-wrapper"><label ng-if="$index == 0">Label Group:</label><span class="filter-item"><span ng-bind="label.name"></span><span class="icon icon-sm remove" ng-click="$parent.unselectFilter('LabelGroups', label, 'id');$event.preventDefault()"></span></span></span>
+    </li>
+    <li ng-repeat="ratetype in $parent.currentSearch.RateTypes|filter: {selected: true}">
+        <span class="filter-wrapper"><label ng-if="$index == 0">Rate Type:</label><span class="filter-item"><span ng-bind="ratetype.rateType"></span><span class="icon icon-sm remove" ng-click="$parent.unselectFilter('RateTypes', ratetype, 'rateTypeId');$event.preventDefault()"></span></span></span>
+    </li>
+    <li ng-repeat="publisher in $parent.currentSearch.Publishers|filter: {selected: true}">
+        <span class="filter-wrapper"><label ng-if="$index == 0">Publisher:</label><span class="filter-item"><span ng-bind="publisher.name"></span><span class="icon icon-sm remove" ng-click="$parent.unselectFilter('Publishers', publisher, 'ipCode');$event.preventDefault()"></span></span></span>
+    </li>
+    <li ng-repeat="licensemethod in $parent.currentSearch.LicesingMethods|filter: {selected: true}">
+        <span class="filter-wrapper"><label ng-if="$index == 0">Method:</label><span class="filter-item"><span ng-bind="licensemethod.licenseMethod"></span><span class="icon icon-sm remove" ng-click="$parent.unselectFilter('LicesingMethods', licensemethod, 'licenseMethodId');$event.preventDefault()"></span></span></span>
+    </li>
+    <li ng-repeat="config in $parent.currentSearch.Configuration|filter: {selected: true}">
+        <span class="filter-wrapper"><label ng-if="$index == 0">Configuration:</label><span class="filter-item"><span ng-bind="config.name"></span><span class="icon icon-sm remove" ng-click="$parent.unselectFilter('Configuration', config, 'id');$event.preventDefault()"></span></span></span>
+    </li>
+    <li ng-repeat="type in $parent.currentSearch.LicenseTypes|filter: {selected: true}">
+        <span class="filter-wrapper"><label ng-if="$index == 0">License Type:</label><span class="filter-item"><span ng-bind="type.licenseType"></span><span class="icon icon-sm remove" ng-click="$parent.unselectFilter('LicenseTypes', type, 'licenseTypeId');$event.preventDefault()"></span></span></span>
+    </li>
+    <li ng-repeat="status in $parent.currentSearch.LicenseStatuses|filter: {selected: true}">
+        <span class="filter-wrapper"><label ng-if="$index == 0">License Status:</label><span class="filter-item"><span ng-bind="status.licenseStatus"></span><span class="icon icon-sm remove" ng-click="$parent.unselectFilter('LicenseStatuses', status, 'licenseStatusId');$event.preventDefault()"></span></span></span>
+    </li>
+    <li ng-if="$parent.currentSearch.filterStatusReport || $parent.currentSearch.filterPriorityReport">
+        <span class="filter-wrapper"><label>Reports Received:</label><span class="filter-item" ng-if="$parent.currentSearch.filterStatusReport">Product Status Report<span class=" icon icon-sm remove" ng-click="$parent.unselectStatusReport();$event.preventDefault()"></span></span></span>
+        <span class="filter-item" ng-if="$parent.currentSearch.filterPriorityReport">Priority Licensing Report<span class="icon icon-sm remove" ng-click="$parent.unselectPriorityReport();$event.preventDefault()"></span></span>
+    </li>
+    <li ng-repeat="specialStatus in $parent.currentSearch.SpecialStatus |filter: {selected: true}">
+        <span class="filter-wrapper"><label ng-if="$index == 0">Special Status:</label><span class="filter-item"><span ng-bind="specialStatus.specialStatus"></span><span class="icon icon-sm remove" ng-click="$parent.unselectFilter('SpecialStatus', specialStatus, 'specialStatusId');$event.preventDefault()"></span></span></span>
+    </li>
+    <li ng-repeat="consentType in $parent.currentSearch.WritersConsentTypes |filter: {selected: true}">
+        <span class="filter-wrapper"><label ng-if="$index == 0">Writer Consent:</label><span class="filter-item"><span ng-bind="consentType.writersConsentType"></span><span class="icon icon-sm remove" ng-click="$parent.unselectFilter('WritersConsentTypes', consentType, 'writersConsentTypeId');$event.preventDefault()"></span></span></span>
+    </li>
+    <li ng-if="$parent.currentSearch.ReleaseDateFrom || $parent.currentSearch.ReleaseDateTo">
+        <span class="filter-wrapper" ng-if="$parent.currentSearch.ReleaseDateFrom"><label>Release date from</label><span class="filter-item"><span ng-bind="$parent.currentSearch.ReleaseDateFrom | date:'MM-dd-yyyy'"></span><span class="icon icon-sm remove" ng-click="$parent.emptyFilter('ReleaseDateFrom');$event.preventDefault()"></span></span></span>
+        <span class="filter-wrapper" ng-if="$parent.currentSearch.ReleaseDateTo"><label>Release date until</label><span class="filter-item"><span ng-bind="$parent.currentSearch.ReleaseDateTo| date:'MM-dd-yyyy'"></span><span class="icon icon-sm remove" ng-click="$parent.emptyFilter('ReleaseDateTo');$event.preventDefault()"></span></span></span>
+    </li>
+    <li ng-if="$parent.currentSearch.SignedDateFrom || $parent.currentSearch.SignedDateTo">
+        <span class="filter-wrapper" ng-if="$parent.currentSearch.SignedDateFrom"><label>Release date from</label><span class="filter-item"><span ng-bind="$parent.currentSearch.SignedDateFrom | date:'MM-dd-yyyy'"></span><span class="icon icon-sm remove" ng-click="$parent.emptyFilter('SignedDateFrom');$event.preventDefault()"></span></span></span>
+        <span class="filter-wrapper" ng-if="$parent.currentSearch.SignedDateTo"><label>Release date until</label><span class="filter-item"><span ng-bind="$parent.currentSearch.SignedDateTo| date:'MM-dd-yyyy'"></span><span class="icon icon-sm remove" ng-click="$parent.emptyFilter('SignedDateTo');$event.preventDefault()"></span></span></span>
+    </li>
+    <li ng-if="$parent.currentSearch.RateRange && $parent.currentSearch.RateRange.length == 2 && !($parent.currentSearch.RateRange[0] == $parent.sliderRangeMin && $parent.currentSearch.RateRange[1] == $parent.sliderRangeMax)">
+        <span class="filter-wrapper"><label></label>Writer rate range: <span class="filter-item"><span ng-bind="$parent.currentSearch.RateRange[0]"></span>&nbsp;-&nbsp;<span ng-bind="$parent.currentSearch.RateRange[1]"></span><span class="icon icon-sm remove" ng-click="$parent.unselectWriterRateRange();$event.preventDefault()"></span></span></span>
+      
+    </li>
+</ul>

@@ -1,0 +1,207 @@
+﻿
+<section class="search-grid" >
+
+<section class="search-filters" ng-include="'app/views/partials/search-Filters.html'"></section>
+
+<ul class="grid-header clearfix">
+    <li class="actions">
+        <button security actions="MyViewAssign" ng-click="openModal('sm')" class="btn btn-default" ng-disabled="allLicenses | isNoneSelected"><span class="icon assign"></span>Assign</button>
+        <button security actions="MyViewCreateLicense" ui-sref="SearchMyView.Tabs.MyViewTab.StepsModal.CreateLicense" class="btn btn-default" ><span class="icon create-license"></span>Create License</button>
+    </li>
+    <li class="pagination">
+        <pagination total-items="pagination.totalItems" items-per-page="pagination.numPerPage" ng-model="pagination.currentPage" ng-change="pageChanged()" max-size="pagination.maxSize" class="pagination-sm" boundary-links="true"
+                    previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" isCollapsed="true"></pagination>
+    </li>
+    <li class="records">
+        <span class="pull-left" ng-if="licenses.length>0">Viewing&nbsp;<span ng-bind="(((pagination.currentPage-1)*pagination.numPerPage)+1)"></span>&nbsp;-&nbsp;<span ng-bind="(((pagination.currentPage-1)*pagination.numPerPage)+1)+(licenses.length)-1"></span>&nbsp;of&nbsp;<span ng-bind="pagination.totalItems"></span></span>
+        <span class="pull-left" ng-if="licenses.length==0">Viewing 0 results</span>
+        <div class="dropdown">
+            <button class="dropdown-toggle btn btn-default" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" ng-click="pagination.isCollapsed=!pagination.isCollapsed">
+                <span ng-bind="pagination.numPerPage"></span>
+                <span class="{{setCaret(pagination.isCollapsed)}}"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li role="presentation" ng-click="changePageSize(pageSize);pagination.isCollapsed=true" ng-repeat="pageSize in pagination.pageSizeList"><a role="menuitem" tabindex="-1" href=""><span ng-bind="pageSize"></span></a></li>
+            </ul>
+        </div>
+        <span class="pull-left"> results per page</span>
+    </li>
+    <li class="edit-columns">
+            <div class="dropdown" dropdown on-toggle="editColumnsDropdown(open);isEditColumnsCollapsed=!isEditColumnsCollapsed">
+                <button type="button" id="dropdownMenu1" class="btn btn-default" dropdown-toggle drop aria-expanded="true">
+                    Edit Columns
+                    <span class="{{setCaret(isEditColumnsCollapsed)}}"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" multiselect-dropdown>
+                    <li><label class="checkbox disabled">Required</label></li>
+                    <li ng-repeat="column in columns | filter:{isDefault:true}">
+                        <label class="checkbox disabled" for="#{{column.name}}-editcolumns"><input type="checkbox" ng-model="column.selected" ng-disabled="true" id="{{column.name}}-editcolumns" /><span ng-bind="column.name"></span></label>
+                    </li>
+                    <li><hr /></li>
+                    <li ng-repeat="column in columns | filter:{isDefault:false}" ng-click="showHideColumn(column, $event)">
+                        <label class="checkbox" for="#{{column.name}}-editcolumns"><input type="checkbox" ng-model="column.selected" ng-disabled="column.isDefault" id="{{column.name}}-editcolumns" /><span ng-bind="column.name"></span></label>
+                    </li>
+
+                </ul>
+            </div>
+</li>
+</ul>
+    <section class="my-view-panel">
+        <table class="table" ng-if="licensesInbox.length > 0" edit-columns="columns" hidden-columns="hiddenColumns" results-data="licensesInbox">
+            <thead>
+                <tr>
+                    <th class="select-all" data-type="select"><input type="checkbox" ng-click="selectAllLicenses(licensesInbox)" ng-checked="licensesInbox | isAllSelected" /></th>
+                    <th class="priority" data-default="true">Pri</th>
+                    <th class="assignee" data-default="true">Assignee</th>
+                    <th class="id">License #</th>
+                    <th class="title" data-default="true">License Title</th>
+                    <th class="status">Status</th>
+                    <th class="products">Products</th>
+                    <th class="artists">Artists</th>
+                    <th class="licensee">Licensee</th>
+                    <th class="method">Method</th>
+                    <th class="config">Config</th>
+                    <th class="created-by">Created By</th>
+                    <th class="type">Type</th>
+                    <th class="created-date">Created</th>
+                    <th class="modified-date">Modified</th>
+                    <th class="signed-date">Signed</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr ng-repeat-start="licenseInbox in licensesInbox" class="editColumnsSelectable">
+                    <td class="select-all"><input type="checkbox" ng-model="licenseInbox.selected" /></td>
+                    <td class="priority"><span class="priority inbox"></span></td>
+                    <td class="assignee"><span ng-bind="licenseInbox.contact.fullName"></span></td>
+                    <td class="id"><span ng-bind="licenseInbox.licenseNumber"></span></td>
+                    <td class="title"><a ui-sref="SearchMyView.DetailLicense({licenseId: licenseInbox.licenseId, myView:'ownLicense'})"><span ng-bind="licenseInbox.licenseName"></span></a></td>
+                    <td class="status">
+                        <span class="status-label">
+                            <span ng-class="{'status-icon verifying': licenseInbox.licenseStatus.licenseStatus=='Verifying', 'status-icon hold': licenseInbox.licenseStatus.licenseStatus=='Hold', 'status-icon pending': licenseInbox.licenseStatus.licenseStatus=='Pending', 'status-icon executed': licenseInbox.licenseStatus.licenseStatus=='Executed', 'status-icon issued': licenseInbox.licenseStatus.licenseStatus=='Issued', 'status-icon accepted': licenseInbox.licenseStatus.licenseStatus=='Accepted', 'status-icon voided': licenseInbox.licenseStatus.licenseStatus=='Voided', 'status-icon error': licenseInbox.licenseStatus.licenseStatus=='Error',  'status-icon rejected': licenseInbox.licenseStatus.licenseStatus=='Rejected', 'status-icon failed': licenseInbox.licenseStatus.licenseStatus=='Failed',  'status-icon proforma': licenseInbox.licenseStatus.licenseStatus=='ProForma'}">
+                            </span>
+                            <span ng-bind="licenseInbox.licenseStatus.licenseStatus"></span>
+                        </span>
+                    </td>
+                    <td class="products">
+                        <button class="btn-default" ng-disabled="licenseInbox.productsNo ==0" ng-click="isCollapsed = !isCollapsed;check(isCollapsed,licenseInbox.licenseId,licensesInbox);"><span ng-bind="licenseInbox.productsNo"></span><span class="{{setCaret(!isCollapsed)}}"></span></button>
+                    </td>
+                    <td class="artists"><span ng-bind="licenseInbox.artistRollup"></span></td>
+                    <td class="licensee"><span ng-bind="licenseInbox.licensee.name"></span></td>
+                    <td class="method"><span ng-bind="licenseInbox.licenseMethod.licenseMethod"></span></td>
+                    <td class="config"><span ng-class="{'icon config-physical': licenseInbox.licenseConfigurationRollup=='P', 'icon config-digital': licenseInbox.licenseConfigurationRollup=='D', 'icon config-both': licenseInbox.licenseConfigurationRollup=='B'}"></span></td>
+                    <td class="created-by"><span ng-bind="licenseInbox.contact2.fullName"></span></td>
+                    <td class="type"><span ng-bind="licenseInbox.licenseType.licenseType"></span></td>
+                    <td class="created-date"><span ng-bind="licenseInbox.createdDate | timezone |date:'MM/dd/yyyy'"></span></td>
+                    <td class="modified-date"><span ng-bind="licenseInbox.modifiedDate | timezone | date:'MM/dd/yyyy'"></span></td>
+                    <td class="signed-date"><span ng-bind="licenseInbox.signedDate | timezone | date:'MM/dd/yyyy'"></span></td>
+                </tr>
+                <tr ng-repeat-end="licenseInbox in licensesInbox">
+                    <td class="nested light shadow" colspan="20" collapse="isCollapsed">
+                        <table class="table nested light grid-product">
+                            <thead>
+                                <tr>
+                                    <th class="twentyfive-percent">Product Title</th>
+                                    <th class="twentyfive-percent">Artist</th>
+                                    <th class="twentyfive-percent">Label</th>
+                                    <th class="twentyfive-percent">Config</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="product in licenseInbox.products">
+                                    <td class="twentyfive-percent"><a href="#/search-MyView/detail-Product/{{ product.productHeader.id }}"><span ng-bind="product.productHeader.title"></span></a></td>
+                                    <td class="twentyfive-percent"><span ng-bind="product.productHeader.artist.name"></span></td>
+                                    <td class="twentyfive-percent"><span ng-bind="product.productHeader.recordLabel.name"></span></td>
+                                    <td class="twentyfive-percent">
+                                        <span ng-repeat="config in product.productHeader.configurations | filter:{licenseProductConfiguration: '!!'}">
+                                            <span class="icon config-physical" ng-class="config.licenseProductConfiguration.configuration_id | returnConfigurationIcon"></span><span ng-bind="config.licenseProductConfiguration.configuration_name"></span>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+
+        <table class="table" ng-if="licenses.length > 0" edit-columns="columns" hidden-columns="hiddenColumns" results-data="licenses">
+            <thead>
+                <tr>
+                    <th class="select-all" data-type="select"><input type="checkbox" ng-click="selectAllLicenses(licenses)" ng-checked="licenses | isAllSelected" /></th>
+                    <th class="priority" data-default="true"><a href="" ng-click="sortSearch('priority')">Pri<span ng-if="sortBy=='priority'" class="{{sortArrow}}"></span></a></th>
+                    <th class="assignee" data-default="true"><a href="" ng-click="sortSearch('asignee')">Assignee<span ng-if="sortBy=='asignee'" class="{{sortArrow}}"></span></a></th>
+                    <th class="id"><a href="" ng-click="sortSearch('licenseNumber')">License #<span ng-if="sortBy=='licenseNumber'" class="{{sortArrow}}"></span></a></th>
+                    <th class="title" data-default="true"><a href="" ng-click="sortSearch('title')">License Title<span ng-if="sortBy=='title'" class="{{sortArrow}}"></span></a></th>
+                    <th class="status"><a href="" ng-click="sortSearch('status')">Status<span ng-if="sortBy=='status'" class="{{sortArrow}}"></span></a></th>
+                    <th class="products">Products</th>
+                    <th class="artists"><a href="" ng-click="sortSearch('artistRollup')">Artists<span ng-if="sortBy=='artistRollup'" class="{{sortArrow}}"></span></a></th>
+                    <th class="licensee"><a href="" ng-click="sortSearch('licensee')">Licensee<span ng-if="sortBy=='licensee'" class="{{sortArrow}}"></span></a></th>
+                    <th class="method"><a href="" ng-click="sortSearch('method')">Method<span ng-if="sortBy=='method'" class="{{sortArrow}}"></span></a></th>
+                    <th class="config"><a href="" ng-click="sortSearch('licenseConfigurationRollup')">Config<span ng-if="sortBy=='licenseConfigurationRollup'" class="{{sortArrow}}"></span></a></th>
+                    <th class="created-by"><a href="" ng-click="sortSearch('createdby')">Created By<span ng-if="sortBy=='createdby'" class="{{sortArrow}}"></span></a></th>
+                    <th class="type"><a href="" ng-click="sortSearch('type')">Type<span ng-if="sortBy=='type'" class="{{sortArrow}}"></span></a></th>
+                    <th class="created-date"><a href="" ng-click="sortSearch('createdDate')">Created<span ng-if="sortBy=='createdDate'" class="{{sortArrow}}"></span></a></th>
+                    <th class="modified-date"><a href="" ng-click="sortSearch('modifiedDate')">Modified<span ng-if="sortBy=='modifiedDate'" class="{{sortArrow}}"></span></a></th>
+                    <th class="signed-date"><a href="" ng-click="sortSearch('signedDate')">Signed<span ng-if="sortBy=='signedDate'" class="{{sortArrow}}"></span></a></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat-start="license in licenses" class="editColumnsSelectable">
+                    <td class="select-all"><input type="checkbox" ng-model="license.selected" /></td>
+                    <td class="priority"><span ng-class="{'priority high':license.priorityId==1,'priority medium':license.priorityId==2,'priority low':license.priorityId==3,'priority inbox':license.priorityId==4}"></span></td>
+                    <td class="assignee"><span ng-bind="license.contact.fullName"></span></td>
+                    <td class="id"><span ng-bind="license.licenseNumber"></span></td>
+                    <td class="title"><a ui-sref="SearchMyView.DetailLicense({licenseId: license.licenseId, myView:'ownLicense'})"><span ng-bind="license.licenseName"></span></a></td>
+                    <td class="status">
+                        <span class="status-label">
+                            <span ng-class="{'status-icon verifying': license.licenseStatus.licenseStatus=='Verifying', 'status-icon hold': license.licenseStatus.licenseStatus=='Hold', 'status-icon pending': license.licenseStatus.licenseStatus=='Pending', 'status-icon executed': license.licenseStatus.licenseStatus=='Executed', 'status-icon issued': license.licenseStatus.licenseStatus=='Issued', 'status-icon accepted': license.licenseStatus.licenseStatus=='Accepted', 'status-icon voided': license.licenseStatus.licenseStatus=='Voided', 'status-icon error': license.licenseStatus.licenseStatus=='Error',  'status-icon rejected': license.licenseStatus.licenseStatus=='Rejected', 'status-icon failed': license.licenseStatus.licenseStatus=='Failed',  'status-icon proforma': license.licenseStatus.licenseStatus=='ProForma'}">
+                            </span>
+                            <span ng-bind="license.licenseStatus.licenseStatus"></span>
+                        </span>
+                    </td>
+                    <td class="products">
+                        <button class="btn-default" ng-disabled="license.productsNo ==0" ng-click="isCollapsed = !isCollapsed;check(isCollapsed,license.licenseId,licenses);"><span ng-bind="license.productsNo"></span><span class="{{setCaret(!isCollapsed)}}"></span></button>
+                    </td>
+                    <td class="artists"><span ng-bind="license.artistRollup"></span></td>
+                    <td class="licensee"><span ng-bind="license.licensee.name"></span></td>
+                    <td class="method"><span ng-bind="license.licenseMethod.licenseMethod"></span></td>
+                    <td class="config"><span ng-class="{'icon config-physical': license.licenseConfigurationRollup=='P', 'icon config-digital': license.licenseConfigurationRollup=='D', 'icon config-both': license.licenseConfigurationRollup=='B'}"></span></td>
+                    <td class="created-by"><span ng-bind="license.contact2.fullName"></span></td>
+                    <td class="type"><span ng-bind="license.licenseType.licenseType"></span></td>
+                    <td class="created-date"><span ng-bind="license.createdDate | timezone |date:'MM/dd/yyyy'"></span></td>
+                    <td class="modified-date"><span ng-bind="license.modifiedDate | timezone |  date:'MM/dd/yyyy'"></span></td>
+                    <td class="signed-date"><span ng-bind="license.signedDate | timezone | date:'MM/dd/yyyy'"></span></td>
+                </tr>
+                <tr ng-repeat-end="license in licenses">
+                    <td class="nested light shadow" colspan="20" collapse="isCollapsed">
+                        <table class="table nested light grid-product">
+                            <thead>
+                                <tr>
+                                    <th class="twentyfive-percent">Product Title</th>
+                                    <th class="twentyfive-percent">Artist</th>
+                                    <th class="twentyfive-percent">Label</th>
+                                    <th class="twentyfive-percent">Config</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="product in license.products">
+                                    <td class="twentyfive-percent"><a href="#/search-MyView/detail-Product/{{ product.productHeader.id }}"><span ng-bind="product.productHeader.title"></span></a></td>
+                                    <td class="twentyfive-percent"><span ng-bind="product.productHeader.artist.name"></span></td>
+                                    <td class="twentyfive-percent"><span ng-bind="product.productHeader.recordLabel.name"></span></td>
+                                    <td class="twentyfive-percent">
+                                        <span ng-repeat="config in product.productHeader.configurations | filter:{licenseProductConfiguration: '!!'}">
+                                            <span class="icon config-physical" ng-class="config.licenseProductConfiguration.configuration_id | returnConfigurationIcon"></span><span ng-bind="config.licenseProductConfiguration.configuration_name"></span>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div ng-if="licenses.length == 0">No results found</div>
+</section>

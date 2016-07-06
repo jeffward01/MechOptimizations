@@ -1,0 +1,139 @@
+﻿<<h1>Product Search</h1>
+<breadcrumbs></breadcrumbs>
+
+<section class="search-wrapper" ng-include="'app/views/partials/search-SearchBar.html'"></section>
+
+<section class="search-filters" ng-include="'app/views/partials/search-Filters.html'"></section>
+
+<section class="search-grid">
+    <ul class="grid-header clearfix">
+        <li class="actions">
+            <button class="btn btn-default"><span class="icon add-product"></span>Add To License</button>
+            <button class="btn btn-default"><span class="icon create-product"></span>Create Product</button>
+            <button class="btn btn-default"><span class="icon copy-product"></span>Copy Product</button>
+            <button class="btn btn-default"><span class="icon create-license"></span>Create License</button>
+        </li>
+         <li class="pagination">
+            <pagination total-items="pagination.totalItems" items-per-page="pagination.numPerPage" ng-model="pagination.currentPage" ng-change="pageChanged()" max-size="pagination.maxSize" class="pagination-sm" boundary-links="true"
+                previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+        </li>
+        <li class="records">
+            <span class="pull-left">Viewing</span>
+            <div class="dropdown">
+                <button class="dropdown-toggle btn btn-default" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                    <span ng-bind="pagination.numPerPage"></span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                    <li role="presentation" ng-click="changePageSize(pageSize)" ng-repeat="pageSize in pagination.pageSizeList"><a role="menuitem" tabindex="-1" href="">{{pageSize}}</a></li>
+                </ul>
+            </div>
+            <span class="pull-left"> of&nbsp;<span ng-bind="pagination.totalItems"></span></span>
+        </li>
+
+        <li class="items-per-page">
+            <div class="dropdown pull-right">
+                <button class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                    Edit Columns
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Product Title</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Artist</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Label</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">UPC</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Config</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Release Date</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Recordings</a></li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th class="product-title"><a href="">Product Title<span class="caret"></span></a></th>
+                <th class="artist"><a href="">Artist<span class="caret"></span></a></th>
+                <th class="label-name"><a href="">Label<span class="caret"></span></a></th>
+                 <th class="licenses"><a href="">Licenses<span class="caret"></span></a></th>
+                <th class="upc"><a href="">UPC<span class="caret"></span></a></th>
+                <th class="config"><a href="">Config<span class="caret"></span></a></th>
+                <th class="release-date"><a href="">Release Date<span class="caret"></span></a></th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat-start="product in products" ng-class-odd="'odd'" ng-class-even="'even'">
+                <td class="product-title">
+                    <a ui-sref="DetailProduct({productId: product.product_id})"><span ng-bind="product.title"></span></a>
+                   
+                </td>
+                <td class="artist"><span ng-bind="product.recsArtist.name"></span></td>
+                <td class="label-name"><span ng-bind="product.recsLabel.name"></span></td>
+                <td>
+                    <button class="btn-default" ng-disabled="product.licensesNo ==0" ng-click="isCollapsed = !isCollapsed;check(isCollapsed,product.product_id);">{{product.licensesNo}} <span class="caret"></span></button>
+                </td>
+                <td class="upc"><span ng-bind="product.upc"></span></td>
+                <td class="config"><span ng-bind="product.recsConfiguration.name"></span></td>
+                <td class="released-date"><span ng-bind="product.release_date  | timezone | date:'MM/dd/yyyy'"></span></td>
+                
+            </tr>
+            <tr ng-repeat-end="license in product.licenses">
+                <td colspan="20" collapse="isCollapsed">
+                    <table class="table table-hover grid-license">
+                        <thead>
+                            <tr>
+                                
+                                <th class="priority"><a href=""><span class="caret"></span></a></th>
+                                <th class="assignee"><a href="" ng-click="sortSearch('asignee')">Assignee<span class=" caret"></span></a></th>
+                                <th class="id"><a href="">Lic. ID #<span class="caret"></span></a></th>
+                                <th class="title"><a href="" ng-click="sortSearch('title')">License Title<span class="caret"></span></a></th>
+                                
+                                <th class="artists"><a href="">Artists<span class="caret"></span></a></th>
+                                <th class="licensee"><a href="">Licensee<span class="caret"></span></a></th>
+                                <th class="method"><a href="">Method<span class="caret"></span></a></th>
+                                <th class="config"><a href="">Config<span class="caret"></span></a></th>
+                                <th class="created-by"><a href="">Created By<span class="caret"></span></a></th>
+                                <th class="type"><a href="">Type<span class="caret"></span></a></th>
+                                <th class="status"><a href="">Status<span class="caret"></span></a></th>
+                                <th class="created-date">Created<span class="caret"></span></th>
+                                <th class="modified-date">Modified<span class="caret"></span></th>
+                                <th class="signed-date">Signed<span class="caret"></span></th>
+                            </tr>
+                        </thead>
+                        <tbody ng-repeat="license in product.licenses">
+                            <tr>
+                                <td ng-class="{'priority high':license.priorityId==1,'priority medium':license.priorityId==2,'priority low':license.priorityId==3}"></td>
+                                <td class="assignee"><span ng-bind="license.contact.fullName"></span></td>
+                                <td class="id"><span ng-bind="license.licenseNumber"></span></td>
+                                <td class="title"><a ui-sref="DetailLicense({licenseId: license.licenseId})"><span ng-bind="license.licenseName"></span></a></td>
+                               
+                                <td class="artists"><span ng-bind="license.artistRollup"></span></td>
+                                <td class="licensee"><span ng-bind="license.licensee.name"></span></td>
+                                <td class="method"><span ng-bind="license.licenseMethod.licenseMethod"></span></td>
+                                <td class="config"><span ng-class="{'icon config-physical': license.licenseConfigurationRollup=='P', 'icon config-digital': license.licenseConfigurationRollup=='D', 'icon config-both': license.licenseConfigurationRollup=='B'}"></span></td>
+                                <td class="created-by"><span ng-bind="license.contact2.fullName"></span></td>
+                                <td class="type"><span ng-bind="license.licenseType.licenseType"></span></td>
+                                <td class="status">
+                                    <span class="status-label">
+                                        <span ng-class="{'status-icon verifying': license.licenseStatus.licenseStatus=='Verifying', 'status-icon hold': license.licenseStatus.licenseStatus=='Hold', 'status-icon pending': license.licenseStatus.licenseStatus=='Pending', 'status-icon executed': license.licenseStatus.licenseStatus=='Executed', 'status-icon issued': license.licenseStatus.licenseStatus=='Issued', 'status-icon accepted': license.licenseStatus.licenseStatus=='Accepted', 'status-icon voided': license.licenseStatus.licenseStatus=='Voided', 'status-icon error': license.licenseStatus.licenseStatus=='Error'}">
+
+                                        </span>
+                                        <span ng-bind="license.licenseStatus.licenseStatus"></span>
+                                    </span>
+
+                                </td>
+                                <td class="created-date"><span ng-bind="license.createdDate | timezone | date:'MM/dd/yyyy'"></span></td>
+                                <td class="modified-date"><span ng-bind="license.modifiedDate | timezone | date:'MM/dd/yyyy'"></span></td>
+                                <td class="signed-date"><span ng-bind="license.signedDate | timezone | date:'MM/dd/yyyy'"></span></td>
+
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>

@@ -1,0 +1,711 @@
+﻿html {position: relative; min-height: 100%;}
+body {margin:0px auto; padding:0px 20px; background:url(/images/template/body-background.jpg) 0px 0px; background-repeat:repeat-x; font-family: 'Roboto', sans-serif; font-size:12px;}
+h1 {margin-top:0px; margin-bottom:0px;}
+
+/* Global Rules */
+input.date-field {width:80px!important;}
+input[type=text], textarea {
+border:solid 1px #A5A5A5;
+border-radius:2px;
+padding:4px;
+vertical-align:middle;
+background-color:#eeeeee;
+-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+-webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;}
+
+input[type=password], textarea {
+border:solid 1px #A5A5A5;
+border-radius:2px;
+padding:4px;
+vertical-align:middle;
+background-color:#eeeeee;
+-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+-webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;}
+
+ ::-ms-clear { width: 0; height: 0; } /* Kills the IE "X" clear in input filds*/
+
+.dropdown .dropdown-menu input[type="checkbox"] {margin-right:6px; vertical-align:middle;}
+.dropdown-toggle  {text-align:left;}
+
+/* Effects */
+.shadow {-webkit-box-shadow:0 6px 12px rgba(0, 0, 0, 0.175); -moz-box-shadow:0 6px 12px rgba(0, 0, 0, 0.175); box-shadow:0 6px 12px rgba(0, 0, 0, 0.175);}
+.shadow-light {-webkit-box-shadow:0 3px 6px rgba(0, 0, 0, 0.175); -moz-box-shadow:0 3px 6px rgba(0, 0, 0, 0.175); box-shadow:0 3px 6px rgba(0, 0, 0, 0.175);}
+
+/*/////// Template ////////*/
+.header-band {margin:0px -20px; background:#333;}
+.header-band .nav.navbar {width:970px; margin:0px auto; min-height:30px; margin-bottom:0px; text-align:right;} 
+.header-band .nav.navbar a {display:inline-block; margin:5px 10px 0px 10px; color:#EFEFEF;}
+.header-band .nav.navbar a:hover {color:#FFF; text-decoration:none;}
+.header-band .nav.navbar span {color:#EFEFEF;}
+
+header {width:970px; margin:0px auto; padding:0;}
+header .header-sprite {height: 100px; width:970px; display: block; margin: 0 auto; padding: 0; background: url(/images/template/header.png) no-repeat;}
+
+nav.main-nav {position:relative; width:970px; margin-top:-30px; margin-bottom:-1px; z-index:1;}
+nav.main-nav ul.nav-tabs  {width:755px; margin-left:215px;}
+nav.main-nav ul.nav-tabs li {width:100px; text-align:center;}
+nav.main-nav ul.nav-tabs li a {font-size:14px; color:#006699; text-transform:uppercase;}
+nav.main-nav ul.nav-tabs li.active a {color:#666666;}
+
+nav.sub-nav {position:relative; width:99.8%; display:block; margin:0 2px -42px 2px; padding:0; z-index:9; background-color:#fff; border-bottom: solid 1px #EFEFEF; border-top-left-radius:5px; border-top-right-radius:5px; text-align:right;}
+nav.sub-nav ul {display:block; width:970px; margin:0 auto; padding:0;}
+nav.sub-nav ul li {display:inline-block; margin:0 auto; padding:0px;}
+nav.sub-nav ul li:last-child {margin-right:172px;}
+nav.sub-nav ul li a {display:block; margin:0 auto; padding:10px; font-size:14px;}
+nav.sub-nav ul li a:hover {text-decoration:none;}
+
+nav.breadcrumbs {padding: 8px 0px; margin: 0px auto 20px 16px; list-style: none; background-color: transparent; border:none; border-radius: 2px;}
+nav.breadcrumbs ul, nav.breadcrumbs ul li {list-style:none; margin:0px; padding:0px; display:inline;}
+nav.breadcrumbs span {margin:-4px 4px 0px 0px; }
+nav.breadcrumbs span, nav.breadcrumbs label, nav.breadcrumbs a {font-weight:normal; text-transform:none; font-size:16px!important; color:#999;}
+nav.breadcrumbs a {text-decoration:none; color:#069;}
+nav.breadcrumbs a::after {content:">";}
+
+nav.reportcrumbs {padding: 8px 0px; margin: 0px auto 20px 16px; list-style: none; background-color: transparent; border:none; border-radius: 2px;}
+nav.reportcrumbs ul, nav.reportcrumbs ul li {list-style:none; margin:0px; padding:0px; display:inline;}
+nav.reportcrumbs span {margin:-4px 4px 0px 0px; }
+nav.reportcrumbs span, nav.reportcrumbs label, nav.reportcrumbs a {font-weight:normal; text-transform:none; font-size:16px!important; color:#999;}
+nav.reportcrumbs a {text-decoration:none; color:#069;}
+
+main {position:relative; display:table; width:100%; min-width:970px; min-height:100%; padding:50px 20px 20px 20px; z-index:0; margin:0; background:#FFF; border:solid 1px #CCC; border-radius:6px;}
+
+footer {height: 60px; display:block; margin:0; padding:0; bottom: 0;}
+
+/*/////// Content ////////*/
+
+/*//// Tables & Columns ////*/
+table.table.nested {border-top:none; margin-top:-1px;}
+table.table td.nested {border-bottom:none; padding-top:0px;}
+
+table.table.nested.light > thead > tr > th  {color:#333333;}
+table.table.nested.light > thead > tr > th, td.nested.light {background-color:#E1F0F4!important;}
+table.table.nested.dark > thead > tr > th  {color:#FFFFFF;}
+table.table.nested.dark > thead > tr > th, td.nested.dark {background-color:#006699!important;}
+
+table.table tr.grouped td {border-bottom:none; padding-bottom:0px; vertical-align:baseline;}
+table.table tr.grouped td .icon.group {margin-bottom:-8px;}
+
+/* Table Column Special Rules */
+table {font-size:11px;}
+table.table tr.ng-scope.even {background-color:#efefef!important;}
+table.table tr.ng-scope.odd {background-color:#ffffff!important;}
+
+th {white-space:nowrap;}
+th a {color:#333333;}
+th a:hover {color:#666666; text-decoration:none;}
+th span {vertical-align:middle;}
+
+th.select-all {width:1%;}
+th.status, td.status {width:5%; white-space:nowrap;}
+th.config, td.config {width:1%; padding-right:20px!important;}
+
+td.notes {width:1%; text-align:right;}
+th.priority, td.priority {width:1%;}
+th.select-all input, td.select-all input {margin:0px 0px 0px 0px;}
+
+td.products.open a.badge {color: #fff; background-color: #333; border: solid 1px #333; text-decoration: none; cursor: pointer;}
+td.products.open a.badge.open {color: #fff; background-color: #ebebeb; border: solid 1px #ccc; text-decoration: none; cursor: pointer;}
+
+th.note-added, td.note-added,
+th.license-type, td.license-type,
+th.license-created, td.license-created {width:1%; white-space:nowrap; vertical-align:top!important;}
+
+/* Table Column Widths / Alignment */
+table .one-percent {width:1%;}
+table .five-percent {width:5%;}
+table .eight-percent {width:8%;}
+table .ten-percent {width:10%;}
+table .fifteen-percent {width:15%;}
+table .eigthteen-percent {width:18%;}
+table .twenty-percent {width:20%;}
+table .twentyfive-percent {width:25%;}
+table .twentyeight-percent {width:28%;}
+table .thirty-percent {width:30%;}
+table .thirtythree-percent {width:33%;}
+table .thirtyfive-percent {width:35%;}
+table .forty-percent {width:40%;}
+table .fortyfive-percent {width:45%;}
+table .fifty-percent {width:50%;}
+table .seventyfive-percent {width:75%;}
+table .eigthyfive-percent {width:85%;}
+table .onehundred-percent {width:100%;}
+
+table .centered {text-align:center;}
+table .left-aligned {text-align:left;}
+table .right-aligned {text-align:right;}
+table .no-wrap {white-space:nowrap;}
+table .top {vertical-align:top!important;}
+
+#configurationTable thead { background-color: #E1F0F4;}
+
+/*.btn.btn-sm span.caret {margin-top:6px;}*/
+ 
+/*//// Search Bar and Advanced Search Panel /////*/
+.search-wrapper {position:relative; display:block; min-width:976px; margin:0px 0px 30px 0; padding:0px;}
+.search-wrapper ul.search {width:820px; height:43px; margin:0px auto; padding:0; list-style:none; }
+.search-wrapper > ul.search > li {display:inline-block;}
+.search-wrapper ul.search li a.icon.advanced.dropdown-toggle {position:relative; display:block; width:36px; height:37px; margin:0; padding:0; background: url(/images/content/usl-sprite.png)  0px -60px no-repeat;}
+.search-wrapper ul.search li input.search-field {width:100%; max-width:750px; min-width:730px; height:43px; margin:0 0 -3px -42px; padding:4px 40px 0px 46px; color:#b9b8b8; font-size:26px; background-color:#F9F9F9; border:solid 1px #CCC; border-radius:5px;}
+.search-wrapper ul.search > li > div.dropdown button {padding:10px 14px 10px 14px; border-radius:3px; margin-bottom:-3px;}
+.search-wrapper ul.search > li > div.dropdown.recent-searches {position:relative; margin-left:-30px;}
+.search-wrapper ul.search > li > div.dropdown.recent-searches button {padding:7px 10px 6px 10px; border:solid 1px #CCC; margin:-7px 0px 0px -6px;}
+.search-wrapper ul.search > li > div.dropdown.recent-searches > .dropdown-toggle > span.caret {margin-left:0px; margin-top:10px; padding:0px 0px 8px 0px;}
+.search-wrapper ul.search > li > div.dropdown.recent-searches ul.dropdown-menu {margin-top:2px; padding:0px 0px; border-color:#CCC; width:723px;}
+.search-wrapper ul.search > li > div.dropdown.recent-searches ul.dropdown-menu li { white-space:nowrap; border-bottom:solid 1px #DDD;}
+.search-wrapper ul.search > li > div.dropdown.recent-searches ul.dropdown-menu li h3 {margin:10px 10px;}
+.search-wrapper ul.search > li > div.dropdown.recent-searches ul.dropdown-menu li a {padding:10px;}
+.search-wrapper ul.search > li > a.btn.big-search {margin:-30px 0 0 0; padding:10px 14px 10px 14px; border-radius:3px; color: #ffffff; border-color: #af4509;
+background: #e37423; /* Old browsers */ background: -moz-linear-gradient(top,  #e37423 0%, #af4509 100%); /* FF3.6+ */ background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e37423), color-stop(100%,#af4509)); /* Chrome,Safari4+ */ background: -webkit-linear-gradient(top,  #e37423 0%,#af4509 100%); /* Chrome10+,Safari5.1+ */ background: -ms-linear-gradient(top,  #e37423 0%,#af4509 100%); /* IE10+ */ background: linear-gradient(to bottom,  #e37423 0%,#af4509 100%); /* W3C */ }
+
+.search-wrapper ul.search li ul.advanced-search-menu {display:none; position:absolute; margin:2px 0 0 0; padding:10px 10px 0px 10px; z-index:100; background-color:#fff; border:solid 1px #ccc; border-radius:4px; border-top-left-radius:0px; border-top-right-radius:0px; list-style:none;}
+.search-wrapper ul.search li ul.advanced-search-menu label,
+.search-wrapper ul.search li ul.advanced-search-menu a {font-size:11px!important;}
+.search-wrapper ul.search li ul.advanced-search-menu span.search-view-title {float:left; clear:both; padding:5px 10px; font-size:14px; color:#666; width:100%; background-color:#efefef;}
+.search-wrapper ul.search li ul.advanced-search-menu .dropdown-menu.dropdown-menu-form.open {max-height:220px; width:200px;  overflow-y:auto; overflow-x:hidden;}
+.search-wrapper ul.search li ul.search-within {clear:left; width:150px; list-style:none; display:block; margin:10px 0px 0px 10px; padding:0; border-right:solid 1px #cccccc;}
+.search-wrapper ul.search li ul.search-within > li {margin-bottom:12px;}
+.search-wrapper ul.search li ul.search-within > li:first-child {margin-bottom:17px; margin-top:0px;}
+.search-wrapper ul.search li ul.search-within > li:last-child {margin-top:20px;}
+.search-wrapper ul.search li ul.advanced-options {width:250px; list-style:none; display:block; margin:8px 20px 20px 0px; padding:0 0 0 20px;}
+.search-wrapper ul.search li ul.advanced-options > li {float:left; clear:both; margin-bottom:8px; white-space:nowrap;}
+.search-wrapper ul.search li ul.advanced-options > li.spacer {display:block; height:10px;}
+.search-wrapper ul.search li ul.advanced-options > li > label {float:left; clear:left; width:100px; line-height:24px; white-space:nowrap;}
+.search-wrapper ul.search li ul.advanced-options > li > input[type=text] {width:120px;}
+.search-wrapper ul.search li ul.advanced-options > li .dropdown {float:right; width:120px; vertical-align:middle;}
+.search-wrapper ul.search li ul.advanced-options > li ul.dropdown-menu li {line-height:22px;}
+.search-wrapper ul.search li ul.advanced-options > li .dropdown-toggle {width:120px; line-height:18px; padding:1px 6px; font-size:11px!important;}
+.search-wrapper ul.search li ul.advanced-options > li .dropdown-toggle span.caret {position:absolute; right:6px;}
+.search-wrapper ul.search li ul.advanced-options > li.date-range > label,
+.search-wrapper ul.search li ul.advanced-options > li.date-range > span {float:left; clear:both;}
+.search-wrapper ul.search li ul.advanced-options > li.date-range input.date-field {line-height:18px; padding:1px 6px;}
+.search-wrapper ul.search li ul.advanced-options > li.date-range .btn.btn-default {line-height:18px; padding:0px 6px;}
+.search-wrapper ul.search li ul.advanced-options > li span.label-after {font-size:11px; font-weight:700;}
+.search-wrapper ul.search li ul.advanced-buttons {float:right; clear:both; display:block; position:relative; bottom:10px; list-style:none;}
+.search-wrapper ul.search li ul.advanced-buttons .dropdown {margin-right:3px;}
+
+.search-filters {position:relative; margin:20px auto 10px auto; padding:0 0 10px 0;}
+.search-filters ul.applied-filters {position:relative; display:block; margin:0px auto; padding:0; border-radius:5px; list-style:none; font-size:11px;}
+.search-filters ul.applied-filters > li {display:inline;}
+.search-filters ul.applied-filters > li span.filter-wrapper {margin-right:10px; line-height:22px; white-space:nowrap;}
+.search-filters ul.applied-filters > li label {font-size:11px!important;}
+.search-filters ul.applied-filters > li span.filter-item {margin: 0px 2px 0px 4px; padding:2px 2px 2px 4px; white-space:nowrap; background-color:#efefef; border:solid 1px #ccc; border-radius:3px;}
+.search-filters ul.applied-filters > li span.icon {margin-left:6px; vertical-align:sub;}
+
+ul.grid-header {width:100%; margin:0 auto 6px auto; padding:0px; list-style:none;}
+ul.grid-header > li {display:inline-block; margin:0; padding:0;}
+ul.grid-header > li > span {line-height:22px;}
+ul.grid-header > li.actions {width:44%; vertical-align:top;}
+ul.grid-header > li.pagination {width:25%;}
+/* ul.grid-header > li.records {width:20%;} */
+ul.grid-header > li.records .dropdown {float:left; margin:0 10px;}
+ul.grid-header > li.edit-columns {float:right; width:10%;}
+ul.grid-header > li.edit-columns .dropdown button {float:right}
+ul.grid-header > li.edit-columns .dropdown-menu {position:absolute; padding:8px; top:24px; right:0px; left:auto!important; min-width:120px; max-width:120px; white-space:nowrap;}
+ul.grid-header > li.edit-columns .dropdown-menu label {font-size:11px;}
+ul.grid-header > li.edit-columns .dropdown-menu .checkbox input[type="checkbox"] {margin-top:1px;}
+ul.grid-header > li.edit-columns .dropdown-menu .checkbox.disabled {color:#999999;}
+
+section.my-view-panel {margin-bottom:10px; max-height:182px; overflow:auto; border:solid 1px #ddd; }
+section.my-view-panel table > tbody > tr > td {background-color:#E7E7E7!important; font-weight:700;}
+
+.search-grid tr > td.collapse.in {display: none;} /* Resolves class conflict with Bootstrap for opening sub-grids */
+
+/*//// Details Pages ////*/
+.details {position:relative; display:block; width:100%; padding:0; margin:0 auto;}
+.details .license-overview {float:left; width:100%; margin:20px 0px 40px 0px; padding:10px; border:solid 1px #DDD;}
+.details .license-overview .license-header {float:left; width:100%; margin:0; padding:0 0 10px 0; border-bottom:solid 1px #DDD; }
+.details .license-overview .license-header h2,
+.details .license-overview .license-header h3 {margin:0px; color:#666;}
+.details .license-overview .license-header h3 {margin-top:6px; line-height:20px; }
+.details .license-overview .license-header .mechanical-report {margin-right:20px;}
+.details .license-overview .license-header .priority-report {float:right; clear:right; display:inline-block; margin-right:8px; white-space:nowrap;}
+.details .license-overview .license-header .license-status {float:left; white-space:nowrap; margin:5px 10px 0px 0px; padding:0px 8px 0px 0px; font-size:16px; color:#666; border-right:solid 1px #DDD;}
+.details .license-overview .license-header .writers-status {float:right; clear:right; width:40%;  margin-top:4px; text-align:right;}
+.details .license-overview .license-info {float:left; clear:left; width:40%;}
+.details .license-overview .license-info .dropdown-toggle {margin-right:3px;}
+.details .license-overview .license-info > section {padding-top:10px;}
+.details .license-overview .license-info > span {display:inline; width:100%;}
+.details .license-overview .license-info > ul {list-style:none; margin:10px 0 0 0; padding:0; font-size:11px;}
+.details .license-overview .license-info > ul > li {float:left; width:48%; padding:5px 4px;}
+.details .license-overview .license-info > ul > li > label {float:left; width:90px; font-size:11px;}
+.details .license-overview .license-info > ul > li > span {display:inline-block; width:160px;}
+.details .license-overview .license-info > ul > li > span.status-icon {float:left; width:18px;}
+.details .license-overview .license-configurations {float:left; max-height:190px; overflow:hidden; margin-top:10px; padding:0px 10px 10px 10px; width:60%; background-color:#E1F0F4;}
+.details .license-overview .license-configurations > table.table > thead > tr > th {background-color:#E1F0F4;}
+
+/* Details Tab Content */
+.details .tab-content {min-height:400px; border:1px solid #DDD; margin-top:-1px; padding:10px; -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175); -moz-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);}
+.details .tab-content .actions {margin:10px 0px 20px 0px;}
+.details .tab-content .dropdown-menu.schedules {max-height:120px; overflow:auto; overflow-y:scroll;}
+.details .tab-content table.table > tbody > tr > td > table.table > tbody > tr > td > table.table > tbody > tr > td.table-cell-light {background-color:#E1F0F4; padding-top:0px;}
+.details .tab-content table.table > tbody > tr > td > table.table > tbody > tr > td > table.table > tbody > tr > td.table-cell-light > table.table th {border-top:none;}
+.details .tab-content table.table > tbody > tr > td.table-cell-light table.table.nested > tbody > tr > td.nested {padding-top:0px; background-color:#006699;}
+.details .tab-content table.table > tbody > tr > td.table-cell-light table.table.nested > thead > tr > th,
+.details .tab-content table.table > tbody > tr > td.table-cell-light table.table.nested > thead > tr > th > table.table.nested > thead > tr > th {background-color:#006699; color:#FFFFFF; border-top:none;}
+.details .tab-content td.collapse.in {display:table-cell;}
+.details .tab-content span.sample-track { margin-top:-14px; font-style:italic; font-weight:700;} 
+.details .tab-content span.product-config-tag {display:inline-block; margin:0 10px; white-space:nowrap; line-height:22px;}
+.details .tab-content td span.strike-through {text-decoration:line-through;}
+.details .tab-content td span.override {color:#C40000;}
+.details .tab-content td span.publisher-label {margin-left:40px;}
+.details .tab-content td span.sub-publisher-label {margin-left:20px;}
+.details .tab-content td.writer-add-note {border-bottom:none; padding-bottom:0px;}
+.details .tab-content td.writer-add-note table.writer-notes tr td {border-bottom:none; padding:0px;}
+.details .tab-content button.btn.btn-default.btn-sm.notes-btn {min-width:75px;}
+.details .tab-content textarea.writer-note {width:99.4%; height:24px; padding:3px;}
+.details .tab-content ul.history-actions {float:left; margin:0; padding:0;}
+.details .tab-content ul.history-actions li {float:left; list-style:none; display:inline;}
+.details .tab-content ul.history-actions li label {float:left; margin-top:1px; margin-right:6px; line-height:22px; font-size:11px; font-weight:normal; }
+.details .tab-content ul.history-actions li button {margin-right:20px;}
+.details .tab-content .details-writer-row {font-weight:700;}
+.details .tab-content table.table tr td.publisher {padding-left:18px;}
+.details .tab-content table.table tr td.admin-company {padding-left:36px;}
+.details .tab-content span:last-child .list-comma { display: none; }
+
+
+
+/* Admin */
+.admin-grid table.table > tbody > tr > td.table-cell-light table.table.nested > tbody > tr > td.nested {padding-top:0px; background-color:#006699;}
+.admin-grid table.table > tbody > tr > td.table-cell-light table.table.nested > thead > tr > th,
+.admin-grid table.table > tbody > tr > td.table-cell-light table.table.nested > thead > tr > th > table.table.nested > thead > tr > th {background-color:#006699; color:#FFFFFF; border-top:none;}
+
+.admin-grid input[type=text] {width:100%;}
+
+.admin-grid tr.edit-licensee {margin-bottom:8px!important;}
+.admin-grid tr.edit-contact {border-bottom:solid 8px #069!important;}
+.admin-grid tr.edit-licensee > td > input[type=text],
+.admin-grid tr.edit-contact > td > input[type=text]  {background-color:#EEE;}
+
+/*//// Modals ////*/
+
+/* Global Modal Styles */
+.modal-content, .modal-content label {font-size:11px!important;}
+.modal-search-wrapper {height:434px; overflow:auto; border:1px solid #DDDDDD; border-radius:2px; }
+.modal-content .search-wrapper {margin:0px 0px 0px 0px;}
+
+/* Progress Bars */
+#progressbar {background-color: #0099CC; width: 0%;}
+
+/*Max Modal for Jquery/Bootstrap */
+.modal-max {width:95%; height:95%; display:table!important}
+
+/* Assign/Prioritize Modal */
+.modal-content .assign-prioritize textarea {margin:0; width:100%; max-width:100%; height:120px; padding:4px; border:1px solid #DDDDDD;}
+.modal-content .assign-prioritize .dropdown {float:left; margin-right:10px;}
+
+/* Add/Edit Note Modal */
+.modal-content .add-note label,
+.modal-content .add-note .dropdown {display:inline; vertical-align:middle; white-space:nowrap; margin-right:8px;}
+.modal-content .add-note textarea {margin:20px 0 0 0; width:100%; max-width:100%; height:120px; padding:4px; border:1px solid #DDDDDD;}
+
+/* Generate Document Modal */
+.modal-content .generate-doc ul {margin:0; padding:0; list-style:none;}
+.modal-content .generate-doc ul li {padding:5px 0px;}
+.modal-content .generate-doc label {line-height:22px; width: 120px;}
+.modal-content .generate-doc ul li input {border: 1px solid #DDDDDD; padding: 4px; vertical-align: middle; width: 200px;}
+.modal-content .generate-doc ul li.select-template {display:inline-flex;}
+.modal-content .generate-doc ul li.generate-doc-message {background-color:#FFCACA; text-align:center; margin-bottom:4px;}
+
+/* Registration Modal */
+.modal-content .register {display:flex;}
+.modal-content .register input[type=text], .modal-content .register input[type=password] {width:200px;}
+.modal-content .register > ul {width:50%; list-style:none; margin:0 0 0 0; padding:0;}
+.modal-content .register > ul > li {display:flex; position:relative; padding:5px 0px; white-space:nowrap;}
+.modal-content .register > ul > li.user-name {padding-bottom:45px; margin-bottom:16px; border-bottom:solid 1px #DDD;}
+.modal-content .register > ul > li.password {padding-bottom:10px; margin-bottom:16px; border-bottom:solid 1px #DDD;}
+.modal-content .register label {width:120px; line-height:22px;}
+.modal-content .register span {color:#FF0000;}
+
+/* Create / Copy / Edit License Modal */
+.modal-content .license {display:flex;}
+.modal-content .license input[type=text] {width:190px;}
+.modal-content .license > ul {width:50%; list-style:none; margin:0 10px 0 10px; padding:0;}
+.modal-content .license > ul > li {display:flex; position:relative; padding:5px 0px; white-space:nowrap;}
+.modal-content .license > ul > li > span {line-height:22px; margin-bottom:3px;}
+.modal-content .license label {width:100px; line-height:22px;}
+
+/* Edit Rates Modal */
+.modal-content .rates input[type=text] {width:43px;}
+.modal-content .rates .writer-row {font-weight:700; background-color:rgb(178, 255, 127);}
+.modal-content .rates .dropdown-menu {max-height:200px; overflow:auto; overflow-y:scroll;}
+.modal-content .rates .select-writers {margin-bottom:20px; padding:0px 10px 10px 10px; background-color:#006699;}
+.modal-content .rates .select-writers .dropdown-toggle,
+.modal-content .rates .select-writers .dropdown-menu {min-width:140px;}
+.modal-content .rates .select-writers .dropdown-toggle span.caret {position:absolute;}
+.modal-content .rates .dropdown-menu li {width:100%; line-height:22px; white-space:nowrap;}
+.modal-content .rates .select-writers table.table > thead > tr > th {background-color:#006699; color:#FFFFFF; border-top:none;}
+.modal-content .rates ul.applied-filters {width:100%; margin:10px 0 0 0; padding:0px 10px; list-style:none; color:#FFFFFF;}
+.modal-content .rates ul.applied-filters > li > span.filter-wrapper {margin-right:10px; line-height:22px; white-space:nowrap;}
+.modal-content .rates ul.applied-filters > li > span.filter-item {margin: 0px 2px 6px 4px; padding:2px 1px 2px 6px; white-space:nowrap; color:#333333; background-color:#efefef; border:solid 1px #ccc; border-radius:3px; display: inline-block; }
+.modal-content .rates ul.applied-filters > li > span > span.icon {margin-left:6px; vertical-align:sub;}
+.modal-content .rates .writer-configurations {padding:0px 10px 10px 10px; background-color:#006699;}
+.modal-content .rates .writer-configurations table.table > thead > tr > th {background-color:#006699; color:#FFFFFF; border-top:none;}
+.modal-content .rates .writer-configurations .dropdown-toggle {min-width:90px;}
+.modal-content .rates .writer-configurations .dropdown-toggle span.caret {position:absolute;}
+.modal-content .rates .writer-configurations .dropdown-toggle.stat-year {min-width:50px;}
+.modal-content .rates .writer-configurations .dropdown-toggle.rate-type {min-width:120px;}
+.modal-content .rates .writer-configurations .dropdown-toggle.paid-quarter {min-width:50px;}
+.modal-content .rates .apply-rates {padding:0px 10px 10px 10px; background-color:#E1F0F4;}
+.modal-content .rates .apply-rates table.table > thead > tr > th {background-color:#E1F0F4; color:#333333; border-top:none;}
+
+/* Edit Configurations Modal */
+.modal-content .configurations button.calendar {margin-left:-3px;}
+.modal-content .configurations .edit-configurations {padding:0px 10px 10px 10px; background-color:#006699;}
+.modal-content .configurations .edit-configurations table.table > thead > tr > th {background-color:#006699; color:#FFFFFF; border-top:none;}
+.modal-content .configurations .selected-configurations {margin-top:20px; padding:0px 10px 10px 10px; background-color:#E1F0F4;}
+.modal-content .configurations .selected-configurations table.table > thead > tr > th {background-color:#E1F0F4; color:#333333; border-top:none;}
+.modal-content .configurations .selected-configurations tr {background-color:#E6E6E6; color:#333333; border-top:none;}
+.modal-content .configurations .selected-configurations tr.configselected {background-color:#FFFFFF; color:#333333; border-top:none;}
+
+.modal-content .configurations table.table > thead > tr > th.product-title {width:18%;}
+.modal-content .configurations table.table > thead > tr > th.config {white-space:nowrap; width:17.5%;}
+.modal-content .configurations table.table > thead > tr > th.upc {width:15%;}
+.modal-content .configurations table.table > thead > tr > th.record  {width:12%;}
+.modal-content .configurations table.table > thead > tr > th.release-date {width:12%;}
+.modal-content .configurations table.table > thead > tr > th.action {white-space:nowrap; width:8%;}
+.modal-content .configurations td.release-date input {width:60%;}
+.modal-content .configurations div.dropdown.system-configs {display:inline;}
+.modal-content .configurations div.dropdown.system-configs input.dropdown-toggle {width:85%;}
+
+/* Create License / Add Products Modal */
+.modal-content .create-license {display:flex; padding:20px 40px;}
+.modal-content .create-license input[type=text] {width:200px;}
+.modal-content .create-license > ul {width:50%; list-style:none; margin:0 0 0 0; padding:0;}
+.modal-content .create-license > ul > li {display:flex; position:relative; padding:5px 0px; white-space:nowrap;}
+.modal-content .create-license > ul > li > span {line-height:22px; width:400px; margin:auto 10px 3px 10px; white-space:normal;}
+.modal-content .create-license > ul > li > label {width:100px; line-height:22px;}
+.modal-content .create-license button.dropdown-toggle {min-width:140px;}
+.modal-content .create-license .dropdown-menu {min-width:140px; max-height:200px; max-width:360px; overflow-y:auto; overflow-x:hidden;}
+.modal-content .create-license button.dropdown-toggle .caret {position:absolute; right:6px;}
+.modal-content .selected-products {max-height:153px; overflow:auto; border:solid 1px #DDD;}
+.modal-content .add-products .carousel .text-center {text-align:left;}
+
+/* Issue License Modal */
+
+.modal-content .issue-license input[type="text"] {height:24px; width:176px; margin-right:-1px;}
+.modal-content .issue-license section.recipients {margin:10px auto;}
+.modal-content .issue-license section.recipients > ul {display:table-cell; margin:0 0 2px 0; padding:0; list-style:none;}
+.modal-content .issue-license section.recipients > ul > li {clear:both; width:478px; margin-bottom:6px;}
+.modal-content .issue-license section.recipients > ul > li .dropdown {display:inline; vertical-align:middle;}
+.modal-content .issue-license section.recipients > ul > li .dropdown-menu { max-height: 200px; overflow-y: auto; overflow-x: hidden;}
+.modal-content .issue-license section.recipients > ul > li > label {margin:6px 0; width:150px; white-space:nowrap;}
+.modal-content .issue-license section.recipients > ul > li > span {display:inline-block; width:320px; vertical-align:text-top; overflow-x:hidden;}
+
+.modal-content .issue-license section.recipients hr {clear:both;}
+.modal-content .issue-license ul.applied-filters {float:left; width:100%; margin:8px 0px 7px 147px; padding:0px; list-style:none; color:#FFFFFF;}
+.modal-content .issue-license ul.applied-filters > li {display:inline;}
+.modal-content .issue-license ul.applied-filters > li > span.filter-wrapper {margin-right:10px; line-height:22px; white-space:nowrap;}
+.modal-content .issue-license ul.applied-filters > li > span.filter-item {display:inline-block; margin: 0px 2px 10px 4px; padding:2px 1px 2px 2px; white-space:nowrap; color:#333333; background-color:#efefef; border:solid 1px #ccc; border-radius:3px; }
+.modal-content .issue-license ul.applied-filters > li > span > span.icon {margin-left:6px; vertical-align:sub;}
+.modal-content .issue-license section.recipients > ul > li.subject-line > input {margin-left:-2px;} 
+.modal-content .issue-license section.file-upload {clear:both; margin:10px 0px;}
+.modal-content .issue-license section.file-upload label.attach {margin:6px 0; width:152px; white-space:nowrap;}
+.modal-content .issue-license section.file-upload input[type="text"] {width:176px;}
+.modal-content .issue-license section.file-upload .input-group, 
+.modal-content .issue-license section.file-upload label {float:left; margin-right:2px;}
+.modal-content .issue-license section.file-upload input[type="text"] {float:left;}
+.modal-content .issue-license section.file-upload .progress {margin-top:20px; margin-left:5px; max-width:456px; clear:both;}
+.modal-content .issue-license section.attachments {margin:10px auto; padding:0px 10px 10px 10px; max-height:300px; overflow:auto; background-color:#E1F0F4;}
+.modal-content .license-preview section.license-window {display:block; padding:10px; border:solid 1px #CCC; border-radius:3px; max-height:600px; overflow:auto;}
+
+/* Create/Edit License Modal */
+.modal-content .product-info {display:flex;}
+.modal-content .product-info > ul {margin:0; padding:0; list-style:none; width:30%;}
+.modal-content .product-info > ul > li > label {width:100px; padding:10px 0px;}
+.modal-content .product-info > ul > li > .dropdown {display:inline;}
+.modal-content .product-info > ul > li > .dropdown > input {min-width:140px;}
+.modal-content .product-info table {margin:6px 20px;}
+.modal-content .product-info table thead > tr > th {background-color:#E1F0F4; color:#333333;}
+
+/* Add Tracks Modal */
+.modal-content .add-tracks {background-color:#006699; padding:0px 8px 8px 8px;}
+.modal-content .add-tracks table > thead > tr > th {background-color:#006699; color:#FFF; border-top:none!important;}
+.modal-content .add-tracks input[type="text"],
+.modal-content .track-listing input[type="text"] {width:100%;}
+.modal-content .add-tracks input[type="text"].sm,
+.modal-content .track-listing input[type="text"].sm {width:40px;}
+.modal-content .track-listing {background-color:#E1F0F4; margin-top:10px; padding:0px 8px 8px 8px;}
+.modal-content .track-listing table > thead > tr > th {background-color:#E1F0F4; border-top:none!important;}
+.modal-content .track-listing table > tbody > tr > td {min-width:56px;}
+.modal-content .track-listing table > tbody > tr.editing {background-color:#E1F0F4;}
+.modal-content .track-listing table > tbody > tr.editing > td {border-bottom:none;}
+.modal-content .track-listing table > tbody > tr.editing > td > label {width:112px; margin:4px 10px auto auto;}
+.modal-content .track-listing table > tbody > tr.editing > td > ul > li {list-style:none;}
+.modal-content .track-listing table input.comp-track-duration {margin-left:10px; margin-right:16px; width:40px!important;}
+.modal-content .track-listing table ul.add-track-copyright-list {list-style:none; margin:0; padding:0;}
+.modal-content .track-listing table ul.add-track-copyright-list li {}
+.modal-content .track-listing table span.track-copyright-info {width:166px; margin-right:14px; display:inline-block; white-space:normal;}
+
+/* Writers Consent */
+.modal-content .writers-consent input[type=file],
+.modal-content .writers-consent input.form-control,
+.modal-content .writers-consent div.input-group {width:508px!important;}
+.modal-content .writers-consent label.btn.btn-default {padding: 1px 4px 0px 4px;}
+.modal-content .writers-consent .file-upload button.btn.btn-default {position:absolute; top:75px; right:20px;}
+.modal-content .writers-consent .dropdown {display:inline;}
+.modal-content .writers-consent .filestyle label.btn.btn-default {height:25px;}
+
+/* Paid Quarter */
+.modal-content .paid-quarter > label {width:80px; line-height:21px; }
+.modal-content .paid-quarter .dropdown {display:inline;}
+.modal-content .paid-quarter ul.dropdown-menu {height:120px; overflow:scroll; overflow-x:auto;}
+
+/* License Writer */
+.modal-content .license-writer > label {width:120px;}
+.modal-content .license-writer .dropdown {display:inline;}
+
+/* Upload Document Modal */
+.modal-content .upload-document input[type=file]  input {height:100px;}
+.modal-content .upload-document .input-group {display:block!important;}
+.modal-content .upload-document .input-group input.form-control {width:80%!important;}
+
+/* Icon Buttons */
+.btn .icon, .btn .status-icon {margin-left:-3px;}
+.icon, .status-icon, .status-icon-lg {display:inline-block; height:20px; width:20px; background:url(/images/content/usl-sprite.png) no-repeat; cursor:pointer; vertical-align:middle;}
+.btn.narrow {padding:1px 1px; line-height:1em!important;}
+.btn.narrow .icon {margin-left:1px;}
+.btn.btn-default.narrow.close-modal {position:absolute; right:10px; top:10px;}
+.btn.btn-default.back {float:left;}
+.btn-icon {height:18px!important; width:18px!important; padding:0px 0px 0px 0px!important}
+
+/* Button Icons */
+.icon.calendar {background-position:-300px 0px;}
+.icon.group {background-position:-280px 0px;}
+.icon.no-group {background-position:-360px 0px;}
+.icon.add {background-position:-320px 0px;}
+.icon.assign {background-position:0px 1px;}
+.icon.select-products {background-position:-100px 0px;}
+.icon.create-license {background-position:-20px 0px;}
+.icon.create-product {background-position:-120px 0px;}
+.icon.reissue-license {background-position:-40px 0px;}
+.icon.copy-license {background-position:-40px 0px;}
+.icon.edit {background-position:-160px 0px;}
+.icon.edit-license {background-position:-60px 0px;}
+.icon.edit-rates {background-position:-380px 0px;}
+.icon.select-configurations {background-position:-600px 0px;}
+.icon.edit-configurations {background-position:-400px 0px;}
+.icon.add-note {background-position:-80px 0px;}
+.icon.remove {background-position:-340px 0px;}
+.icon.set-priority {background-position:-220px 0px;}
+.icon.arrow-down {background-position:-240px 0px;}
+.icon.remove-note {background-position:-420px 0px;}
+.icon.upload-doc {background-position:-440px 0px;}
+.icon.download-doc {background-position:-460px 0px;}
+.icon.print-doc {background-position:-480px 0px;}
+.icon.folder {background-position: -500px 0px;}
+.icon.error {background-position: -520px 0px;}
+.icon.delete {background-position: -260px 0px;}
+.icon.save {background-position: -540px 0px;}
+.icon.save-select {background-position: -560px 0px;}
+.icon.cancel, .icon.close {background-position: -580px 0px;}
+.icon.back {background-position: -301px -81px;}
+.icon.proforma {background-position: -501px -81px;}
+.icon.include {background-position: -323px -82px;}
+.icon.exclude {background-position: -523px -82px;}
+
+/* Tab Icons */
+.icon.tab-myview {width:23px; height:19px; background-position:-1px -119px;}
+
+/* Grid Icons */
+.icon.config-physical {margin-right:3px; height:20px; width:20px; background-position: 0px -97px;}
+.icon.config-digital {margin-right:3px; height:20px; width:20px; background-position: -23px -97px;}
+.icon.config-both {height:20px; width:43px; background-position:0px -97px;}
+
+/* Status Icons & Labels */
+.status-icon {margin-right:3px; height:18px; width:18px;}
+.dropdown-toggle .status-icon {margin:-2px 4px auto -4px}
+.status-label {width:72px; border-radius:2px; padding:0px 4px 0px 0px; line-height:20px; font-size:9px; font-weight:700; text-transform:uppercase; text-align:center;}
+
+.status-icon.executed {background-position: -321px -81px; }
+.status-icon.issued {background-position: -341px -81px;}
+.status-icon.accepted {background-position: -361px -81px;}
+.status-icon.verifying {background-position: -381px -81px;}
+.status-icon.pending {background-position: -401px -81px;}
+.status-icon.hold {background-position: -421px -81px;}
+.status-icon.voided {background-position: -441px -81px;}
+.status-icon.error {background-position: -461px -81px;}
+.status-icon.rejected {background-position: -481px -81px;}
+.status-icon.failed {background-position: -481px -81px;}
+.status-icon.proforma {background-position: -501px -81px;}
+
+.status-icon-lg {margin-right:4px; height:24px; width:22px;}
+.status-icon-lg.executed {background-position: -78px -60px; }
+.status-icon-lg.issued {background-position: -101px -60px;}
+.status-icon-lg.accepted {background-position: -124px -60px;}
+.status-icon-lg.verifying {background-position: -147px -60px;}
+.status-icon-lg.pending {background-position: -170px -60px;}
+.status-icon-lg.hold {background-position: -193px -60px;}
+.status-icon-lg.voided {background-position: -216px -60px;}
+.status-icon-lg.rejected {background-position: -239px -60px;}
+.status-icon-lg.failed {background-position: -239px -60px;}
+.status-icon-lg.error {background-position: -262px -60px;}
+.status-icon-lg.proforma {background-position: -78px -85px;}
+
+/* Large Details Icons */
+.license-icon, .product-icon {float:left; clear:left; width:50px; height:50px; margin-right:10px; background:url(/images/content/usl-sprite.png) no-repeat; background-position:-143px -89px;}
+.license-icon {background-position:-194px -89px;}
+
+/* Small Icon Set */
+.icon-sm {height:14px; width:14px;}
+.icon-sm.remove {background-position:-36px -60px;}
+.icon-sm.remove:hover {background-position:-36px -74px;}
+
+/* Grid Priority */
+.dropdown-menu span.priority {float:left; margin-right:6px;}
+
+span.priority {display:block; height:16px; width:16px; border-radius:2px;}
+span.priority.inbox {background-color:#158BB4;}
+span.priority.high {background-color:#990000;}
+span.priority.medium {background-color:#FF9900;}
+span.priority.low {background-color:#336600;}
+
+/* Badges */
+.badge.claim {/*background-color:#FF9900;*/ display:none!important;}
+.badge.sample, .badge.medley {background-color:#158BB4;}
+.badge.warning, .badge.medley {background-color:#FF9900;}/*tomh added because claim was used and commented for Recs/license descrepancy warning*/
+
+
+/* Date Pickers */
+#datepicker button.btn.btn-default.btn-sm {background: #FF0000;}
+
+/* Fixed Table Headers */
+.fixed_headers {width:100%; table-layout:fixed; border-collapse:collapse;}
+.fixed_headers thead tr {display:inline-table; position:relative;}
+.fixed_headers tbody {display:block; overflow: auto; width: 100%; height:100%; max-height: 148px;}
+.track-listing .fixed_headers tbody {max-height:400px!important;}
+
+
+/* License Templates CSS */
+
+.license-template {font-size:11pt!important; vertical-align:top; font-family:Cambria, "Hoefler Text", "Liberation Serif", Times, "Times New Roman", serif!important;}
+.license-template th {background-color:#FFFFFF!important; font-weight:bold!important; }
+.license-template .address-header {position:relative; display:block; width:50%; margin:20pt auto; text-align:center;}
+.license-template .title-bar {background-color:rgba(0,0,0,1.00); color:rgba(255,255,255,1.00); padding:3pt 6pt;}
+.license-template .title-bar date {float:right; position:relative;}
+.license-template .licensee-info {margin:10pt 0pt;}
+
+@media print {.license-template .legal-letter {page-break-after: always;}}
+.license-template .licensee-list ol li,
+.license-template .legal-letter ul li {padding:4pt 10pt;}
+.license-template .legal-letter ul {list-style:none; margin:0; padding:0; }
+.license-template .legal-letter ul.license-signatures {display:inline; clear:both;}
+.license-template .legal-letter ul.license-signatures li {display:inline-block; width:200pt; height:30pt; vertical-align:top;}
+.license-template .legal-letter ul.license-signatures li b {margin-right:10pt;}
+.license-template .legal-letter span {display:inline-block; width:140pt; border-bottom:solid 1pt rgba(0,0,0,1.00); text-align:center;}
+.license-template .legal-letter label {clear:both; margin-left:20pt; margin-right:10pt;}
+.license-template .legal-letter span.address-block {display:block; position:absolute; border:none; right:0pt; text-align:left; margin-top:-12pt; width:50%;}
+
+@media print {.license-template .schedule-header.continued {page-break-before:always;}}
+.license-template .schedule-header ul {list-style:none;}
+
+/* License Template Table Rules */
+.license-template table {width:100%; text-align:left; border-collapse:collapse; font-size:11pt!important}
+.license-template table thead tr th {padding:3pt 6pt; vertical-align:bottom; white-space:nowrap; border-bottom:solid 1px #000000;}
+.license-template table tbody tr td {padding:3pt 6pt; vertical-align:top;}
+
+/* Products Table */
+@media print {.license-template .rates-table {page-break-inside:avoid;}}
+.license-template .product-table table .upc {width:25%;}
+.license-template .product-table table .config-type {width:25%;}
+.license-template .product-table table .configuration {width:15%;}
+.license-template .product-table table .catalog-number {width:15%;}
+.license-template .product-table table .release-date {width:20%;}
+
+/* Rates Tables */
+.license-template .rates-table table.physical-only .track-writer,
+.license-template .rates-table table.physical-digital .track-writer {width:55%;}
+.license-template .rates-table table.physical-only .split,
+.license-template .rates-table table.physical-digital .split {width:10%; text-align:center;}
+.license-template .rates-table table .rate-type {text-align:center; background-color:#EFEFEF;}
+.license-template .rates-table table .rates,
+.license-template .rates-table table .config-type,
+.license-template .rates-table table .base-rate,
+.license-template .rates-table table .pro-rata-rate {text-align:center;}
+.license-template .rates-table table .base-rate,
+.license-template .rates-table table .pro-rata-rate {width:10%;}
+.license-template .rates-table table.physical-only thead tr th.rates,
+.license-template .rates-table table.physical-only thead tr th.config-type,
+.license-template .rates-table table.physical-digital thead tr th.rates,
+.license-template .rates-table table.physical-digital thead tr th.config-type {border-bottom:none;}
+.license-template .rates-table table.physical-only thead tr th.rates span,
+.license-template .rates-table table.physical-digital thead tr th.rates span {display:block; width:100%; height:4pt; border:solid 1pt #000000; border-bottom:none;}
+
+@media print {.license-template footer {page-break-after: always;}}
+.license-template footer ul {list-style:none; display:table; margin:0pt; padding:6pt; width:100%;}
+.license-template footer ul li {display:inline-block; width:33%; text-align:center;}
+
+
+/**pagination fix*/
+.pagination > li > a:focus {
+    background: #E7E7E7;
+}
+.pagination > li > a:focus:hover {
+    background: #AEAEAE;
+}
+
+/* User Sign Up */
+.user-signup {padding:0px 20px 20px 20px;}
+.user-signup > ul {width:530px!important; margin:0 auto; padding:0; width:initial; list-style:none;}
+.user-signup > ul > li {margin:0; padding:5px 0px;}
+.user-signup > ul > li > label {display:inline-block; width:120px; line-height:22px; font-size:11px;}
+.user-signup > ul > li > button {margin-left:4px;} 
+.user-signup > ul > li > .dropdown {display:inline;}
+.user-signup > ul > li > label > b {color:#990000;}
+.user-signup .form-buttons {margin:40px auto auto 240px;}
+
+.field-error {
+    border: 1px solid red !important;
+}
+
+.highlight {
+    background-color:#FFFF73
+}
+.highlight-live {
+    background-color:#B2FF7F
+}
+
+.collapse.in {
+    display: table-cell;
+}
+
+.publisher-highlit {
+    color: gray;
+}
+.float-left-subpub {
+    float: left;
+    margin-right: 5px;
+}
+
+/* This turns off transition on collapse*/
+.no-transition {
+  -webkit-transition: height 0.01s;
+  -moz-transition: height 0.01s;
+  -ms-transition: height 0.01s;
+  -o-transition: height 0.01s;
+  transition: height 0.01s;
+}
+
+/*Validation for text areas*/
+    textarea.ng-invalid {
+            background: #F84072;
+            border: 2px solid red;
+        }
+
+.emph {
+        color: #696969;
+        font-style: italic;
+
+    }
+
+    /*For collapse/expand writers on productDetail*/
+.collapseAllWriterProductBtn {
+    margin-bottom: 10px;
+}
+
+.writerExpandBtn {
+    margin-right: 10px;
+}

@@ -1,0 +1,21 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Edit License Note</h3>
+    <button class="btn btn-default narrow close-modal" ng-click="cancel()"><span class="icon cancel"></span></button>
+</div>
+<div class="modal-body add-note">
+    <label>Note Type </label>
+    <div class="dropdown" dropdown is-open="status.isopen">
+        <button type="button" class=" btn btn-default dropdown-toggle" id="noteType" data-toggle="dropdown" ng-disabled="disabled" ng-click="getNoteTypes()">
+            <!--<button type="button" class=" btn btn-default dropdown-toggle" id="noteType" data-toggle="dropdown" ng-disabled="disabled" >-->
+            <span ng-bind="selectedNoteType.noteType"></span><span class="caret"></span>
+        </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="noteType">
+                    <li ng-repeat="noteType in noteTypes"><a href="#" ng-click="selectNoteType(noteType);$event.preventDefault()">{{noteType.noteType}}</a></li>
+                </ul>
+            </div>
+    <textarea placeholder="New note here" draggable="false" ng-model="note" ng-model-options="{debounce:1000}"></textarea>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="ok()">Save</button>
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>

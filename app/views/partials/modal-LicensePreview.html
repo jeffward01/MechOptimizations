@@ -1,0 +1,16 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Preview License Document</h3>
+    <button class="btn btn-default narrow close-modal" ng-click="$parent.cancel()"><span class="icon cancel"></span></button>
+</div>
+<div class="modal-body license-preview" id="licensePreviewModalContent">
+    <section class="license-window" ng-include="templatePreviewData.Url">
+        <!-- Generated License Template Here -->
+    </section>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default pull-left" ng-disabled="!showActionButton" ng-click="print()">Print</button>
+    <iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-default" ng-if="!directPreviewFromDetailsPage" ng-click="modalPreviousStep()">Back</button>
+    <button class="btn btn-default" ng-if="!directPreviewFromDetailsPage" ng-disabled="!showActionButton" ng-click="ok()">Send</button>
+</div>

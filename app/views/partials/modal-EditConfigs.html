@@ -1,0 +1,188 @@
+﻿
+<div class="modal-header">
+    <h3 class="modal-title">Edit Configurations</h3>
+    <button class="btn btn-default narrow close-modal" ng-click="cancel()"><span class="icon cancel"></span></button>
+</div>
+<div class="modal-body configurations">
+    <section class="edit-configurations">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="thirty-percent">Product Title</th>
+                    <th class="twenty-percent">Artist</th>
+                    <th class="twenty-percent">Label</th>
+                    <th class="ten-percent">Configurations</th>
+                    <th class="twenty-percent">Add a Configuration</th>
+                </tr>
+            </thead>
+            <!--<tbody ng-repeat="product in selectedProducts">repeat in tbody for accordian hack -->
+            <tbody ng-repeat="product in myproducts"><!--repeat in tbody for accordian hack -->
+
+                <tr>
+                    <td class="thirty-percent"><span ng-bind="product.productHeader.title"></span></td>
+                    <td class="twenty-percent"><span ng-bind="product.productHeader.artist.name"></span></td>
+                    <td class="twenty-percent"><span ng-bind="product.productHeader.recordLabel.name"></span></td>
+                    <td class="ten-percent">
+                        <!-- Accordion button for configs -->
+                        <button class="btn-default" ng-disabled="product.productHeader.configurations.length==0" ng-click="setProductDetails(product)">
+                            <!-- Configs count for the product goes here -->
+                            <span ng-bind="product.productHeader.configurations.length"></span>
+                            <span class="caret"></span>
+                        </button>
+                    </td>
+                    <td class="twenty-percent">
+                        <div class="dropdown system-configs">
+                            <!-- Auto Suggest Field with Dropdown Menu to Add configs from the system level to the Product and License -->
+                            <input class="dropdown-toggle"  ng-model-options="{debounce:1000}" data-toggle="dropdown" ng-model="product.configSuggest" type="text" ng-blur="updateConfigSuggest(product);" ng-click="updateConfigSuggest(product);" ng-class="{'field-error': product.configSuggest.length > 0 && modal_submit}">
+                            <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="label" ng-show="product.configSuggest.length > 0">
+                                <!-- <li ng-repeat="config in filteredConfigs = (all_configurations | filter:availableConfigurationFilter(product.productHeader.configurations) | filter:product.configSuggest)" ng-click="updateSelectedConfig(product,config);">-->
+                                <li ng-repeat="config in filteredConfigs = (all_configurations | filter:product.configSuggest )" ng-click="updateSelectedConfig(product,config);">
+                                    <label>
+                                        <span ng-bind="config.name"></span>
+                                    </label>
+                                </li>
+                                <li ng-if="filteredConfigs.length == 0 && product.configSuggest.length > 0">No Configurations Available</li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-default narrow pull-right" ng-disabled="!product.addConfiguration" ng-click="addNewConfig(product, product.addConfiguration);" ng-class="{'field-error': product.configSuggest.length > 0 && modal_submit}"><span class="icon add"></span></button>
+                        <!--
+                        <div>
+                            ProductId: {{product.productHeader.id}}
+                            LicenseProductId:{{product.licenseProductId}}
+                        </div>
+                         <div>
+                            addConfiguration <br />
+                            product.configSuggest:{{product.configSuggest}}<br />
+                            new config to be added - id:{{product.addConfiguration.id}}, name:{{product.addConfiguration.name}}<br />
+                            current product info: <br />
+                            product: {{product.productHeader.id}}/{{product.productHeader.title}}/{{product.productHeader.databaseVersion}}  <br />
+                            artist:{{product.productHeader.artist.id}}/{{product.productHeader.artist.name}} <br />
+                            label: {{product.productHeader.recordLabel.id}},{{product.productHeader.recordLabel.name}} <br />
+                            configurations:<div ng-repeat="config in product.productHeader.configurations">
+                                pid:{{config.id}}, upc:{{config.upc}}, rd:{{config.releaseDate}}, v:{{config.databaseVersion}}<br />
+                                cid:{{config.configuration.id}}, cname:{{config.configuration.name}}
+                            </div><br />
+
+                        </div>
+                        <div>
+                            LicenseId:{{product.licenseId}}<br />
+                            LicenseProductId:{{product.licenseProductId}}<br />
+                            LicenseProductConfigurationId:{{config.licenseProductConfiguration.licenseProductConfigurationId}}<br />
+                            ProductId:{{product.productHeader.id}}<br />
+                            RecsConfigurationId:{{config.id}}<br />
+                            ConfigurationId: {{config.configuration.id}}<br />
+                            ConfigurationName: {{config.configuration.name}}
+                        </div>
+                        -->
+                    </td>
+                </tr>
+                <tr>
+                    <td class="selected-configurations" colspan="20" ng-show="product== myproduct">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="forty-percent">Configurations</th>
+                                    <th class="twenty-percent">UPC</th>
+                                    <th class="twenty-percent">Catalog #</th>
+                                    <th class="eigthteen-percent">Release Date</th>
+                                    <th class="one-percent">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-class="rowClass(product.productHeader.configurations, config)" ng-repeat="config in product.productHeader.configurations | orderBy:['configuration.name']">
+                                    <td>
+                                        <span class="icon config-physical" ng-class="config.configuration.id | returnConfigurationIcon"></span><span ng-bind="config.configuration.name"></span>
+                                    </td>
+                                    <td>
+                                        <input type="text" ng-model="config.upc" ng-model-options="{debounce:1000}" ng-change="config.isDirty=true" />
+                                        <!--
+                                        <div>
+                                            LicenseId:{{product.licenseId}}
+                                            LicenseProductId:{{product.licenseProductId}}
+                                            LicenseProductConfigurationId:{{config.licenseProductConfiguration.licenseProductConfigurationId}}
+                                            ProductId:{{product.productHeader.id}}
+                                            RecsConfigurationId:{{config.id}}
+                                            ConfigurationId: {{config.configuration.id}}
+                                            ConfigurationName: {{config.configuration.name}}<br />
+                                            LicenseProductConfiguration:{{config.licenseProductConfiguration}}
+                                        </div>
+                                        -->
+                                    </td>
+                                    <td>
+                                        <input type="text" ng-model="config.licenseProductConfiguration.catalogNumber"  ng-model-options="{debounce:1000}" ng-change="config.isDirty=true"  />
+                                    </td>
+                                    <td class="release-date">
+                                        <form class="form-horizontal" name="forms" role="form" novalidate>
+                                            <p class="input-group" ng-class="{ 'has-error': forms.date10.$invalid && forms.date10.$dirty }">
+                                                <input type="text"  ng-model-options="{debounce:1000}" class="config-date form-control" id="date10" name="date10" placeholder="mm/dd/yyyy" aw-datepicker-pattern="^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$" clear-text="Clear" datepicker-popup="{{format}}" ng-model="::config.releaseDate" is-open="config.isOpen" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close" ng-change="config.isDirty=true" />
+                                                <button type="button" class="calendar btn btn-default narrow" ng-click="open($event, config)"><span class="icon calendar"></span></button>
+                                            </p>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <button  data-dismiss="modal" class="btn btn-default narrow" ng-show="canDeleteConfig(product.productHeader.configurations, config)" ng-click="deleteExistingConfig(product, config);"><span class="icon remove"></span></button>
+                                        <button  data-dismiss="modal" class="btn btn-default narrow" ng-show="canAddConfig(config)" ng-click="addConfig(product, config);"><span class="icon add"></span></button>
+                                        <!--
+                                        <div>
+                                            ProductConfigurationId:{{config.id}}
+                                            LicenseProductConfigurationId:{{config.licenseProductConfiguration.licenseProductConfigurationId}}
+                                        </div>
+                                        -->
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+    <!--
+    <div>
+        myProduct:{{myproduct.productHeader.title}}
+        <div>
+            <span ng-repeat="config in myproduct.productHeader.configurations">
+                <span>{{config.configuration.name}}</span>
+            </span>
+        </div>
+    </div>
+    <section class="selected-configurations">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="forty-percent">Configurations</th>
+                    <th class="twenty-percent">UPC</th>
+                    <th class="fifteen-percent">Catalog #</th>
+                    <th class="twenty-percent">Release Date</th>
+                    <th class="fifteen-percent">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="config in myproduct.productHeader.configurations">
+                    <td>
+                        <span class="icon config-physical" ng-class="{'9':'icon config-digital', '10':'icon config-digital'}[config.configuration.id]"></span>{{config.configuration.name}}
+                    </td>
+                    <td><input type="text" value="{{config.upc}}" /></td>
+                    <td><input type="text" value="{{config.licenseProductConfiguration.catalogNumber}}" /></td>
+                    <td>
+                        <input type="text" datepicker-popup="{{format}}" ng-model="config.releaseDate" is-open="config.isOpen" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close" />
+                        <button type="button" class="calendar btn btn-default narrow" ng-click="open($event, config)"><span class="icon calendar"></span></button>
+                    </td>
+                    <td>
+                        <button class="btn btn-default narrow" ng-show="config.licenseProductConfiguration"><span class="icon remove"></span></button>
+                        <button class="btn btn-default narrow" ng-show="!config.licenseProductConfiguration"><span class="icon add"></span></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+-->
+</div>
+<div class="modal-footer">
+    <!--<button class="btn btn-default pull-left" ng-click="modalPreviousStep()"><span class="icon back"></span>Back</button>-->
+    <button class="btn btn-default pull-left"  ng-click="back()"><span class="icon back"></span>Back</button>
+    <button class="btn btn-default" ng-click="ok()"><span class="icon save"></span>Save &amp; Close</button>
+    <!--<button class="btn btn-default cancel" ng-click="cancelToLicenseDetails()"><span class="icon cancel"></span>Cancel</button>-->
+    <button class="btn btn-default cancel" ng-click="cancel()"><span class="icon cancel"></span>Cancel</button>
+</div>

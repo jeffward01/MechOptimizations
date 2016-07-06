@@ -1,0 +1,413 @@
+﻿<nav class="breadcrumbs">
+    <ul>
+        <li><a href="/#/search-MyView/Tabs/MyViewTab">My View </a>
+            <label>Admin</label></li>
+    </ul>
+</nav>
+
+<ul class="grid-header clearfix">
+    <li class="actions">
+        
+    </li>
+    <li class="pagination">
+        <pagination total-items="pagination.totalItems" items-per-page="pagination.numPerPage" ng-model="pagination.currentPage" ng-change="pageChanged()" max-size="pagination.maxSize" class="pagination-sm" boundary-links="true"
+            previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" iscollapsed="true"></pagination>
+    </li>
+    <li class="records pull-right">
+        <span class="pull-left">Viewing</span>
+        <div class="dropdown">
+            <button class="dropdown-toggle btn btn-default" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" ng-click="pagination.isCollapsed=!pagination.isCollapsed">
+               <span ng-bind="pagination.numPerPage"></span>
+                <span class="{{setCaret(pagination.isCollapsed)}}"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li role="presentation" ng-click="changePageSize(pageSize);pagination.isCollapsed=true" ng-repeat="pageSize in pagination.pageSizeList"><a role="menuitem" tabindex="-1" href=""><span ng-bind="pageSize"></span></a></li>
+            </ul>
+        </div>
+        <span class="pull-left">of&nbsp;<span ng-bind="pagination.totalItems"></span></span>
+    </li>
+</ul>
+<section class="admin-grid">
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="twenty-percent">Licensee</th>
+                <th class="fifteen-percent">Labels</th>
+                <!--  <th class="fifteen-percent">Address</th>
+                    <th class="fifteen-percent">STE / Apt. #</th>
+                    <th class="ten-percent">City</th>
+                    <th class="five-percent centered">State / Province</th>
+                    <th class="five-percent centered">Country</th>
+                    <th class="five-percent centered">Postal Code</th>-->
+                <th class="five-percent centered">Contacts</th>
+                <th class="one-percent centered no-wrap">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="edit-licensee shadow" ng-show="addLicenseeVisible">
+                <!-- This row is for creating a new licensee and should be outside the repeater -->
+                <td>
+                    <input ng-model="newLicenseeName" type="text" ng-class="{'field-error': !is_valid_field(newLicenseeName) && submit_saveNewLicensee}" />
+                </td>
+
+                <!--<td><input type="text" /></td>
+        <td><input type="text" /></td>
+        <td><input type="text" /></td>-->
+                <!--<td class="centered">-->
+                <!-- Need State Dropdown Here -->
+                <!--<div class="dropdown" dropdown is-open="status.isopen">
+                <button type="button" class="btn btn-default dropdown-toggle" id="state" data-toggle="dropdown" ng-click="">
+                   <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#" ng-click=""></a></li>
+                </ul>
+            </div>
+        </td>-->
+                <!--<td class="centered">-->
+                <!-- Need Country Dropdown Here -->
+                <!--<div class="dropdown" dropdown is-open="status.isopen">
+                <button type="button" class="btn btn-default dropdown-toggle" id="country" data-toggle="dropdown" ng-click="">
+                   <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#" ng-click=""></a></li>
+                </ul>
+            </div>
+        </td>
+        <td class="centered"><input type="text" /></td>-->
+                <td class="centered"></td>
+                <td class="one-percent centered no-wrap">
+                    <button class="btn btn-default btn-sm narrow" ng-click="saveNewLicensee()"><span class="icon save narrow"></span></button>
+                    <button class="btn btn-default btn-sm narrow" ng-click="closeSaveNewLicensee()"><span class="icon cancel narrow"></span></button>
+                </td>
+            </tr>
+            <tr ng-repeat-start="licensee in licensees">
+                <td ng-if="!licensee.editLicenseeVisible"><span ng-bind="licensee.name"></span></td>
+                <!--<td>12345 Some Street</td>
+                    <td>STE #777</td>
+                    <td>Cloudville</td>
+                    <td class="centered">CA</td>
+                    <td class="centered">USA</td>
+                    <td class="centered">90050-2344</td>-->
+                <td ng-if="!licensee.editLicenseeVisible">
+                    <button class="btn-default" ng-click="collapseLabelGroups(licensee)"><span ng-bind="licensee.licenseeLabelGroupFiltered.length"></span><span class="caret"></span></button>
+                </td>
+                <td ng-if="!licensee.editLicenseeVisible" class="centered">
+                    <button class="btn-default" ng-click="collapseLicenseContacts(licensee)"><span ng-bind="licensee.licenseeContactsFiltered.length"></span><span class="caret"></span></button>
+                </td>
+                <td ng-if="!licensee.editLicenseeVisible" class="one-percent centered no-wrap">
+                    <button ng-click="addLicenseeShow()" class="btn btn-default btn-sm narrow"><span class="icon add narrow"></span></button>
+                    <button ng-click="editLicenseeShow(licensee)" class="btn btn-default btn-sm narrow"><span class="icon edit narrow"></span></button>
+                    <button class="btn btn-default btn-sm narrow" ng-click="deleteLicensee(licensee)"><span class="icon delete narrow"></span></button>
+                </td>
+                <!-- edit-->
+                <td ng-if="licensee.editLicenseeVisible"><input type="text" ng-model="licensee.newName" /></td>
+                <td ng-if="licensee.editLicenseeVisible"></td>
+                 <td ng-if="licensee.editLicenseeVisible" class="one-percent centered no-wrap">
+                        <button class="btn btn-default btn-sm narrow" ng-click="saveEditedLicensee(licensee)"><span class="icon save narrow"></span></button>
+                        <button class="btn btn-default btn-sm narrow" ng-click="closeEditLicensee(licensee)"><span class="icon cancel narrow"></span></button>
+                 </td>
+
+            </tr>
+        <tr ng-repeat-end="licensee in licensees">
+        <!-- Collapsable License Contacts Row -->
+                <td class="nested dark shadow" colspan="20" collapse="licensee.contactsCollapsed">
+                                <table class="table nested dark">
+                                    <thead>
+                                        <tr>
+                                            <th class="ten-percent">First Name *</th>
+                                            <th class="fifteen-percent">Last Name *</th>
+                                            <th class="ten-percent">Phone</th>
+                                            <th class="fifteen-percent">Email *</th>
+                                            <th class="fifteen-percent">Address</th>
+                                            <th class="ten-percent">Address 2</th>
+                                            <th class="five-percent">City</th>
+                                            <th class="one-percent centered no-wrap">State / Province</th>
+                                            <th class="five-percent centered no-wrap">Country</th>
+                                            <th class="one-percent centered no-wrap">Postal Code</th>
+                                            <th class="one-percent centered no-wrap">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-if="licensee.addContactVisible">
+                                            <td class="ten-percent">
+                                                <input class="dropdown-toggle" data-toggle="dropdown" ng-model="licensee.selectedContact.firstName" type="text"  ng-class="{'field-error': !is_valid_field(licensee.selectedContact.firstName) && submit_saveNewContact}" letters-only />
+                                                
+                                            </td>
+                                            <td class="fifteen-percent">
+                                                <input type="text" ng-model="licensee.selectedContact.lastName" ng-class="{'field-error': !is_valid_field(licensee.selectedContact.lastName) && submit_saveNewContact}" letters-only />
+                                            </td>
+                                            <td class="ten-percent">
+                                                <input type="text" ng-model="licensee.selectedContact.contactPhone.phoneNumber" />
+                                                <!--  ng-class="{'field-error': !is_valid_phone(licensee.selectedContact.contactPhone.phoneNumber) && submit_saveNewContact}" phone-number -->
+                                            </td>
+                                            <td class="fifteen-percent">
+                                                <input type="text" ng-model="licensee.selectedContact.contactEmail.emailAddress" ng-class="{'field-error': !is_valid_email(licensee.selectedContact.contactEmail.emailAddress) && submit_saveNewContact}" email-address />
+                                            </td>
+                                            <td class="fifteen-percent">
+                                                <input type="text" ng-model="licensee.selectedContact.contactAddress.address1" />
+                                            </td>
+                                            <td class="ten-percent">
+                                                <input type="text" ng-model="licensee.selectedContact.contactAddress.address2" />
+                                            </td>
+                                            <td class="one-percent centered no-wrap">
+                                                <input type="text" ng-model="licensee.selectedContact.contactAddress.city" />
+                                            </td>
+                                            <td class="ten-percent">
+                                                <input type="text" ng-model="licensee.selectedContact.contactAddress.state" />
+                                            </td>
+                                            <td class="one-percent centered no-wrap">
+                                                <input type="text" ng-model="licensee.selectedContact.contactAddress.country" />
+                                            </td>
+                                            <td class="five-percent centered no-wrap">
+                                                <input type="text" ng-model="licensee.selectedContact.contactAddress.postalCode" />
+                                            </td>
+                                            <td class="one-percent centered no-wrap">
+                                                <button class="btn btn-default btn-sm narrow" ng-click="saveNewLicenseeContact(licensee)"><span class="icon save narrow"></span></button>
+                                                <button class="btn btn-default btn-sm narrow" ng-click="closeSaveNewLicenseeContact(licensee)"><span class="icon cancel narrow"></span></button>
+
+                                            </td>
+                                        </tr>
+
+
+                                        <tr ng-repeat="link in licensee.licenseeContactsFiltered">
+                                            <td ng-if="!link.editContactVisible" class="ten-percent"><span ng-bind="link.firstName"></span></td>
+                                            <td ng-if="!link.editContactVisible" class="fifteen-percent"><span ng-bind="link.lastName"></span></td>
+                                            <td ng-if="!link.editContactVisible" class="ten-percent"><span ng-bind="link.phone.phoneNumber"></span></td>
+                                            <td ng-if="!link.editContactVisible" class="fifteen-percent"><span ng-bind="link.email.emailAddress"></span></td>
+                                            <td ng-if="!link.editContactVisible" class="fifteen-percent"><span ng-bind="link.address.address1"></span></td>
+                                            <td ng-if="!link.editContactVisible" class="ten-percent"><span ng-bind="link.address.address2"></span></td>
+                                            <td ng-if="!link.editContactVisible" class="ten-percent"><span ng-bind="link.address.city"></span></td>
+                                            <td ng-if="!link.editContactVisible" class="one-percent centered no-wrap"><span ng-bind="link.address.state"></span></td>
+                                            <td ng-if="!link.editContactVisible" class="five-percent centered no-wrap"><span ng-bind="link.address.country"></span></td>
+                                            <td ng-if="!link.editContactVisible" class="one-percent centered no-wrap"><span ng-bind="link.address.postalCode"></span></td>
+                                            <td ng-if="!link.editContactVisible" class="one-percent centered no-wrap">
+                                                <button class="btn btn-default btn-sm narrow" ng-click="addLicenseeContactShow(licensee)"><span class="icon add narrow"></span></button>
+                                                <button class="btn btn-default btn-sm narrow" ng-click="editLicenseeContactShow(link)"><span class="icon edit narrow"></span></button>
+                                                <button class="btn btn-default btn-sm narrow" ng-click="deleteLicenseeContact(licensee, link.contactId)"><span class="icon delete narrow"></span></button>
+                                            </td>
+                                            <!-- Editable Contact Row // Only viewable after  -->
+                                            <td ng-if="link.editContactVisible" class="ten-percent">
+                                                <input type="text" ng-model="link.newContact.firstName" />
+                                            </td>
+                                            <td ng-if="link.editContactVisible" class="fifteen-percent">
+                                                <input type="text" ng-model="link.newContact.lastName" />
+                                            </td>
+                                            <td ng-if="link.editContactVisible" class="ten-percent">
+                                                <input type="text" ng-model="link.newContact.contactPhone.phoneNumber" />
+                                            </td>
+                                            <td ng-if="link.editContactVisible" class="fifteen-percent">
+                                                <input type="text" ng-model="link.newContact.contactEmail.emailAddress" />
+                                            </td>
+                                            <td ng-if="link.editContactVisible" class="fifteen-percent">
+                                                <input type="text" ng-model="link.newContact.contactAddress.address1" />
+                                            </td>
+                                            <td ng-if="link.editContactVisible" class="ten-percent">
+                                                <input type="text" ng-model="link.newContact.contactAddress.address2" />
+                                            </td>
+                                            <td ng-if="link.editContactVisible" class="one-percent centered no-wrap">
+                                                <input type="text" ng-model="link.newContact.contactAddress.city" />
+                                            </td>
+                                            <td ng-if="link.editContactVisible" class="ten-percent">
+                                                <input type="text" ng-model="link.newContact.contactAddress.state" />
+                                            </td>
+                                            <td ng-if="link.editContactVisible" class="one-percent centered no-wrap">
+                                                <input type="text" ng-model="link.newContact.contactAddress.country" />
+                                            </td>
+                                            <td ng-if="link.editContactVisible" class="five-percent centered no-wrap">
+                                                <input type="text" ng-model="link.newContact.contactAddress.postalCode" />
+                                            </td>
+                                            <td ng-if="link.editContactVisible" class="one-percent centered no-wrap">
+                                                <button class="btn btn-default btn-sm narrow" ng-click="saveEditedLicenseeContact(licensee,link)"><span class="icon save narrow"></span></button>
+                                                <button class="btn btn-default btn-sm narrow" ng-click="closeEditContact(link)"><span class="icon cancel narrow"></span></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                   
+                <!-- Collapsable Label Group Row -->
+                
+                <td class="nested dark shadow" colspan="20" collapse="licensee.groupCollapsed">
+                    <table class="table nested dark">
+                        <thead>
+                            <tr>
+                                <th class="ten-percent">LabelGroup Name</th>
+                                <th class="ten-percent">Contacts</th>
+                                <th class="one-percent centered no-wrap">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-if="licensee.addLabelGroupVisible">
+                            <td>
+                                <table class="table nested dark">
+                                    <tbody>
+                                    <tr class="edit-licensee shadow">
+                                        <td>
+                                            <input ng-model="licensee.newLabelGroupName" type="text" ng-class="{'field-error': !is_valid_field(licensee.newLabelGroupName) && submit_saveNewLabelGroup}" />
+                                        </td>
+                                        <td class="centered"></td>
+                                        <td class="one-percent top no-wrap">
+                                            <button class="btn btn-default btn-sm narrow" ng-click="saveNewLabelGroup(licensee)"><span class="icon save"></span></button>
+                                            <button class="btn btn-default btn-sm narrow" ng-click="closeNewLabelGroup(licensee)"><span class="icon cancel narrow"></span></button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                            <tr ng-repeat-start="labelgroup in licensee.licenseeLabelGroupFiltered">
+                                <td ng-if="!labelgroup.editLabelGroupVisible" class="ten-percent"><span ng-bind="labelgroup.licenseeLabelGroupName"></span></td>
+                                <td ng-if="!labelgroup.editLabelGroupVisible" class="ten-percent">
+                                    <button class="btn-default" ng-click="collapseContacts(labelgroup)"><span ng-bind="labelgroup.labelGroupLinksFiltered.length"></span><span class="caret"></span></button>
+                                </td>
+                                <td ng-if="!labelgroup.editLabelGroupVisible" class="one-percent centered no-wrap ng-scope">
+                                    <button ng-click="addLabelGroupNameShow(licensee)" class="btn btn-default btn-sm narrow"><span class="icon add narrow"></span></button>
+                                    <button ng-click="editLabelGroupNameShow(labelgroup)" class="btn btn-default btn-sm narrow"><span class="icon edit narrow"></span></button>
+                                    <button ng-click="deleteLabelGroup(licensee, labelgroup)" class="btn btn-default btn-sm narrow"><span class="icon delete narrow"></span></button>
+                                </td>
+                                <td ng-if="labelgroup.editLabelGroupVisible">
+                                    <table class="table nested dark">
+                                        <tbody>
+                                            <tr class="edit-licensee shadow">
+                                                <td>
+                                                    <input ng-model="labelgroup.newLabelGroupName" type="text" ng-class="{'field-error': !is_valid_field(labelgroup.newLabelGroupName) && submit_saveNewLabelGroup}" />
+                                                </td>
+                                                <td class="centered"></td>
+                                                <td class="one-percent top no-wrap">
+                                                    <button class="btn btn-default btn-sm narrow" ng-click="saveEditedLabelGroup(labelgroup)"><span class="icon save"></span></button>
+                                                    <button class="btn btn-default btn-sm narrow" ng-click="closeEditLabelGroup(labelgroup)"><span class="icon cancel narrow"></span></button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+
+                            </tr>
+                        <tr ng-repeat-end="labelgroup in licensee.licenseeLabelGroupFiltered">
+                            <!-- Collapsable Contacts Row -->
+                            <td class="nested dark shadow" colspan="20" collapse="labelgroup.contactsCollapsed">
+                                <table class="table nested dark">
+                                    <thead>
+                                    <tr>
+                                        <th class="ten-percent">First Name *</th>
+                                        <th class="fifteen-percent">Last Name *</th>
+                                        <th class="ten-percent">Phone</th>
+                                        <th class="fifteen-percent">Email *</th>
+                                        <th class="fifteen-percent">Address</th>
+                                        <th class="ten-percent">Address 2</th>
+                                        <th class="five-percent">City</th>
+                                        <th class="one-percent centered no-wrap">State / Province</th>
+                                        <th class="five-percent centered no-wrap">Country</th>
+                                        <th class="one-percent centered no-wrap">Postal Code</th>
+                                        <th class="one-percent centered no-wrap">Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-if="labelgroup.addContactVisible">
+                                            <td class="ten-percent">
+                                                <div class="dropdown">
+                                                    <input class="dropdown-toggle" data-toggle="dropdown" ng-model="labelgroup.selectedContact.firstName" type="text" ng-click="getContactsForLicensee(licensee)" ng-class="{'field-error': !is_valid_field(labelgroup.selectedContact.firstName) && submit_saveNewContact}" letters-only />
+                                                    <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="label" ng-show="labelgroup.selectedContact.firstName.length > 2">
+                                                        <li ng-repeat="contact in filteredContacts = (allContacts | filter:{firstName:labelgroup.selectedContact.firstName}) " ng-click="selectContact(labelgroup,contact);">
+                                                            <label>
+                                                                <span ng-bind="contact.firstName"></span>&nbsp;<span ng-bind="contact.lastName"></span>&nbsp;&nbsp;&nbsp;(<span ng-bind="contact.email[0].emailAddress"></span>)
+                                                            </label>
+                                                        </li>
+                                                        <li ng-if="filteredContacts.length == 0 && labelgroup.selectedContact.firstName.length > 0">No Contacts Found</li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                            <td class="fifteen-percent">
+                                                <input type="text" ng-model="labelgroup.selectedContact.lastName" ng-class="{'field-error': !is_valid_field(labelgroup.selectedContact.lastName) && submit_saveNewContact}" letters-only />
+                                            </td>
+                                            <td class="ten-percent">
+                                                <input type="text" ng-model="labelgroup.selectedContact.contactPhone.phoneNumber" />
+                                                <!--  ng-class="{'field-error': !is_valid_phone(labelgroup.selectedContact.contactPhone.phoneNumber) && submit_saveNewContact}" phone-number -->
+                                            </td>
+                                            <td class="fifteen-percent">
+                                                <input type="text" ng-model="labelgroup.selectedContact.contactEmail.emailAddress" ng-class="{'field-error': !is_valid_email(labelgroup.selectedContact.contactEmail.emailAddress) && submit_saveNewContact}" email-address />
+                                            </td>
+                                            <td class="fifteen-percent">
+                                                <input type="text" ng-model="labelgroup.selectedContact.contactAddress.address1" />
+                                            </td>
+                                            <td class="ten-percent">
+                                               <input type="text" ng-model="labelgroup.selectedContact.contactAddress.address2" />
+                                            </td>
+                                            <td class="one-percent centered no-wrap">
+                                                <input type="text" ng-model="labelgroup.selectedContact.contactAddress.city" />
+                                            </td>
+                                            <td class="ten-percent">
+                                                <input type="text" ng-model="labelgroup.selectedContact.contactAddress.state" />
+                                            </td>
+                                            <td class="one-percent centered no-wrap">
+                                                <input type="text" ng-model="labelgroup.selectedContact.contactAddress.country" />
+                                            </td>
+                                            <td class="five-percent centered no-wrap">
+                                                <input type="text" ng-model="labelgroup.selectedContact.contactAddress.postalCode" />
+                                            </td>
+                                            <td class="one-percent centered no-wrap">
+                                                <button class="btn btn-default btn-sm narrow" ng-click="saveNewContact(licensee,labelgroup)"><span class="icon save narrow"></span></button>
+                                                <button class="btn btn-default btn-sm narrow" ng-click="closeSaveNewContact(labelgroup)"><span class="icon cancel narrow"></span></button>
+
+                                            </td>
+                                        </tr>
+
+
+                                    <tr ng-repeat="link in labelgroup.labelGroupLinksFiltered">
+                                        <td ng-if="!link.editContactVisible" class="ten-percent"><span ng-bind="link.contact.firstName"></span></td>
+                                        <td ng-if="!link.editContactVisible" class="fifteen-percent"><span ng-bind="link.contact.lastName"></span></td>
+                                        <td ng-if="!link.editContactVisible" class="ten-percent"><span ng-bind="link.contact.contactPhone.phoneNumber"></span></td>
+                                        <td ng-if="!link.editContactVisible" class="fifteen-percent"><span ng-bind="link.contact.contactEmail.emailAddress"></span></td>
+                                        <td ng-if="!link.editContactVisible" class="fifteen-percent"><span ng-bind="link.contact.contactAddress.address1"></span></td>
+                                        <td ng-if="!link.editContactVisible" class="ten-percent"><span ng-bind="link.contact.contactAddress.address2"></span></td>
+                                        <td ng-if="!link.editContactVisible" class="ten-percent"><span ng-bind="link.contact.contactAddress.city"></span></td>
+                                        <td ng-if="!link.editContactVisible" class="one-percent centered no-wrap"><span ng-bind="link.contact.contactAddress.state"></span></td>
+                                        <td ng-if="!link.editContactVisible" class="five-percent centered no-wrap"><span ng-bind="link.contact.contactAddress.country"></span></td>
+                                        <td ng-if="!link.editContactVisible" class="one-percent centered no-wrap"><span ng-bind="link.contact.contactAddress.postalCode"></span></td>
+                                        <td ng-if="!link.editContactVisible" class="one-percent centered no-wrap">
+                                            <button class="btn btn-default btn-sm narrow" ng-click="addContactShow(labelgroup)"><span class="icon add narrow"></span></button>
+                                            <button class="btn btn-default btn-sm narrow" ng-click="editContactShow(link)"><span class="icon edit narrow"></span></button>
+                                            <button class="btn btn-default btn-sm narrow" ng-click="deleteContact(licensee,labelgroup, link.contact.contactId)"><span class="icon delete narrow"></span></button>
+                                        </td>
+                                         <!-- Editable Contact Row // Only viewable after  -->
+                                        <td ng-if="link.editContactVisible" class="ten-percent">
+                                            <input type="text" ng-model="link.newContact.firstName" ng-class="{'field-error': !is_valid_field(link.newContact.firstName)}" letters-only /></td>
+                                        <td ng-if="link.editContactVisible" class="fifteen-percent">
+                                            <input type="text" ng-model="link.newContact.lastName" ng-class="{'field-error': !is_valid_field(link.newContact.lastName)}" letters-only /></td>
+                                        <td ng-if="link.editContactVisible" class="ten-percent">
+                                            <input type="text" ng-model="link.newContact.contactPhone.phoneNumber" /></td>
+                                        <!--  ng-class="{'field-error': !is_valid_phone(link.newContact.contactPhone.phoneNumber)}" phone-number -->
+                                        <td ng-if="link.editContactVisible" class="fifteen-percent">
+                                            <input type="text" ng-model="link.newContact.contactEmail.emailAddress" ng-class="{'field-error': !is_valid_email(link.newContact.contactEmail.emailAddress)}" email-address /></td>
+                                        <td ng-if="link.editContactVisible" class="fifteen-percent">
+                                            <input type="text" ng-model="link.newContact.contactAddress.address1" /></td>
+                                        <td ng-if="link.editContactVisible" class="ten-percent">
+                                            <input type="text" ng-model="link.newContact.contactAddress.address2" /></td>
+                                         <td ng-if="link.editContactVisible" class="one-percent centered no-wrap">
+                                            <input type="text" ng-model="link.newContact.contactAddress.city" /></td>
+                                        <td ng-if="link.editContactVisible" class="ten-percent">
+                                            <input type="text"  ng-model="link.newContact.contactAddress.state"/></td>
+                                        <td ng-if="link.editContactVisible" class="one-percent centered no-wrap">
+                                            <input type="text" ng-model="link.newContact.contactAddress.country" />
+                                        </td>
+                                        <td ng-if="link.editContactVisible" class="five-percent centered no-wrap">
+                                            <input type="text" ng-model="link.newContact.contactAddress.postalCode" />
+                                        </td>
+                                        <td ng-if="link.editContactVisible" class="one-percent centered no-wrap">
+                                            <button class="btn btn-default btn-sm narrow" ng-click="saveEditedcontact(licensee,link)"><span class="icon save narrow"></span></button>
+                                            <button class="btn btn-default btn-sm narrow" ng-click="closeEditContact(link)"><span class="icon cancel narrow"></span></button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>

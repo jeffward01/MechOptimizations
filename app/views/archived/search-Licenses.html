@@ -1,0 +1,124 @@
+﻿<!--<h1>License Search</h1>
+<breadcrumbs></breadcrumbs>
+
+<section class="search-wrapper" ng-include="'app/views/partials/search-SearchBar.html'"></section>
+
+<section class="search-filters" ng-include="'app/views/partials/search-Filters.html'"></section>
+
+
+
+            <section class="search-grid">
+
+                <ul class="grid-header clearfix">
+                    <li class="actions">
+                        <button ng-click="openModal('sm')" class="btn btn-default"><span class="icon assign"></span>Assign / Set Priority</button>
+                        <button class="btn btn-default"><span class="icon create-license"></span>Create License</button>
+                        <button class="btn btn-default"><span class="icon copy-license"></span>Copy License</button>
+                    </li>
+                    <li class="pagination">
+                        <pagination total-items="totalItems" items-per-page="numPerPage" ng-model="currentPage" ng-change="pageChanged()" max-size="maxSize" class="pagination pagination-sm" boundary-links="true"
+                                    previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+                    </li>
+                    <li class="records">
+                        <span class="pull-left">Viewing</span>
+                        <div class="dropdown">
+                            <button class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                                10
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">10</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">20</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">50</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">100</a></li>
+                            </ul>
+                        </div>
+                        <span class="pull-left"> of 2,000 records</span>
+                    </li>
+                    <li class="items-per-page">
+                        <div class="dropdown pull-right">
+                            <button class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                                Edit Columns
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">10 per page</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">20 per page</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">50 per page</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">100 per page</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="select-all"><input type="checkbox" /></th>
+                            <th class="assignee"><a href="">Assignee<span class="caret"></span></a></th>
+                            <th class="id"><a href="">Lic. ID #<span class="caret"></span></a></th>
+                            <th class="title"><a href="">License Title<span class="caret"></span></a></th>
+                            <th class="status"><a href="">Status<span class="caret"></span></a></th>
+                            <th class="products"><a href="">Products<span class="caret"></span></a></th>
+                            <th class="artists"><a href="">Artists<span class="caret"></span></a></th>
+                            <th class="licensee"><a href="">Licensee<span class="caret"></span></a></th>
+                            <th class="method"><a href="">Method<span class="caret"></span></a></th>
+                            <th class="config"><a href="">Config<span class="caret"></span></a></th>
+                            <th class="created-by"><a href="">Created By<span class="caret"></span></a></th>
+                            <th class="type"><a href="">Type<span class="caret"></span></a></th>
+                            <th class="created-date">Created<span class="caret"></span></th>
+                            <th class="modified-date">Modified<span class="caret"></span></th>
+                            <th class="signed-date">Signed<span class="caret"></span></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr ng-repeat-start="license in licenses">
+                            <td class="select-all"><input type="checkbox" /></td>
+                            <td class="assignee">{{ license.contact.fullName }}</td>
+                            <td class="id">{{ license.licenseNumber }}</td>
+                            <td class="title">{{ license.licenseName }}</td>
+                            <td class="status">
+                                <span class="status-label">
+                                    <span ng-class="{'status-icon verifying': license.licenseStatus.licenseStatus=='Verifying', 'status-icon hold': license.licenseStatus.licenseStatus=='Hold', 'status-icon pending': license.licenseStatus.licenseStatus=='Pending', 'status-icon executed': license.licenseStatus.licenseStatus=='Executed', 'status-icon issued': license.licenseStatus.licenseStatus=='Issued', 'status-icon accepted': license.licenseStatus.licenseStatus=='Accepted', 'status-icon voided': license.licenseStatus.licenseStatus=='Voided', 'status-icon error': license.licenseStatus.licenseStatus=='Error'}">
+                                    </span>
+                                    {{ license.licenseStatus.licenseStatus }}
+                                </span>
+                            </td>
+                            <td class="products">
+                                <a class="badge" ng-click="isCollapsed = !isCollapsed">5 <span class="caret"></span></a>
+                            </td>
+                            <td class="artists">Sample Artist Name</td>
+                            <td class="licensee">{{ license.licensee.name }}</td>
+                            <td class="method">{{ license.licenseMethod.licenseMethod }}</td>
+                            <td class="config">{{ license.licenseConfiguration.licenseConfiguration }}</td>
+                            <td class="created-by">{{ license.contact2.fullName }}</td>
+                            <td class="type">{{ license.licenseType.licenseType }}</td>
+                            <td class="created-date">01/20/12</td>
+                            <td class="modified-date">02/11/14</td>
+                            <td class="signed-date">02/22/14</td>
+                        </tr>
+                        <tr ng-repeat-end="license in licenses">
+                            <td colspan="20" collapse="isCollapsed">
+                                <table class="table table-hover grid-product" ng-include="'app/views/partials/grid-Product.html'"></table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>-->
+
+         
+
+
+    
+          
+
+
+
+
+
+            
+
+
+
+

@@ -1,0 +1,136 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Create/Edit Product</h3>
+    <button class="btn btn-default narrow close-modal" ng-click="$parent.cancel()"><span class="icon cancel"></span></button>
+</div>
+<div class="modal-body">
+    <section class="product-info">
+        <ul>
+            <li>
+                <label>Product Title</label>
+                <div class="dropdown" >
+                    <input type="text" ng-model="productDetail.title" ng-class="{'field-error': !is_valid_field(productDetail.title) && modal_submit}"  />
+                </div>
+            </li>
+            <li>
+                <!--
+        <li><label>License Title</label><input type="text" ng-model="license.licenseName" ng-class="{'field-error': !is_valid_field(license.licenseName) && modal_submit}" ng-disabled="selectedLicense.relatedLicenseId" /></li>
+                    
+                -->
+                <label>Artist</label>
+                <div class="dropdown">
+                    <input class="dropdown-toggle" data-toggle="dropdown" ng-model="productDetail.artist.name" ng-class="{'field-error': !is_valid_field(productDetail.artist.name) && modal_submit}"  type="text" ng-keyup="artistAutosuggest()" />
+                    <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="label" ng-show="showArtistAutoSuggestions">
+                        <li ng-repeat="artist in artistList" ng-click="selectArtist(artist);">
+                            <label>
+                               <span ng-bind="artist.name"></span>
+                            </label>
+                        </li>
+                        <li ng-show="showNoArtistText">No artists found</li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <label>Label</label>
+                <div class="dropdown">
+                    <input class="dropdown-toggle" data-toggle="dropdown" ng-model="productDetail.recordLabel.name" type="text" ng-keyup="labelAutosuggest()" ng-blur="checkSelectedLabel(productDetail)"/>
+                    <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="label" ng-show="showLabelAutoSuggestions">
+                        <li ng-repeat="label in filteredLabels = (labelList | filter:{name:productDetail.recordLabel.name})" ng-click="selectLabel(label);">
+                            <label>
+                                <span ng-bind="label.name"></span>
+                            </label>
+                        </li>
+                        <li ng-if="filteredLabels.length == 0 && productDetail.recordLabel.name.length > 0">No labels found</li>
+                    </ul>
+                </div>
+            </li>
+            <!--
+            <li><label>Label Groups</label><input type="text" ng-model="product.labelgroups" /></li>
+            -->
+        </ul>
+        <div style="margin:6px 20px;">
+            <!--<div class="dropdown system-configs">-->
+            <div class="dropdown">
+                Select Configuration(s):
+                <input class="dropdown-toggle" data-toggle="dropdown" ng-disabled="productDetail.title.length == 0 || productDetail.artist.name.length == 0" ng-model="configSuggest" type="text" ng-class="{'field-error': (is_valid_field(configSuggest)) && modal_submit}">
+                <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="label" ng-show="configSuggest.length > 0">
+                    <!-- <li ng-repeat="config in filteredConfigs=(configurations | filter:{selected:false} | filter:{configname:configSuggest})" ng-click="addConfig(config);"> -->
+                    <li ng-repeat="config in filteredConfigs=(configurations | unique:'configname' | filter:{configname:configSuggest})" ng-click="addConfig(config);">
+                        <label style="width:200px">
+                            <span ng-bind="config.configname"></span>
+                        </label>
+                    </li>
+                    <li ng-if="filteredConfigs.length == 0 && configSuggest.length > 0">No Configurations Available</li>
+                </ul>
+                <!--<button class="btn btn-default narrow pull-right" onclick="alert('this does not do anything');"><span class="icon add"></span></button>-->
+            </div>
+            <table class="table" ng-show="hasSelectedConfigurations()">
+                <thead>
+                    <tr>
+                        <th>Configurations</th>
+                        <th>UPC</th>
+                        <th>Release Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  
+                    <tr ng-repeat="config in selectedConfigurations = (configurations | filter:{selected:true})">
+                        <td><span ng-show="config.configtype=='PHYSICAL'" class="icon config-physical"></span><span ng-show="config.configtype=='DIGITAL'" class="icon config-digital"></span><span ng-show="config.configtype=='ALL'" class="icon config-both"></span> <span ng-bind="config.configname"></span></td>
+                        <td><input type="text" ng-model="config.upc" /></td>
+                        <td>
+                            <form class="form-horizontal" name="someForm8" role="form" novalidate>
+                                <p class="input-group" ng-class="{ 'has-error': someForm8.date8.$invalid && someForm8.date8.$dirty }">
+                                    <input type="text" id="date8" name="date8" clear-text="Clear" class="date-field form-control" datepicker-popup="{{format}}" aw-datepicker-pattern="^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$" placeholder="mm/dd/yyyy" ng-model="::config.releaseDate" is-open="config.isOpen" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close" />
+                                    <button type="button" class="btn btn-default" ng-click="open($event, config)"><span class="icon calendar"></span></button>
+                                </p>
+                            </form>
+                        </td>
+                        <td>
+                            <!--<button class="btn btn-default narrow"><span class="icon add"></span></button>-->
+                            <button class="btn btn-default narrow" ng-click="removeConfig(config)"><span class="icon remove"></span></button>
+                        </td>
+                    </tr>
+                    <!--
+        original html
+        <tr>
+            <td><span class="icon config-physical"></span>12 &quot; Vinyl Album</td>
+            <td><input type="text"/></td>
+            <td><input type="text"/></td>
+            <td><input type="text"/></td>< !-- Need Datepicker-- >
+            <td>
+                <button class="btn btn-default narrow"><span class="icon add"></span></button>
+                <button class="btn btn-default narrow"><span class="icon remove"></span></button>
+            </td>
+        </tr>
+        < !-- This row will appear if the user clicks the add icon from a row above -- >
+        <tr>
+            <td></td>
+            <td><input type="text"/></td>
+            <td><input type="text"/></td>
+            <td><input type="text"/></td>
+            <td>
+                <button class="btn btn-default narrow"><span class="icon add"></span></button>
+                <button class="btn btn-default narrow"><span class="icon remove"></span></button>
+            </td>
+        </tr>
+        -->
+                </tbody>
+            </table>
+            <!--
+            <div>
+                <div ng-repeat="config in configurations">
+                    <span>
+                        {{config.id}}-{{config.configid}}-{{config.configname}}-{{config.selected}}-{{config.index}}
+                    </span>
+                </div>
+            </div>
+            -->
+        </div>
+    </section>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="saveProduct('cancel')">Save &amp; Close</button>
+    <button class="btn btn-default" ng-click="saveProduct('addtracks')">Add Tracks</button>
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>

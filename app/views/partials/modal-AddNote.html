@@ -1,0 +1,22 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Add License Note</h3>
+    <button class="btn btn-default narrow close-modal" ng-click="cancel()"><span class="icon cancel"></span></button>
+</div>
+<div class="modal-body add-note">
+    <label>Note Type </label>
+    <div class="btn-group" dropdown is-open="status.isopen">
+        <button type="button" class="dropdown-toggle btn btn-default" id="noteType" data-toggle="dropdown" ng-disabled="disabled" ng-click="getNoteTypes()" ng-class="{'field-error': !is_valid_field(selectedNoteType.noteType) && modal_submit}">
+            <!--<button type="button" class="dropdown-toggle btn btn-default" id="noteType" data-toggle="dropdown" ng-disabled="disabled"  ng-class="{'field-error': !is_valid_field(selectedNoteType.noteType) && modal_submit}">-->
+            {{selectedNoteType.noteType}}<span class="caret"></span>
+        </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="noteType">
+                    <li ng-repeat="noteType in noteTypes"><a href="#" ng-click="selectNoteType(noteType);$event.preventDefault()">{{noteType.noteType}}</a></li>
+                </ul>
+            </div>
+    <textarea placeholder="New note here" draggable="false" ng-model="note"  ng-model-options="{ debounce: 1000 }" ng-class="{'field-error': !is_valid_field(note) && modal_submit}"></textarea>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="ok()">Save</button>
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>
+

@@ -1,0 +1,70 @@
+﻿<nav class="breadcrumbs">
+    <ul ng-if="!$navigationState.isException()">
+        <li>
+            <span class="icon tab-myview"></span>
+           <span ng-if="$navigationState.currentState.name == 'SearchMyView.Tabs.MyViewTab'">My View</span>
+            <a ng-if="$navigationState.currentState.name != 'SearchMyView.Tabs.MyViewTab'" ui-sref="SearchMyView.Tabs.MyViewTab">
+                My View
+            </a>
+        </li>
+        <li ng-repeat="state in navigationStates = ($navigationState.currentState.path | filter: $parent.emptyName())">
+            <a ng-if="!$navigationState.isCurrent(state) && navigationStates.indexOf(state) != navigationStates.length-1" href="#{{ state.url.format(params) }}">
+                <span ng-bind="$navigationState.getDisplayName(state)"></span>
+            </a>
+            <label ng-if="$navigationState.isCurrent(state) || navigationStates.indexOf(state) == navigationStates.length-1">
+               <span ng-bind="$navigationState.getDisplayName(state)"></span> 
+            </label>
+        </li>
+    </ul>
+
+    <ul ng-if="$navigationState.isException() && $navigationState.currentState.name == 'SearchMyView.DetailProduct'">
+        <li>
+            <span class="icon tab-myview"></span>
+            <a ng-if="$navigationState.currentState.name != 'SearchMyView.Tabs.MyViewTab'" ui-sref="SearchMyView.Tabs.MyViewTab">
+                My View
+            </a>
+        </li>
+        <li>
+            <a ui-sref="SearchMyView.Tabs.ProductsTab">
+                Products Search
+            </a>
+        </li>
+        <li>
+            <label>
+                Products Details
+            </label>
+        </li>
+    </ul>
+    <ul ng-if="$navigationState.isException() && $navigationState.currentState.name == 'SearchMyView.DetailLicense' && $navigationState.params.myView==''">
+        <li>
+            <span class="icon tab-myview"></span>
+            <a  ui-sref="SearchMyView.Tabs.MyViewTab">
+                My View
+            </a>
+        </li>
+        <li>
+            <a ui-sref="SearchMyView.Tabs.LicenseTab">
+                License Search
+            </a>
+        </li>
+        <li>
+            <label>
+                License Detail
+            </label>
+        </li>
+    </ul>
+
+    <ul ng-if="$navigationState.isException() && $navigationState.currentState.name == 'SearchMyView.DetailLicense' && $navigationState.params.myView!=''">
+        <li>
+            <span class="icon tab-myview"></span>
+            <a ng-if="$navigationState.currentState.name != 'SearchMyView.Tabs.MyViewTab'" ui-sref="SearchMyView.Tabs.MyViewTab">
+                My View
+            </a>
+        </li>
+        <li>
+            <label>
+                License Detail
+            </label>
+        </li>
+    </ul>
+</nav>

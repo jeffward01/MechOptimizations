@@ -1,0 +1,134 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Issue License</h3>
+    <button class="btn btn-default narrow close-modal" ng-click="$parent.cancel()"><span class="icon cancel"></span></button>
+</div>
+<div class="modal-body issue-license">
+    <section class="recipients">
+        <ul>
+            <li>
+                <label>License Title</label><span ng-bind="selectedLicense.licenseName"></span>
+            </li>
+            <li>
+                <label>License Type</label><span ng-bind="selectedLicense.licenseType.licenseType"></span>
+            </li>
+            <li>
+            	<label>Licensee</label><span ng-bind="selectedLicense.licensee.name"></span>
+            </li>
+            <li class="select-template">
+                <label>Select a Template</label>
+                <div class="dropdown" dropdown is-open="status.isopen">
+                    <button type="button" class="btn btn-default dropdown-toggle" id="assign" data-toggle="dropdown">
+                        <span ng-bind="selectedTemplate.Name"></span><span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="assign">
+                        <li ng-repeat="template in templates"><a ng-click="selectTemplate(template)">{{template.Name}}</a></li>
+                    </ul>
+                </div>
+            </li>
+             <li class="select-template">
+                <label>Term Option</label>
+                <div class="dropdown" dropdown is-open="status.isopen">
+                    <button type="button" class="btn btn-default dropdown-toggle" id="assign" data-toggle="dropdown">
+                        <span ng-bind="selectedTermOption.Name"></span><span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="assign">
+                        <li ng-repeat="termOption in termOptions"><a ng-click="selectTermOption(termOption)">{{termOption.Name}}</a></li>           
+                    </ul>
+                </div>
+            </li>
+        </ul>
+        <ul class="recipients">
+            <li>
+                <label>From</label>
+                <div class="dropdown" dropdown is-open="status.isopen">
+                    <button type="button" class="btn btn-default dropdown-toggle" id="from" data-toggle="dropdown">
+                        <span ng-bind="selectedFrom.fullName"></span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="from">
+                        <li ng-repeat="contact in fromContacts">
+                            <a ng-click="selectFrom(contact);$event.preventDefault();"><span ng-bind="contact.fullName"></span></a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <label>Select Recipient</label>
+                <div class="dropdown" dropdown is-open="status.isopen">
+                    <button type="button" class="btn btn-default dropdown-toggle" id="recipientBtn" data-toggle="dropdown">
+                        <span ng-bind="selectedRecipients[selectedRecipients.length-1].contactName"></span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="assign" >
+                        <li ng-repeat="contact in licenseeContacts" ng-click="addSelectedRecipient(contact)">
+                           <!-- <input type="checkbox" ng-model="contact.selected" />-->
+                            <a ng-click="$event.preventDefault();"><span ng-bind="contact.contactName"></span></a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Selected Recipients-->
+                <!--<ul class="applied-filters">
+                    <li class="filter-wrapper" ng-if="selectedRecipients.length > 0">
+                        <span class="filter-item" ng-repeat="recipient in selectedRecipients  | filter:contactFilter">{{recipient.contactName}}<span class="icon icon-sm remove" ng-click="deleteSelectedRecipient(recipient);$event.preventDefault()"></span></span>
+                    </li>
+                </ul>-->
+            </li>
+            <li>
+                <label>Additional Recipients</label><input ng-model="newEmail" id="newEmail" type="text" placeholder="Enter Recipient Email" /><button class="btn btn-default narrow" ng-click="addNewAdditionalEmail(newEmail);"><span class="icon add"></span></button>
+                <!-- Additional Emails -->
+                <ul class="applied-filters">
+                    <li class="filter-wrapper" ng-if="additionalEmails.length > 0"><span class="filter-item" ng-repeat="email in additionalEmails  | filter:contactFilter"><span ng-bind="email.emailAddress"></span><span class="icon icon-sm remove" ng-click="deleteAdditionalEmail(email);$event.preventDefault()"></span></span></li>
+                </ul>
+            </li>
+            <li class="subject-line"><label>Subject</label> <input type="text" ng-model="adobeSubjectLine" ng-readonly="true" placeholder="Enter Subject Line" /></li>
+            <li class="content-line"><label>Email Content</label> <input type="text" ng-model="$parent.adobeContent" placeholder="Enter Email Content" /></li>
+            <li>
+                <section class="file-upload">
+                    <label class="attach">Upload an Attachment</label>
+                    <input type="file" class="filestyle" id="fileToUpload" customfileupload />
+                    <button class="btn btn-default" ng-click="upload()"><span class="icon upload-doc"></span>Upload</button>
+                    <br />
+                    <!-- We only show this progress bar as items are uploaded -->
+                    <progress id="progressbar" class="progress-striped" value="0" max="100" ng-show="progressVisible">0%</progress>
+                </section>
+            </li>
+        </ul>
+    </section>
+    
+   
+
+    <!-- We only show this section if there are documents already attached -->
+    <label>License Attachments</label><br />
+    <section class="attachments">
+        <table class="table ">
+            <thead>
+                <tr>
+                    <th class="one-percent centered no-wrap">Attach</th>
+                    <th class="fifty-percent">File Name</th>
+                    <th class="twentyfive-percent">Date Uploaded</th>
+                    <th class="twentyfive-percent">Uploaded By</th>
+                    <th class="one-percent centered">Remove</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-show="licenseAttachments.length==0">
+                    <td class="eigthyfive-percent centered">
+                        There are no attachments on this License.
+                    </td>
+                </tr>
+                <tr ng-repeat="attachment in licenseAttachments">
+                    <td><input type="checkbox" /></td>
+                    <td><label><span ng-bind="attachment.fileName"></span></label></td>
+                    <td><span ng-bind="attachment.uploaddedDate | timezone | date:'MM/dd/yyyy'"></span></td>
+                    <td><span ng-bind="attachment.contact.fullName"></span></td>
+                    <td class="centered"><button class="btn btn-default narrow" ng-click="removeFile(attachment)"><span class="icon remove"></span></button></td>
+                </tr>
+            
+            </tbody>
+        </table>
+    </section>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="validateAndDataProcess()">Preview</button>
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>

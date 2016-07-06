@@ -1,0 +1,93 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Execute License</h3>
+    <button class="btn btn-default narrow close-modal" ng-click="$parent.cancel()"><span class="icon cancel"></span></button>
+</div>
+<div class="modal-body issue-license">
+
+    <label>License Info</label><br />
+    <section class="create-license">
+        <ul>
+            <li><label>License Title</label><span ng-bind="licenseDetail.licenseName"></span></li>
+            <li><label>Licensee</label><span ng-bind="licenseDetail.licensee.name"></span></li>
+            <li><label>License Type</label><span ng-bind="licenseDetail.licenseType.licenseType"></span></li>
+            <li><label>Assignee</label><span ng-bind="licenseDetail.licensee.name"></span></li>
+        </ul>
+        <ul>
+            <li>
+                <label>Effective Date</label>
+                <form class="form-horizontal" name="someForm11" role="form" novalidate>
+                    <p class="input-group" ng-class="{ 'has-error': someForm11.date11.$invalid && someForm11.date11.$dirty}">
+                        <input type="text" id="date11" name="date11" class="date-field form-control" aw-datepicker-pattern="^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$" placeholder="mm/dd/yyyy" clear-text="Clear" datepicker-popup="{{format}}" ng-model="::dt" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close" />
+                        <button type="button" class="btn btn-default" ng-click="open($event)"><span class="icon calendar"></span></button>
+                    </p>
+                </form>
+            </li>
+            <li>
+                <label>Received Date</label>
+                <form class="form-horizontal" name="someForm12" role="form" novalidate>
+                    <p class="input-group" ng-class="{ 'has-error': someForm12.date12.$invalid && someForm12.date12.$dirty}">
+                        <input type="text" id="date12" name="date12" class="date-field form-control" clear-text="Clear" datepicker-popup="{{format}}" aw-datepicker-pattern="^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$" placeholder="mm/dd/yyyy" ng-model="::dtReceived" is-open="openedReceived" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close" />
+                        <button type="button" class="btn btn-default" ng-click="openReceived($event)"><span class="icon calendar"></span></button>
+                    </p>
+                </form>
+            </li>
+            <li>
+                <label>Signed Date</label>
+                <form class="form-horizontal" name="someForm13" role="form" novalidate>
+                    <p class="input-group" ng-class="{ 'has-error': someForm13.date13.$invalid && someForm13.date13.$dirty}">
+                        <input type="text" id="date13" name="date13" class="date-field form-control" clear-text="Clear" datepicker-popup="{{format}}" ng-model="::dtSigned" is-open="openedSigned" aw-datepicker-pattern="^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$" placeholder="mm/dd/yyyy" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close" />
+                        <button type="button" class="btn btn-default " ng-click="openSigned($event)"><span class="icon calendar"></span></button>
+                    </p>
+                </form>
+            </li>
+        </ul>
+    </section>
+
+
+    <label>Upload a file to add to the license document</label><br />
+    <section class="file-upload">
+        <input type="file" class="filestyle" id="fileToUpload" customfileupload />
+        <button class="btn btn-default" ng-click="upload()"><span class="icon upload-doc"></span>Upload</button>
+        <br />
+        <!-- We only show this progress bar as items are uploaded -->
+        <progress id="progressbar" class="progress-striped" value="0" max="100" ng-show="progressVisible">0%</progress>
+    </section>
+
+    <!-- We only show this section if there are documents already attached -->
+    <label>License Attachments</label><br />
+    <section class="attachments">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="one-percent centered"></th>
+                    <th class="fifty-percent">File Name</th>
+                    <th class="fifteen-percent">Date Uploaded</th>
+                    <th class="fifteen-percent">Uploaded By</th>
+                    <th class="fifteen-percent centered">Remove</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-show="licenseAttachments.length==0">
+                    <td class="eigthyfive-percent centered">
+                        There are no attachments on this License.
+                    </td>
+                </tr>
+                <tr ng-repeat="attachment in licenseAttachments">
+                    <td class="centered"><input type="checkbox" /></td>
+                    <td><label><span ng-bind="attachment.fileName"></span></label></td>
+                    <td><span ng-bind="attachment.uploaddedDate | timezone | date:'MM/dd/yyyy'"></span></td>
+                    <td><span ng-bind="attachment.contact.fullName"></span></td>
+                    <td class="centered"><button class="btn btn-default narrow" ng-click="removeFile(attachment)"><span class="icon remove"></span></button></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+
+
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="ok()">Execute License</button>
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>

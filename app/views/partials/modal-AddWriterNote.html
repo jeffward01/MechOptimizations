@@ -1,0 +1,16 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Add Writer Note</h3>
+    <button class="btn btn-default narrow close-modal" ng-click="cancel()"><span class="icon cancel"></span></button>
+</div>
+<div class="modal-body add-note">
+    <label>Note For: <strong>{{writer.name}}</strong></label>
+    <!--<br/>
+    <label class="emph">Note: Please do not enter single or double quotes</label>
+    <br/>-->
+    <textarea placeholder="New note here"  style="resize:none"   draggable="false" ng-model="writer.newWriterNote" ng-pattern="myRegex" ng-model-options="{ debounce: 1000 }" ng-class="{'field-error': !is_valid_field(note) && modal_submit , highlight:writer.newWriterNote.$invalid}"></textarea>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="saveWriterNote(writer, 43, {}, writer.newWriterNote, -1)" ng-disabled="writer.newWriterNote | isEmpty">Save</button>
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>
+

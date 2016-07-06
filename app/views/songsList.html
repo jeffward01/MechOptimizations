@@ -1,0 +1,59 @@
+﻿
+<div class="row">
+    <div class="col-md-2">
+        &nbsp;
+    </div>
+    <div class="col-md-8">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Artist</th>
+                    <th>Writers</th>
+                    <th>Country</th>
+                    <th>Ownership</th>
+                </tr>
+            </thead>
+            <tbody bindonce refresh-on="'refreshSongs'" ng-repeat="song in songs| limitTo: 100">
+                <tr>
+                    <td>
+                        <span ng-bind="song.songid"></span>
+                    </td>
+                    <td>
+                        <span bo-if="!song.IsEdit"><span ng-bind="song.songName"></span></span>
+                        <span bo-if="song.IsEdit"><input type="text" value="" bo-model="song.songName" /></span>
+                    </td>
+                    <td>
+                        <span bo-if="!song.IsEdit"><span ng-bind="song.artist"></span></span>
+                        <span bo-if="song.IsEdit"><input type="text" value="" bo-model="song.artist" /></span>
+
+                    </td>
+                    <td>
+                        <span bo-if="!song.IsEdit"><span ng-bind="song.writers"></span></span>
+                        <span bo-if="song.IsEdit"><input type="text" value="" bo-model="song.writers" /></span>
+
+                    </td>
+                    <td>
+                        <span bo-if="!song.IsEdit"><span ng-bind="song.country"></span></span>
+                        <span bo-if="song.IsEdit"><input type="text" value="" bo-model="song.country" /></span>
+
+                    </td>
+                    <td>
+                        <span bo-if="!song.IsEdit"><span ng-bind="song.ownership"></span></span>
+                        <span bo-if="song.IsEdit"><input type="text" value="" bo-model="song.ownership" /></span>
+                    </td>
+                    <td>
+                        <input type="button" value="Edit" bo-if="!song.IsEdit" ng-click="editMode(song)" />
+                        <input type="button" value="Save" bo-if="song.IsEdit" />
+                        <input type="button" value="Cancel" bo-if="song.IsEdit" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-2">
+        &nbsp;
+    </div>
+</div>

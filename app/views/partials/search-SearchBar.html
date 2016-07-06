@@ -1,0 +1,431 @@
+﻿<ul class="search">
+    <li>
+        <a class="icon advanced dropdown-toggle" advanced-dropdown dropdown-after-show="$parent.showSlider"></a>
+        <ul class="advanced-search-menu shadow advanced-dropdown-menu">
+            <li>
+                <span class="search-view-title pull-left clearfix"><span ng-bind="selectedTabName.name"></span></span><br />
+
+                <ul class="search-within pull-left clearfix">
+                    <li>
+                        <label class="list-title">In This Search Include:</label>
+                    </li>
+                    <li>
+                        <label class="checkbox">
+                            <input type="checkbox" ng-model="$parent.advancedSearch.includeRecordingTitle" />Recording Title
+                        </label>
+                    </li>
+                    <li>
+                        <label class="checkbox">
+                            <input type="checkbox" ng-model="$parent.advancedSearch.includeProductTitle" />Product Title
+                        </label>
+                    </li>
+                    <li>
+                        <label class="checkbox">
+                            <input type="checkbox" ng-model="$parent.advancedSearch.includeLicenseTitle" />License Title
+                        </label>
+                    </li>
+                    <li>
+                        <label class="checkbox">
+                            <input type="checkbox" ng-model="$parent.advancedSearch.includeArtist" />Artist
+                        </label>
+                    </li>
+                    <li>
+                        <label class="checkbox">
+                            <input type="checkbox" ng-model="$parent.advancedSearch.includeWriter" />Writer
+                        </label>
+                    </li>
+                    <li>
+                        <label class="checkbox">
+                            <input type="checkbox" ng-model="$parent.advancedSearch.includePIPS" />PIPS #
+                        </label>
+                    </li>
+                    <li>
+                        <label class="checkbox">
+                            <input type="checkbox" ng-model="$parent.advancedSearch.includeUPC" />UPC #
+                        </label>
+                    </li>
+                    <li>
+                        <label class="checkbox">
+                            <input type="checkbox" ng-model="$parent.advancedSearch.includeClient" />Client #
+                        </label>
+                    </li>
+                    <li>
+                        <label class="checkbox">
+                            <input type="checkbox" ng-model="$parent.advancedSearch.includeLicenseNumber" />License #
+                        </label>
+                    </li>
+                    <!-- <li>
+                         <label class="checkbox">
+                             <input type="checkbox" ng-model="" />License #</label></li> -->
+                    <li>
+                        <label class="checkbox list-spacing">
+                            <!--<input type="checkbox" ng-model="$parent.advancedSearch.includeHFALicense" />HFA License #-->
+                        </label>
+                    </li>
+                    <li><a href="" ng-click="$parent.setAll(true);">Select All</a><span> | </span><a href="" ng-click="$parent.setAll(false)">Select None</a></li>
+
+                </ul>
+                <ul class="advanced-options pull-left">
+                    <li>
+                        <label>Additional Options:</label>
+                    </li>
+                    <li>
+                        <label>Assignee</label>
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="assignee" data-toggle="dropdown" aria-expanded="true" ng-click="$parent.openAsignees(); $event.stopPropagation()">
+                                (<span ng-bind="$parent.advancedSearch.Asignees.length"></span>)&nbsp;Selections
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="assignee">
+                                <li ng-repeat="asignee in $parent.GlobalAssignees" ng-click="$parent.addRemoveSelected($parent.advancedSearch.Asignees, asignee, 'contactId')">
+                                    <input type="checkbox" ng-model="asignee.selected" />
+                                    <label><span ng-bind="asignee.fullName"></span></label>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <label>Label Group</label>
+                        <div class="dropdown">
+                            <input class="dropdown-toggle" data-toggle="dropdown" ng-model="$parent.labelGroupSuggest" type="text" ng-click="$event.stopPropagation()" ng-keyup="labelGroupAutosuggest($parent.labelGroupSuggest);$event.stopPropagation()" />
+                            <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="label" ng-show="$parent.labelGroupSuggest.length > 2">
+                                <li ng-repeat="label in $parent.GlobalLabelGroups" ng-click="$parent.addRemoveSelected($parent.advancedSearch.LabelGroups, label, 'id')">
+                                    <input type="checkbox" ng-model="label.selected" />
+                                    <label><span ng-bind="label.name"></span></label>
+                                </li>
+                                <li ng-if="$parent.labelGroupSuggest.length == 0">No label groups found</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <label>Label</label>
+                        <div class="dropdown">
+                            <input class="dropdown-toggle" data-toggle="dropdown" ng-model="$parent.labelSuggest" type="text" ng-click="$parent.openLabels();$event.stopPropagation()" />
+                            <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="label" ng-show="$parent.labelSuggest.length > 2">
+                                <li ng-repeat="label in filteredLabels = ($parent.GlobalLabels | filter: $parent.labelSuggest) " ng-click="$parent.addRemoveSelected($parent.advancedSearch.Labels, label, 'id')">
+                                    <input type="checkbox" ng-model="label.selected" />
+                                    <label><span ng-bind="label.name"></span></label>
+                                </li>
+                                <li ng-if="filteredLabels.length == 0 && $parent.labelSuggest.length > 0">No labels found</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <label>Licensee</label>
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="assignee" data-toggle="dropdown" aria-expanded="true" ng-click="$parent.openLicensees();$event.stopPropagation()">
+                                (<span ng-bind="$parent.advancedSearch.Licensees.length"></span>)&nbsp;Selections
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="licensee">
+                                <li ng-repeat="licensee in $parent.GlobalLicensees" ng-click="$parent.addRemoveSelected($parent.advancedSearch.Licensees, licensee, 'licenseeId')">
+                                    <input type="checkbox" ng-model="licensee.selected" />
+                                    <label><span ng-bind="licensee.name"></span></label>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <label>Publisher</label>
+                        <div class="dropdown">
+                            <input class="dropdown-toggle" data-toggle="dropdown" ng-model="$parent.publisherSuggest" type="text" ng-click="$event.stopPropagation()" ng-keyup="$parent.openPublishers($parent.publisherSuggest);$event.stopPropagation()" />
+                            <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="label" ng-show="$parent.publisherSuggest.length > 2">
+                                <li ng-repeat="publisher in filteredPublishers = ($parent.GlobalPublishers | filter: $parent.publisherSuggest) " ng-click="$parent.addRemoveSelected($parent.advancedSearch.Publishers, publisher, 'ipCode')">
+                                    <input type="checkbox" ng-model="publisher.selected" />
+                                    <label><span ng-bind="publisher.name"></span></label>
+                                </li>
+                                <li ng-if="filteredPublishers.length == 0 && $parent.publisherSuggest.length > 2">No publishers found</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <label>Rate Type</label>
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="ratetype" data-toggle="dropdown" aria-expanded="true" ng-click="$parent.openRateTypes(); $event.stopPropagation()">
+                                (<span ng-bind="$parent.advancedSearch.RateTypes.length"></span>)&nbsp;Selections
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="rateType">
+                                <li ng-repeat="rateType in $parent.GlobalRateTypes" ng-click="$parent.addRemoveSelected($parent.advancedSearch.RateTypes, rateType, 'rateTypeId')">
+                                    <input type="checkbox" ng-model="rateType.selected" />
+                                    <label><span ng-bind="rateType.rateType"></span></label>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <!--<li> Commented until we have this from Simon
+                        <label>Distributor</label>
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="assignee" data-toggle="dropdown" aria-expanded="true" ng-click="$parent.openLicensees();$event.stopPropagation()">
+                                (0) Selections
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="distributor">
+                                <li>
+                                    <input type="checkbox" />
+                                    <label>Recording Title</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" />
+                                    <label>Product Title</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" />
+                                    <label>License Title</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" />
+                                    <label>Artist</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" />
+                                    <label>Writer</label>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>-->
+                    <li>
+                        <label>License Method</label>
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="assignee" data-toggle="dropdown" aria-expanded="true" ng-click="$parent.openLicenseMethods(); $event.stopPropagation()">
+                                (<span ng-bind="$parent.advancedSearch.LicesingMethods.length"></span>)&nbsp;Selections <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="licensingMethod">
+                                <li ng-repeat="licenseMethod in $parent.GlobalLicenseMethods" ng-click="$parent.addRemoveSelected($parent.advancedSearch.LicesingMethods, licenseMethod, 'licenseMethodId')">
+                                    <input type="checkbox" ng-model="licenseMethod.selected" />
+                                    <label><span ng-bind="licenseMethod.licenseMethod"></span></label>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <label>Configurations</label>
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="Button2" data-toggle="dropdown" aria-expanded="true" ng-click="$parent.openConfigurations(); $event.stopPropagation()">
+                                (<span ng-bind="$parent.advancedSearch.Configuration.length"></span>)&nbsp;Selections
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="rateType">
+                                <li ng-repeat="config in $parent.GlobalConfigurations" ng-click="$parent.addRemoveSelected($parent.advancedSearch.Configuration, config, 'id')">
+                                    <input type="checkbox" ng-model="config.selected" />
+                                    <label><span ng-bind="config.name"></span></label>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <label>License Type</label>
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="assignee" data-toggle="dropdown" aria-expanded="true" ng-click="$parent.openLicenseTypes();$event.stopPropagation()">
+                                (<span ng-bind="$parent.advancedSearch.LicenseTypes.length"></span>)&nbsp;Selections
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="licenseTypes">
+                                <li ng-repeat="licenseType in $parent.GlobalLicenseTypes | orderBy:'licenseType'" ng-click="$parent.addRemoveSelected($parent.advancedSearch.LicenseTypes, licenseType, 'licenseTypeId')">
+                                    <input type="checkbox" ng-model="licenseType.selected" />
+                                    <label><span ng-bind="licenseType.licenseType"></span></label>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="advanced-options pull-left">
+                    <li>
+                        <label>&nbsp;</label>
+                    </li>
+                    <li>
+                        <label>License Status</label>
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="assignee" data-toggle="dropdown" aria-expanded="true" ng-click="$parent.openLicenseStatuses();$event.stopPropagation()">
+                                (<span ng-bind="$parent.advancedSearch.LicenseStatuses.length"></span>)&nbsp;Selections
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="licensingMethod">
+                                <li ng-repeat="licStatus in $parent.GlobalLicenseStatuses | orderBy:'licenseStatus'" ng-click="$parent.addRemoveSelected($parent.advancedSearch.LicenseStatuses, licStatus, 'licenseStatusId')">
+                                    <input type="checkbox" ng-model="licStatus.selected" />
+                                    <label><span ng-bind="licStatus.licenseStatus"></span></label>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <label>Special Status</label>
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="Button1" data-toggle="dropdown" aria-expanded="true" ng-click="$parent.openSpecialStatuses();$event.stopPropagation()">
+                                (<span ng-bind="$parent.advancedSearch.SpecialStatus.length"></span>)&nbsp;Selections
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="licensingMethod">
+                                <li ng-repeat="specialStatus in $parent.GlobalSpecialStatuses" ng-click="$parent.addRemoveSelected($parent.advancedSearch.SpecialStatus, specialStatus, 'specialStatusId')">
+                                    <input type="checkbox" ng-model="specialStatus.selected" />
+                                    <label><span ng-bind="specialStatus.specialStatus"></span></label>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <label>Reports Received</label>
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="reportsReceived" data-toggle="dropdown" aria-expanded="true" ng-click="$event.stopPropagation()">
+                                <span ng-if="!$parent.advancedSearch.filterStatusReport && !$parent.advancedSearch.filterPriorityReport">(0) Selections</span>
+                                <span ng-if="($parent.advancedSearch.filterStatusReport && !$parent.advancedSearch.filterPriorityReport) || (!$parent.advancedSearch.filterStatusReport && $parent.advancedSearch.filterPriorityReport) ">(1) Selection</span>
+                                <span ng-if="$parent.advancedSearch.filterStatusReport && $parent.advancedSearch.filterPriorityReport">(2) Selections</span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="reportsReceived">
+                                <li>
+                                    <input type="checkbox" ng-model="$parent.advancedSearch.filterPriorityReport" />
+                                    <label>Priority Licensing Report</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" ng-model="$parent.advancedSearch.filterStatusReport" />
+                                    <label>Product Status Report</label>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <!--<li>
+                        <label>Writers Consent Type</label>
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="Button1" data-toggle="dropdown" aria-expanded="true" ng-click="$parent.openWritersConsentTypes();$event.stopPropagation()">
+                                ({{$parent.advancedSearch.WritersConsentTypes.length}}) Selections
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="licensingMethod">
+                                <li ng-repeat="consentType in $parent.GlobalWritersConsentTypes" ng-click="$parent.addRemoveSelected($parent.advancedSearch.WritersConsentTypes, consentType, 'writersConsentTypeId')">
+                                    <input type="checkbox" ng-model="consentType.selected" />
+                                    <label>{{consentType.writersConsentType}}</label>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>-->
+                    <!-- Commented 10/12 -- Java Team Dependentcy <li>
+                        <label>Contains Sample</label>
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="sample" data-toggle="dropdown" aria-expanded="true" ng-click="$event.stopPropagation()">
+                                No Preference
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="licensingMethod">
+                                <li>
+                                    <input type="checkbox" />
+                                    <label>No Preference</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" />
+                                    <label>Contains Sample</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" />
+                                    <label>Does Not Contain Sample</label>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>-->
+                    <li class="date-range">
+                        <label>Release Date Range</label>
+                        <span>
+                            <!--       <form class="form-horizontal" name="someForm" role="form" novalidate>
+                                <p class="input-group" ng-class="{ 'has-error': someForm.date.$invalid }">
+                                    <input id="date" name="date" type="text" datepicker-popup="MM/dd/yyyy" is-open="opened" close-text="Close"
+                                           ng-model="someDate" class="form-control" placeholder="mm/dd/yyyy"
+                                           aw-datepicker-pattern="^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$" required />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="open($event)">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </button>
+                                    </span>
+                                </p>
+                            </form>-->
+                            <form class="form-horizontal" name="someForm" role="form" novalidate style="display:inline-block" >
+                                <p class="input-group"  ng-class="{ 'has-error': someForm.date.$invalid && someForm.date.$dirty }">
+                                    <input type="text" ng-blur="$parent.closeOnBlur()" id="date" name="date" class="date-field form-control hasDatepicker" datepicker-popup="{{$parent.rangeFormat}}" placeholder="mm/dd/yyyy" clear-text="Clear" is-open="$parent.dateRangesOpened.releaseFrom" ng-model="::$parent.advancedSearch.ReleaseDateFrom" show-weeks="false" required close-text="Close" date-disabled="$parent.disabled(date,mode)" datepicker-options="$parent.dateOptions" aw-datepicker-pattern="^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$" />
+                                    <button type="button" class="btn btn-default narrow" ng-click="$parent.flipDateRange('releaseFrom', $event)">
+                                        <span class="icon calendar"></span>
+                                    </button>&nbsp;-&nbsp;
+                                </p>
+                            </form>
+                            <form class="form-horizontal" name="someForm1" role="form" novalidate style="display:inline-block">
+                                <p class="input-group" ng-class="{ 'has-error': someForm1.date1.$dirty && someForm1.date1.$invalid}">
+                                
+                                    <input type="text" id="date1" ng-blur="$parent.closeOnBlur()" name="date1" aw-datepicker-pattern="^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$" placeholder="mm/dd/yyyy" class="date-field form-control hasDatepicker" datepicker-popup="{{$parent.rangeFormat}}" clear-text="Clear" is-open="$parent.dateRangesOpened.releaseTo" ng-model="::$parent.advancedSearch.ReleaseDateTo" datepicker-options="$parent.dateOptions" date-disabled="$parent.disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close" />
+                                    <button type="button" class="btn btn-default narrow" ng-click="$parent.flipDateRange('releaseTo', $event)">
+                                        <span class="icon calendar"></span>
+                                    </button>
+                                </p>
+                            </form>
+                        </span>
+                    </li>
+                    <li class="date-range">
+                        <label>Signed Date Range</label>
+                        <span>
+                            <form class="form-horizontal" name="someForm2" role="form" novalidate style="display:inline-block">
+                                <p class="input-group" ng-class="{ 'has-error': someForm2.date2.$invalid && someForm2.date2.$dirty}">
+                                    <input type="text" ng-blur="$parent.closeOnBlur()" aw-datepicker-pattern="^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$" placeholder="mm/dd/yyyy" class="date-field form-control hasDatepicker" id="date2" name="date2" clear-text="Clear" datepicker-popup="{{$parent.rangeFormat}}" is-open="$parent.dateRangesOpened.signedFrom" ng-model="::$parent.advancedSearch.SignedDateFrom" datepicker-options="$parent.dateOptions" date-disabled="$parent.disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close" />
+                                    <button type="button" class="btn btn-default narrow" ng-click="$parent.flipDateRange('signedFrom', $event)"><span class="icon calendar"></span></button>
+                                    &nbsp;-&nbsp;
+                                </p>
+                            </form>
+                            <form class="form-horizontal" name="someForm3" role="form" novalidate style="display:inline-block">
+                                <p class="input-group" ng-class="{ 'has-error': someForm3.date3.$invalid && someForm3.date3.$dirty}">
+                                    <input type="text" ng-blur="$parent.closeOnBlur()" aw-datepicker-pattern="^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$" placeholder="mm/dd/yyyy" class="date-field form-control hasDatepicker" id="date3" name="date3" clear-text="Clear" datepicker-popup="{{$parent.rangeFormat}}" ng-model="::$parent.advancedSearch.SignedDateTo" is-open="$parent.dateRangesOpened.signedTo" datepicker-options="$parent.dateOptions" date-disabled="$parent.disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close" />
+                                    <button type="button" class="btn btn-default narrow" ng-click="$parent.flipDateRange('signedTo', $event)"><span class="icon calendar"></span></button>
+                                </p>
+                            </form>
+
+                        </span>
+                    </li>
+                    <li>
+                        <label>Rate Range</label><br /><br />
+                        <!--<span slider ng-model="$parent.advancedSearch.RateRange" min="10" step="1" max="100" value="10"></span>-->
+                        <slider-custom-scale ng-if="advancedDropdownVisible" ng-model="$parent.advancedSearch.RateRange" ticks="$parent.sliderTicks" ticks-labels="$parent.sliderScale" min="1" max="$parent.sliderTicks.length" range="true"></slider-custom-scale>
+                    </li>
+                </ul>
+                <ul class="advanced-buttons">
+                    <li>
+                        <div class="dropdown pull-left" dropdown is-open="status.isopen" ng-show="$parent.insideModal == ''">
+                            <button type="button" class="btn btn-default dropdown-toggle" id="priority" data-toggle="dropdown" aria-expanded="true" ng-click="$event.stopPropagation()">
+                                <span ng-bind="selectedTabName.name"></span><span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="licensingMethod">
+                                <li ng-repeat="tabName in tabNames"><a href="#" ng-click="selectTabName(tabName);$event.preventDefault()"><span ng-bind="tabName.name"></span></a></li>
+                            </ul>
+                        </div>
+                        <button security actions="SaveUserOptions" class="btn btn-default" ng-click="$parent.saveDefaults()">Save Default</button>
+                        <button security actions="SaveUserOptions" class="btn btn-default" ng-click="$parent.getDefaults($parent.selectedTabName.route)">Reset to Default</button>
+                        <button class="btn btn-default" ng-click="$parent.clearDefaults()">Clear All</button>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <input class="search-field pull-left" type="text" ng-model="$parent.searchTerm" ng-enter="search()" placeholder="Start Your Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Start Your Search'" />
+    </li>
+    <li>
+        <div class="dropdown recent-searches pull-left">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
+                <li role="presentation">
+                    <h3>Recent Searches</h3>
+                </li>
+                <li role="presentation" ng-repeat="recent in $parent.recentSearches | slice:1:$parent.recentLimit-1 ">
+                    <a role="menuitem" tabindex="-1" href="#" ng-if="recent.searchTerm.length>0" ng-click="$event.preventDefault();$parent.changeSavedSearch($index)">
+                        <span ng-bind="recent.searchTerm"></span><span class="icon remove pull-right" ng-click="$parent.removeSavedSearch($index);$event.stopPropagation()"></span>
+                    </a>
+                    <a role="menuitem" tabindex="-1" href="#" ng-if="recent.searchTerm.length==0" ng-click="$event.preventDefault();$parent.changeSavedSearch($index)">
+                        Search&nbsp;<span ng-bind="$index+1"></span><span class="icon remove pull-right" ng-click="$parent.removeSavedSearch($index);$event.stopPropagation()"></span>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </li>
+    <li>
+        <a class="btn btn-lg big-search" title="Search" ng-click="search()" ng-show="$parent.insideModal == ''">Search</a>
+        <a class="btn btn-lg big-search" title="Search" ng-click="searchProductsModal()" ng-show="$parent.insideModal == 'AddProducts'">Search</a>
+    </li>
+</ul>
+

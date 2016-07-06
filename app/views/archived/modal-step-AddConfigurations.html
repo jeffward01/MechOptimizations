@@ -1,0 +1,79 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Selected configuration</h3>
+</div>
+<div class="modal-body">
+    <button ng-click="testme()"><span class="icon add-configurations"></span>Add Configurations</button>
+    <section class="select-configurations">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="product-title">Product Title</th>
+                    <th class="artist">Artist</th>
+                    <th class="configurations">Select Configurations</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="product in selectedProducts">
+                    <td class="product-title"><span ng-bind="product.title"></span></td>
+                    <td class="artist"><span ng-bind="product.recsArtist.name"></span></td>
+                    <td class="configurations">
+                        <ul>
+                            <li ng-show="hasProductConfigurations(product)">
+                                <input type="checkbox" ng-model="product.Selected" ng-click="selectAll(product)" />
+                                <label>Select All</label>
+                            </li>
+                            <li ng-repeat="config in configurations | filter:licenseProductConfigurationFilter(product.product_id) ">
+                                <input type="checkbox" ng-model="config.Selected" />
+                                <label><span ng-bind="config.configuration_name"></span></label><span class="icon config-physical" ng-class="config.configuration_Id | returnConfigurationIcon"></span>
+                            </li>
+                        </ul>
+                        <span ng-show="!hasProductConfigurations(product)"><label>No available configurations</label></span>
+                    </td>
+                </tr>
+                <!--
+                <tr>
+                    <td class="product-title">Product Title Here</td>
+                    <td class="artist">Artist Name Here</td>
+                    <td class="configurations">
+                        <ul>
+                            <li><input type="checkbox" /><label>Select All</label></li>
+                            <li><input type="checkbox" /><span class="icon config-physical"></span><label>12&quot; Vinyl Album</label></li>
+                            <li><input type="checkbox" /><span class="icon config-physical"></span><label>CD/DVD</label></li>
+                            <li><input type="checkbox" /><span class="icon config-physical"></span><label>EP</label></li>
+                            <li><input type="checkbox" /><span class="icon config-digital"></span><label>Interactive Streaming</label></li>
+                            <li><input type="checkbox" /><span class="icon config-digital"></span><label>MP3</label></li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="product-title">Product Title Here</td>
+                    <td class="artist">Artist Name Here</td>
+                    <td class="configurations">
+                        <ul>
+                            <li><input type="checkbox" /><label>Select All</label></li>
+                            <li><input type="checkbox" /><span class="icon config-physical"></span><label>12&quot; Vinyl Album</label></li>
+                            <li><input type="checkbox" /><span class="icon config-physical"></span><label>CD/DVD</label></li>
+                            <li><input type="checkbox" /><span class="icon config-digital"></span><label>Interactive Streaming</label></li>
+                        </ul>
+                    </td>
+                </tr>
+                -->
+            </tbody>
+        </table>
+    </section>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="modalPreviousStep()" ><span class="icon back"></span>Back</button>
+    <button class="btn btn-default pull-right" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-default pull-right" ng-click="ok()"><span class="icon add-configurations"></span>Add Configurations<span class="icon forward"></span></button>
+</div>
+<!--
+ for testing
+ <div>
+    <div ng-repeat="product in selectedProducts">
+        <div ng-repeat="config in configurations |  filter:licenseProductConfigurationFilter(product.product_id) " ng-if="config.Selected">
+            <label>{{product.title}} ==> {{config.configuration_name}}</label><span class="icon config-physical"></span>
+        </div>
+    </div>
+</div>
+    -->

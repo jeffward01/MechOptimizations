@@ -1,0 +1,13 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Upload Document</h3>
+    <button class="btn btn-default narrow close-modal" ng-click="$parent.cancel()"><span class="icon cancel"></span></button>
+</div>
+<div class="modal-body upload-document">
+
+    <input type="file" class="filestyle" id="fileToUpload" customfileupload onchange="angular.element(this).scope().checkIfValidFile()" />
+    <progress id="progressbar" class="progress-striped" value="0" max="100" ng-show="progressVisible">0%</progress>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="upload()">Upload</button>
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>

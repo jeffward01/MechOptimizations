@@ -1,0 +1,76 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">View/Edit Writer Note</h3>
+    <button class="btn btn-default narrow close-modal" ng-click="cancel()"><span class="icon cancel"></span></button>
+</div>
+<div class="modal-body add-note">
+    <label>Writer Notes For: <strong>{{writer.name}}</strong></label>
+    
+    <!--<textarea placeholder="New note here" draggable="false" ng-model="writer.newWriterNote" ng-model-options="{ debounce: 1000 }" ng-class="{'field-error': !is_valid_field(note) && modal_submit}"></textarea>-->
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="ten-percent">Created Date</th>
+                <th class="fifteen-percent">Created By</th>
+                <th class="seventyfive-percent">Note</th>
+                <th class="ten-percent centered">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        <tr ng-repeat-start="writernote in writer.licenseProductRecordingWriter.writerNotes">
+            <td class="ten-percent top"><span ng-bind="writernote.createdDate | timezone | date:'MM/dd/yyyy'"></span></td>
+            <td class="fifteen-percent top"><span ng-bind="writernote.createdBy"></span></td>
+            <td class="seventyfive-percent top"><span ng-bind="writernote.note"></span></td>
+            <td class="ten-percent top no-wrap">
+                <button ng-show="buttons.writerNoteBtn && writer.controlled" class="btn btn-default btn-sm narrow" title="Edit Note" ng-click="collapseEditNote(writer, writernote)"><span class="icon edit"></span></button>
+                <button ng-show="buttons.writerNoteBtn && writer.controlled" class="btn btn-default btn-sm narrow" title="Delete Note" ng-click="removeWriterNote(writer, writernote.licenseWriterNoteId)"><span class="icon delete"></span></button>
+                <input type="hidden" ng-model="currentWriteNoteId"/>
+            </td>
+        </tr>
+            
+        <tr ng-repeat-end="writernote in writer.licenseProductRecordingWriter.writerNotes">
+
+            <td class="writer-add-note" colspan="12" ng-show="writernote.editNoteVisible" >
+                <table class="table writer-notes">
+                    <tr>
+                        <td class="onehundred-percent">
+                            <textarea class="writer-note restrictQuote"  style="resize:none" ng-model-options="{debounce:1000}" ng-model="writernote.editNoteValue"></textarea>
+                        </td>
+                        <td class="one-percent no-wrap">
+                            <button class="btn btn-default btn-sm narrow" ng-click="saveWriterNote(writer, 43, writernote, writernote.editNoteValue,writernote.licenseWriterNoteId)" ng-disabled="writernote.editNoteValue | isEmpty"><span class="icon save"></span></button>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+            <tr>
+                <td class="writer-add-note" colspan="12" ng-show="writer.addNewNoteVisible">
+                    <table class="table writer-notes">
+                        <tr>
+                            <td class="onehundred-percent"><textarea  style="resize:none" class="writer-note restrictQuote" ng-model-options="{debounce:1000}" ng-model="writer.newWriterNote"></textarea></td>
+                            <td class="one-percent no-wrap">
+                                <button class="btn btn-default btn-sm narrow" ng-click="saveWriterNote(writer, 43,{}, writer.newWriterNote, -1)" ng-disabled="writer.newWriterNote | isEmpty"><span class="icon save"></span></button>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+   
+
+
+
+
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" ng-if="!newNoteClosed" ng-click="cancelNewNote(writer)">Cancel New Note</button>
+    <button ng-show="buttons.writerNoteBtn && writer.controlled" ng-if="newNoteClosed" class="btn btn-default" title="New Note" ng-disabled="editOpen" ng-click="collapseWriterAddNotes(writer, writernote)">New Note</button>
+    <!--<button class="btn btn-default" ng-click="saveWriterNote(writer, 43, {}, writer.newWriterNote, -1)" ng-disabled="writer.newWriterNote | isEmpty">Save</button>-->
+    <!--<button class="btn btn-default" ng-disabled="!modifiedUI" ng-click="cancel(true)">Ok</button>-->
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-default" ng-click="clickMe()">Loaded</button>
+</div>
+

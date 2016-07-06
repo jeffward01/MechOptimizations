@@ -1,0 +1,34 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Set Priority / Assignee</h3>
+    <button class="btn btn-default narrow close-modal" ng-click="cancel()"><span class="icon cancel"></span></button>
+</div>
+<div class="modal-body assign-prioritize">
+   
+    <div class="dropdown" dropdown is-open="status.isopen">
+        <button type="button" class="btn btn-default dropdown-toggle" id="priority" data-toggle="dropdown" ng-disabled="disabled" ng-click="getPriorities()">
+            <span ng-bind="selectedPriority.priority"></span><span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="priority">
+            <li ng-repeat="priority in priorities">
+                <a href="#" ng-click="selectPriority(priority);$event.preventDefault()"><span ng-class="{'priority high':priority.priorityId==1,'priority medium':priority.priorityId==2,'priority low':priority.priorityId==3}"></span>{{priority.priority}}</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="dropdown" dropdown is-open="status.isopen">
+        <button type="button" class="btn btn-default dropdown-toggle" id="assign" data-toggle="dropdown" ng-click="getAssignees()" ng-class="{'field-error': !is_valid_field(selectedAssignee.fullName) && modal_submit}">
+            <span ng-bind="selectedAssignee.fullName"></span>&nbsp;<span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="assign">
+            <li ng-repeat="contact in contacts"><a ng-click="selectAsignee(contact);$event.preventDefault()">{{contact.fullName}}</a></li>
+        </ul>
+    </div>
+    <br /><br />
+    <label>Comments</label><!-- Any comments added here will be added as an internal note only // Remember that you have to grab the user thats making the comment and the date stamp to post to internal notes -->
+    <textarea placeholder="Your comments here" draggable="false" ng-model="note" ng-model-options="{debounce:1000}"></textarea>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="ok()">Save</button>
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>
+

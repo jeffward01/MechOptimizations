@@ -1,0 +1,14 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Select Products</h3>
+    <button class="btn btn-default narrow close-modal" ng-click="cancelToLicenseDetails()"><span class="icon cancel"></span></button>
+</div>
+<div class="modal-body add-products" ng-controller="globalController">
+    <section class="search-wrapper" ng-include="'app/views/partials/search-SearchBar.html'"></section>
+    <section id="products-list" ng-include="'app/views/partials/search-GridAddProducts.html'" ng-controller="productsController"></section>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default back" ng-click="modalPreviousStep()"><span class="icon back"></span>Back</button>
+    <button class="btn btn-default" ng-click="addProducts()"><span class="icon select-configurations"></span>Select Configurations</button>
+    <!--<button class="btn btn-default cancel" ng-click="cancelToLicenseDetails()"><span class="icon cancel"></span>Cancel</button>-->
+    <button class="btn btn-default cancel" ng-click="$parent.cancel()"><span class="icon cancel"></span>Cancel</button>
+</div>

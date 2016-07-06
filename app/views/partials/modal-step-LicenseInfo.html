@@ -1,0 +1,144 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title" ng-if="!IsEdit">Create License</h3>
+    <h3 class="modal-title" ng-if="IsEdit">Edit License</h3>
+    <button class="btn btn-default narrow close-modal" ng-click="$parent.cancel()"><span class="icon cancel"></span></button>
+</div>
+<div class="modal-body create-license">
+    <ul>
+        <!--<li>&nbsp;</li>-->
+        <li><label>License Title</label><input type="text" ng-model="license.licenseName" ng-class="{'field-error': !is_valid_field(license.licenseName) && modal_submit}" ng-disabled="selectedLicense.relatedLicenseId && selectedLicense.licenseNumber.indexOf('-') != -1" /></li>
+        <li>
+            <label>Assignee</label>
+            <div class="dropdown" dropdown is-open="status.isopen" ng-class="{'field-error': !is_valid_field(selectedAssignee.fullName) && modal_submit}">
+                <button type="button" class="btn btn-default dropdown-toggle" id="assign" data-toggle="dropdown" ng-click="getAssignees()">
+                   <span ng-bind="selectedAssignee.fullName"></span><span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="assign">
+                    <li ng-repeat="contact in contacts"><a ng-click="selectAsignee(contact);$event.preventDefault()"><span ng-bind="contact.fullName"></span></a></li>
+                </ul>
+            </div>
+        </li>
+        <!--<li>
+            <label>Status</label>
+            <div class="dropdown">
+                <button type="button" class="btn btn-default dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" ng-disabled="disabled" ng-click="getLicenseStatuses()">
+                    <span class="status-icon {{selectedLicenseStatus.licenseStatus|lowercase}}"></span>{{selectedLicenseStatus.licenseStatus}}
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                    <li ng-repeat="licenseStatus in licenseStatuses"><a href="#" ng-click="selectLicenseStatus(licenseStatus);$event.preventDefault()"><span class="status-icon {{licenseStatus.licenseStatus|lowercase}}"></span>{{licenseStatus.licenseStatus}}</a></li>
+                </ul>
+            </div>
+        </li>-->
+        <li>
+            <label>License Type</label>
+            <div class="dropdown">
+                <button type="button" class="btn btn-default dropdown-toggle" id="licensetype" data-toggle="dropdown" ng-disabled="disabled; selectedLicense.relatedLicenseId && selectedLicense.licenseNumber.indexOf('-') != -1" ng-click="getLicenseTypes()">
+                    <span ng-bind="selectedLicenseType.licenseType"></span><span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                    <li role="presentation" ng-repeat="licenseType in licenseTypes"><a href="#" role="menuitem" tabindex="-1" ng-click="selectLicenseType(licenseType);$event.preventDefault()"><span class=""></span>
+                        <span ng-bind="licenseType.licenseType"></span></a></li>
+                </ul>
+            </div>
+        </li>
+        <li>
+            <label>Priority</label>
+            <div class="dropdown" dropdown is-open="status.isopen">
+                <button type="button" class="btn btn-default dropdown-toggle" id="priority" data-toggle="dropdown" ng-disabled="disabled" ng-click="getPriorities()">
+                    <span ng-bind="selectedPriority.priority"></span><span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="priority">
+                    <li ng-repeat="priority in priorities"><a href="#" ng-click="selectPriority(priority);$event.preventDefault()"><span ng-class="{'priority high':priority.priorityId==1,'priority medium':priority.priorityId==2,'priority low':priority.priorityId==3}"></span><span ng-bind="priority.priority"></span></a></li>
+                </ul>
+            </div>
+        </li>
+        <li>
+            <label>Method</label>
+            <div class="dropdown" dropdown is-open="status.isopen">
+                <button type="button" class="btn btn-default dropdown-toggle" id="priority" data-toggle="dropdown" ng-disabled="disabled; selectedLicense.relatedLicenseId && selectedLicense.licenseNumber.indexOf('-') != -1" ng-click="getLicenseMethods()">
+                    <span ng-bind="selectedLicenseMethod.licenseMethod"></span><span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="priority">
+                    <li ng-repeat="licenseMethod in licenseMethods"><a href="#" ng-click="selectLicenseMethod(licenseMethod);$event.preventDefault()"><span ng-bind="licenseMethod.licenseMethod"></span></a></li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+    <ul>
+        <!--<li><span><input type="checkbox" />Product Status Reports Received</span></li>-->
+        <li>
+            <label>Licensee</label>
+            <div class="dropdown" ng-class="{'field-error': !is_valid_field(selectedLicensee.name) && modal_submit}">
+                <input class="dropdown-toggle" data-toggle="dropdown" ng-model="selectedLicensee.name" type="text" ng-click="getLicensees()" ng-disabled="selectedLicense.relatedLicenseId && selectedLicense.licenseNumber.indexOf('-') != -1" />
+                    <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="label" ng-show="selectedLicensee.name.length > 2">
+                        <li ng-repeat="licensee in filteredLicensees = (licensees | filter:{name:selectedLicensee.name}) " ng-click="selectLicensee(licensee);">
+                            <label>
+                                <span ng-bind="licensee.name"></span>
+                            </label>
+                        </li>
+                        <li ng-if="filteredLicensees.length == 0 && selectedLicensee.name.length > 0">No licensees found</li>
+                    </ul>
+                </div>
+        </li>
+        <li>
+            <label>Label</label>
+            <div class="dropdown" dropdown is-open="status.isopen">
+                <button type="button" class="btn btn-default dropdown-toggle" id="priority" data-toggle="dropdown" ng-disabled="licenseeLabels.length==0" ng-click="getLicenseeLabels()">
+                    <span ng-bind="selectedLicenseeLabel.licenseeLabelGroupName"></span><span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="priority">
+                    <li ng-repeat="licenseeLabel in licenseeLabels"><a href="#" ng-click="selectLicenseeLabel(licenseeLabel);$event.preventDefault()"><span ng-bind="licenseeLabel.licenseeLabelGroupName"></span></a></li>
+                </ul>
+            </div>
+        </li>
+        <li>
+            <label>Contact</label>
+            <div class="dropdown" dropdown is-open="status.isopen" ng-class="{'field-error': !is_valid_field(selectedLicenseeContact.fullName) && modal_submit}">
+                <button type="button" class="btn btn-default dropdown-toggle" id="priority" data-toggle="dropdown" ng-disabled="disabled">
+                    <span ng-bind="selectedLicenseeContact.fullName"></span><span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="priority">
+                    <li ng-repeat="licenseeContact in licenseeContacts"><a href="#" ng-click="selectLicenseeContact(licenseeContact);$event.preventDefault()"><span ng-bind="licenseeContact.fullName"></span></a></li>
+                </ul>
+            </div>
+        </li>
+        <li>
+            <label>Effective Date</label>
+            <form class="form-horizontal" name="someForm14" role="form" novalidate>
+                <p class="input-group" ng-class="{ 'has-error': someForm14.date14.$invalid && someForm14.date14.$dirty}">
+                    <input type="text" id="date14" name="date14" class="date-field form-control" aw-datepicker-pattern="^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$" placeholder="mm/dd/yyyy" clear-text="Clear" datepicker-popup="{{format}}" ng-model="::dt" is-open="opened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close" />
+                    <button type="button" class="btn btn-default narrow" ng-click="open($event)"><span class="icon calendar"></span></button>
+                </p>
+            </form>
+        </li>
+        <li>
+            <label>Received Date</label>
+            <form class="form-horizontal" name="someForm15" role="form" novalidate>
+                <p class="input-group" ng-class="{ 'has-error': someForm15.date15.$invalid  && someForm15.date15.$dirty }">
+                    <input type="text" id="date15" name="date15" class="date-field form-control" aw-datepicker-pattern="^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$" placeholder="mm/dd/yyyy" clear-text="Clear" datepicker-popup="{{format}}" ng-model="::dtReceived" is-open="openedReceived" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close" />
+                    <button type="button" class="btn btn-default narrow" ng-click="openReceived($event)"><span class="icon calendar"></span></button>
+                </p>
+            </form>
+        </li>
+        <li>
+            <label>Signed Date</label>
+            <form class="form-horizontal" name="someForm16" role="form" novalidate>
+                <p class="input-group" ng-class="{ 'has-error': someForm16.date16.$invalid && someForm16.date16.$dirty}">
+                    <input type="text" id="date16" name="date16" class="date-field form-control" aw-datepicker-pattern="^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$" placeholder="mm/dd/yyyy" clear-text="Clear" datepicker-popup="{{format}}" ng-model="::dtSigned" is-open="openedSigned" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close" />
+                    <button type="button" class="btn btn-default narrow" ng-click="openSigned($event)"><span class="icon calendar"></span></button>
+                </p>
+            </form>
+        </li>
+    </ul>
+</div>
+<div class="modal-footer">
+   
+    <button class="btn btn-default" ng-click="ok_close()"><span class="icon save"></span>Save &amp; Close</button>
+    <button class="btn btn-default" ng-if='stateName!="SearchMyView.Tabs.ProductsTab.StepsModal.CreateLicense"' ng-click="ok_select()"><span class="icon save-select"></span>Save &amp; Select Products</button>
+    <button class="btn btn-default" ng-if='stateName=="SearchMyView.Tabs.ProductsTab.StepsModal.CreateLicense"' ng-click="ok_selectConfig()"><span class="icon save-select"></span>Save &amp; Select Configurations</button>
+    <button class="btn btn-default cancel" ng-click="$parent.cancel()"><span class="icon cancel"></span>Cancel</button>
+
+</div>
+
+

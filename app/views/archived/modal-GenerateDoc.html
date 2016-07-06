@@ -1,0 +1,15 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Generate Document</h3>
+</div>
+<div class="modal-body generate-doc">
+    <ul>
+    <!-- This li.generate-doc-message element will only be displayed if a writer on the license is in a dispute/hold status -->
+    <li class="generate-doc-message"><span class="icon error"></span>One or more writers selected is in dispute or on hold.</li>
+
+    <li><label>Filename</label><input type="text" /></li>
+    </ul>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-default" ng-click="ok()">Generate</button>
+</div>

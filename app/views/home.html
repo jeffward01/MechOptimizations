@@ -1,0 +1,110 @@
+﻿<nav class="sub-nav" ng-include="'app/views/partials/nav-SubNav.html'"></nav>
+
+<breadcrumbs></breadcrumbs>
+
+<section class="search-wrapper" ng-include="'app/views/partials/search-SearchBar.html'"></section>
+
+<h1>My View</h1>
+
+<section class="search-filters" ng-include="'app/views/partials/search-Filters.html'"></section>
+
+<section class="search-grid">
+
+    <ul class="grid-header">
+        <li class="actions">
+            <button class="btn btn-sm"><span class="icon assign"></span>Assign</button>
+            <button class="btn btn-sm"><span class="icon set-priority"></span>Set Priority</button>
+            <button class="btn btn-sm"><span class="icon set-priority"></
+                span>Create License</button>
+            <button class="btn btn-sm"><span class="icon set-priority"></span>Clone License</button>
+        </li>
+        <li class="pagination">
+            <pagination total-items="totalItems" items-per-page="numPerPage" ng-model="currentPage" ng-change="pageChanged()" max-size="maxSize" class="pagination pagination-sm" boundary-links="true"
+                        previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+        </li>
+        <li class="records">
+            <span class="pull-left">Viewing</span>
+            <div class="dropdown">
+                <button class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                    10
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">10</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">20</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">50</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">100</a></li>
+                </ul>
+            </div>
+            <span class="pull-left"> of 2,000 records</span>
+        </li>
+        <li class="items-per-page">
+            <div class="dropdown pull-right">
+                <button class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                    Edit Columns
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">10 per page</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">20 per page</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">50 per page</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">100 per page</a></li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th class="priority"><a href=""><span class="caret"></span></a></th>
+                <th class="select-all"><input type="checkbox" /></th>
+                <th class="assignee"><a href="">Assignee<span class="caret"></span></a></th>
+                <th class="id"><a href="">License #<span class="caret"></span></a></th>
+                <th class="title" ><a href="" ng-click="sortSearch('LicenseName')">License Title<span class="caret"></span></a></th>
+                <th class="products"><a href="">Products<span class="caret"></span></a></th>
+                <th class="artists"><a href="">Artists<span class="caret"></span></a></th>
+                <th class="licensee"><a href="">Licensee<span class="caret"></span></a></th>
+                <th class="method"><a href="">Method<span class="caret"></span></a></th>
+                <th class="config"><a href="">Config<span class="caret"></span></a></th>
+                <th class="created-by"><a href="">Created By<span class="caret"></span></a></th>
+                <th class="type"><a href="">Type<span class="caret"></span></a></th>
+                <th class="status"><a href="">Status<span class="caret"></span></a></th>
+                <th class="created-date">Created<span class="caret"></span></th>
+                <th class="modified-date">Modified<span class="caret"></span></th>
+                <th class="signed-date">Signed<span class="caret"></span></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr ng-repeat-start="license in licenses">
+                <td class="priority"><span ng-class="{'priority high':license.priorityId==1,'priority medium':license.priorityId==2,'priority low':license.priorityId==3,'priority inbox':license.priorityId==4}"></span></td>
+                <td class="select-all"><input type="checkbox" /></td>
+                <td class="assignee"><span ng-bind="license.contact.fullName"></span></td>
+                <td class="id"><span ng-bind="license.licenseNumber"></span></td>
+                <td class="title"><span ng-bind="license.licenseName"></span></td>
+                <td class="products">
+                    <!-- Commented because of the change requiring a product count and associated accordion, i.e. DML's search grid for songs {{ license.ProductID }}-->
+                    <a class="badge" data-toggle="collapse" href="#collapseProducts" aria-expanded="false" aria-controls="collapseProducts">5 <span class="caret"></span></a>
+                </td>
+                <td class="artists">Sample Artist Name</td>
+                <td class="licensee"><span ng-bind="license.licensee.name"></span></td>
+                <td class="method"><span ng-bind="license.licenseMethod.licenseMethod"></span></td>
+                <td class="config"><span ng-bind="license.licenseConfiguration.licenseConfiguration"></span></td>
+                <td class="created-by"><span ng-bind="license.contact2.fullName"></span></td>
+                <td class="type"><span ng-bind="license.licenseType.licenseType"></span></td>
+                <td class="status"><span ng-bind="license.licenseStatus.licenseStatus"></span></td>
+                <td class="created-date">01/20/12</td>
+                <td class="modified-date">02/11/14</td>
+                <td class="signed-date">02/22/14</td>
+
+            </tr>
+            <tr ng-repeat-end="license in licenses" class="collapse" id="collapseProducts"><td colspan="20">Test Collapse</td></tr>
+        </tbody>
+    </table>
+
+</section>
+
+
+
+

@@ -1,0 +1,21 @@
+﻿<nav class="breadcrumbs">
+    <ul>
+        <li>
+            <span class="icon tab-myview"></span>
+            <a ng-if="$navigationState.currentState.name != 'SearchMyView.Tabs.MyViewTab'" ui-sref="SearchMyView.Tabs.MyViewTab">
+                My View
+            </a>
+        </li>
+        <li>
+            <label ng-if="$navigationState.currentState.name == 'SearchReports.Tabs.Mechanical'" ui-sref="SearchReports.Tabs.Mechanical">
+                     Mechanical Licensing Report
+            </label>
+            <label ng-if="$navigationState.currentState.name == 'SearchReports.Tabs.Priority'" ui-sref="SearchReports.Tabs.Priority">
+                Priority Report
+            </label>
+            <label ng-if="$navigationState.currentState.name == 'SearchReports.Tabs.Consent'" ui-sref="SearchReports.Tabs.Consent">
+                Writers Consent Report
+            </label>
+        </li>
+    </ul>
+</nav>

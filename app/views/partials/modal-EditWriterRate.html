@@ -1,0 +1,404 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Edit Rates</h3>
+    <button class="btn btn-default narrow close-modal" ng-click="$parent.cancel()"><span class="icon cancel"></span></button>
+</div>
+<div class="modal-body rates">
+    <section class="writer-configurations">
+        <table class="table">
+            <thead data-toggle="tooltip" title="Update writer information below">
+            <tr>
+                <th class="twenty-percent">Writer</th>
+                <th class="twenty-percent">Publisher(s) (Affiliation)</th>
+                <th class="ten-percent">Split</th>
+                <th class="ten-percent" ng-show="isClaimException">C/E</th>
+                <th class="ten-percent">Override</th>
+                <th class="twenty-percent">&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="writer-row">
+                <td><span ng-bind="writer.name"></span></td>
+                <td>
+                    <span ng-repeat="originalPublisher in writer.originalPublishers | filter:{zeroValue:false}">
+                        <span class="float-left-subpub" ng-repeat="administrator in originalPublisher.administrators">
+                            <span ng-if='!originalPublisher.SeExists && administrator.capacityCode=="AM" && !originalPublisher.zeroValue'>
+                                <span ng-bind="administrator.name"></span><span style="margin-left: 4px;margin-right: 4px">/</span>
+                                <span ng-bind="administrator.pub.name"></span>
+                                <span ng-repeat='affiliation in administrator.pub.affiliations | filter:{incomeGroup:"Performance"}'>
+                                    <span ng-repeat='a in affiliation.affiliations'>
+                                        (<span ng-bind="a.societyAcronym"></span>)
+                                    </span>
+                                </span>
+                            </span>
+                            <span ng-if='originalPublisher.SeExists && administrator.capacityCode=="SE" && !originalPublisher.zeroValue'>
+                                <span ng-bind="administrator.name"></span>  
+                                <span ng-repeat='affiliation in administrator.affiliations | filter:{incomeGroup:"Performance"}'>
+                                    <span ng-repeat='a in affiliation.affiliations'>
+                                        (<span ng-bind="a.societyAcronym"></span>)
+                                    </span> <span style="margin-left: 4px;margin-right: 4px">/</span>
+                                    <span><span ng-bind="administrator.pub.name"></span></span>
+                                </span>
+                            </span>
+                        </span>
+                        <br />
+                    </span>
+                </td>
+                <td>
+                    <label><span ng-bind="writer.contribution"></span></label><!-- Preset calculated value // unable to change without following override column -->
+                </td>
+                <td ng-show="isClaimException">
+                    <input type="text" ng-model="writer.licenseProductRecordingWriter.claimExceptionOverride" />
+                </td>
+                <td>
+                    <input type="text" ng-model="writer.licenseProductRecordingWriter.splitOverride" />
+                </td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+        <section class="apply-rates">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="twenty-percent">Configuration (UPC)</th>
+                    <th class="fifteen-percent">Status</th>
+                    <th class="ten-percent">Rate Type</th>
+                    <th class="five-percent">Stat Year</th>
+                    <th class="five-percent">% Stat</th>
+                    <th class="fifteen-percent">Threshold</th>
+                    <th class="ten-percent">Rate</th>
+                    <th class="five-percent">Pro-rata</th>
+                    <th class="five-percent">Song Rate</th>
+                    <th class="five-percent">Paid Qtr</th>
+                    <th class="ten-percent centered no-wrap">Actions</th>
+                </tr>
+                </thead>
+                <tbody ng-repeat="configurationRate in writer.licenseProductRecordingWriter.ratesByConfiguration">
+                <tr ng-repeat="rate in configurationRate.rates">
+                    <td class="ten-percent"><span ng-show="$index == 0"><span class="icon config-physical" ng-class="rate.configuration_id | returnConfigurationIcon"></span>{{rate.configuration_name}} <span ng-if="rate.configuration_upc">({{rate.configuration_upc}})</span></span></td>
+                    <td class="fifteen-percent">
+                        <div class="dropdown pull-left" ng-if="$index == 0">
+                            <button class="dropdown-toggle btn btn-default" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" ng-click="getSpecialStatus(configurationRate)">
+                                <span ng-if="configurationRate.specialStatusList | isNoneSelected">Select Status</span>
+                                <span ng-if="!(configurationRate.specialStatusList | isSingleSelected)">1 Selected</span>
+                                <span ng-if="configurationRate.specialStatusList | isMore1Selected"><span ng-bind="configurationRate.specialStatusList | countSelected"></span>&nbsp;Selected</span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" multiselect-dropdown>
+                                <li ng-repeat="status in configurationRate.specialStatusList" ng-click="">
+                                    <input type="checkbox" ng-model="status.selected" id="editstatus_{{status.specialStatusId}}" ng-click="selectStatusForRollup(status)" /><label for="editstatus_{{status.specialStatusId}}">{{status.specialStatus}}</label>
+                                </li>
+                            </ul>
+                            <span ng-show="false" ng-repeat="status in rate.specialStatusList" class="badge">
+                                    <span ng-bind="status.specialStatus"></span>
+                                </span>
+                        </div>
+                    </td>
+                    <td class="ten-percent">
+                        <div class="dropdown pull-left" ng-show="rate.isFirstRate">
+                            <button class="dropdown-toggle btn btn-default rate-type" type="button" id="rateTypeDropdown" data-toggle="dropdown" aria-expanded="true" ng-click="getRateTypes()">
+                                <span ng-bind="rate.rateType.rateType"></span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                <li ng-repeat="rateType in ratetypesForSave">
+                                    <a href="" ng-click="selectRateTypeForSave(configurationRate.rates, rate ,rateType);$event.preventDefault();"><span ng-bind="rateType.rateType"></span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td class="five-percent">
+                        <div class="dropdown pull-left" ng-show="rate.visibleYear">
+                            <button class="dropdown-toggle btn btn-default stat-year" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                                <span ng-bind="rate.statYear"></span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                <li ng-repeat="year in years">
+                                    <a href="" ng-click="selectYear(rate,year);$event.preventDefault();"><span ng-bind="year"></span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td class="five-percent">
+                        <input type="text" value="100" class="rateStatPrcentage" ng-model="rate.percentOfStat" ng-show="rate.visibleStat" digits-only under-value="100" />
+                    </td>
+                    <td class="fifteen-percent"><input type="text" ng-model="rate.escalatedRate" ng-show="rate.visibleThreshold" /></td>
+                    <td class="ten-percent"><input type="text" ng-model="rate.rate" ng-value="{{rate.rate}}" ng-show="rate.visibleRate" class="rateValue" digits-only under-value="10" /></td>
+                    <td class="five-percent"><span ng-bind="rate.proRataRate"></span></td>
+                    <td class="five-percent"><span ng-bind="rate.perSongRate"></span></td>
+                    <td>
+                        <div class="dropdown pull-left" ng-if="$index == 0">
+                            <button class="dropdown-toggle btn btn-default paid-quarter" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" ng-click="getQuarters()">
+                                <span ng-if="configurationRate.paidQuarter == null">N/A</span>
+                                <span ng-if="configurationRate.paidQuarter != null"><span ng-bind="configurationRate.paidQuarter"></span></span>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                <li ng-repeat="qtr in quarters">
+                                    <a href="" ng-click="selectQuarter(configurationRate, qtr)"><span ng-bind="qtr.paidQuarter"></span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td class="ten-percent centered no-wrap">
+                        <button class="btn btn-default narrow" ng-show="rate.visibleAdd" ng-click="addRate(rate,configurationRate.rates)"><span class="icon add"></span></button>
+                        <button class="btn btn-default narrow" ng-show="rate.visibleRemove && $index != 0" ng-click="removeRate(rate,configurationRate.rates)"><span class="icon remove"></span></button>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </section>
+    </section>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="ok()">Save and Close</button>
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>
+
+
+<!--TOM below are the fields for each row -refer to the first dropdown default like *******HERE******* to see which rate type it is-->
+<!--<tr>
+    <td><span class="icon config-physical"></span>CD/DVD</td>
+    <td>
+        <div class="dropdown pull-left">
+            <button class="dropdown-toggle btn-default btn-sm" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+
+                Controlled: Fixed   ***************************************************HERE**************************************
+
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Statuatory</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Controlled: Fixed</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Controlled: Stat</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Reduced: Fixed</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Reduced: Stat</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Gratis</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Compulsory</a></li>
+            </ul>
+        </div>
+    </td>
+    <td>
+        <input type="text" />
+    </td>
+    <td>
+        <input type="text" />
+    </td>
+    <td>
+        <input type="text" />
+    </td>
+    <td>
+       <input type="checkbox" />
+    </td>
+    <td></td>
+    <td><input type="text" /></td>
+    <td><input type="text" /></td>
+    <td><input type="text" /></td>
+    <td>
+        <button class="btn btn-default narrow"><span class="icon add"></span></button>
+        <button class="btn btn-default narrow"><span class="icon remove"></span></button>
+    </td>
+</tr>-->
+<!--<tr>
+    <td><span class="icon config-physical"></span>EP</td>
+    <td>
+        <div class="dropdown pull-left">
+            <button class="dropdown-toggle btn-default btn-sm" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                Controlled: Stat
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Statuatory</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Controlled: Fixed</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Controlled: Stat</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Reduced: Fixed</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Reduced: Stat</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Gratis</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Compulsory</a></li>
+            </ul>
+        </div>
+    </td>
+    <td>
+        <input type="text" /> **** Year Datepicker
+    </td>
+    <td>
+        <input type="text" />
+    </td>
+    <td>
+        <input type="text" />
+    </td>
+    <td>
+        <input type="checkbox" />
+    </td>
+    <td></td>
+    <td><input type="text" /></td>
+    <td><input type="text" /></td>
+    <td><input type="text" /></td>
+    <td>
+        <button class="btn btn-default narrow"><span class="icon add"></span></button>
+        <button class="btn btn-default narrow"><span class="icon remove"></span></button>
+    </td>
+</tr>-->
+<!--<tr>
+    <td><span class="icon config-physical"></span>CD/DVD</td>
+    <td>
+        <div class="dropdown pull-left">
+            <button class="dropdown-toggle btn-default btn-sm" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                Reduced: Fixed
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Statuatory</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Controlled: Fixed</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Controlled: Stat</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Reduced: Fixed</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Reduced: Stat</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Gratis</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Compulsory</a></li>
+            </ul>
+        </div>
+    </td>
+    <td>
+        <input type="text" />*** Year Datepicker
+    </td>
+    <td>
+        <input type="text" />
+    </td>
+    <td>
+        <input type="text" />
+    </td>
+    <td>
+        <input type="checkbox" />
+    </td>
+    <td></td>
+    <td><input type="text" /></td>
+    <td><input type="text" /></td>
+    <td><input type="text" /></td>
+    <td>
+        <button class="btn btn-default narrow"><span class="icon add"></span></button>
+        <button class="btn btn-default narrow"><span class="icon remove"></span></button>
+    </td>
+</tr>-->
+<!--<tr>
+    <td><span class="icon config-physical"></span>EP</td>
+    <td>
+        <div class="dropdown pull-left">
+            <button class="dropdown-toggle btn-default btn-sm" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                Reduced: Stat
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Statuatory</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Controlled: Fixed</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Controlled: Stat</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Reduced: Fixed</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Reduced: Stat</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Gratis</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Compulsory</a></li>
+            </ul>
+        </div>
+    </td>
+    <td>
+        <input type="text" /> ****Year Datepicker
+    </td>
+    <td>
+        <input type="text" />
+    </td>
+    <td>
+        <input type="text" />
+    </td>
+    <td>
+        <input type="checkbox" />
+    </td>
+    <td></td>
+    <td><input type="text" /></td>
+    <td><input type="text" /></td>
+    <td><input type="text" /></td>
+    <td>
+        <button class="btn btn-default narrow"><span class="icon add"></span></button>
+        <button class="btn btn-default narrow"><span class="icon remove"></span></button>
+    </td>
+</tr>-->
+<!--<tr>
+    <td><span class="icon config-physical"></span>12&quot; Vinyl</td>
+    <td>
+        <div class="dropdown pull-left">
+            <button class="dropdown-toggle btn-default btn-sm" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                Gratis
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Statuatory</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Controlled: Fixed</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Controlled: Stat</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Reduced: Fixed</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Reduced: Stat</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Gratis</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Compulsory</a></li>
+            </ul>
+        </div>
+    </td>
+    <td>
+        <input type="text" />**** Year Datepicker
+    </td>
+    <td>
+        <input type="text" />
+    </td>
+    <td>
+        <input type="text" />
+    </td>
+    <td>
+        <input type="checkbox" />
+    </td>
+    <td><input type="text" /></td>
+    <td><input type="text" /></td>
+    <td><input type="text" /></td>
+    <td><input type="text" /></td>
+    <td>
+        <button class="btn btn-default narrow"><span class="icon add"></span></button>
+        <button class="btn btn-default narrow"><span class="icon remove"></span></button>
+    </td>
+</tr>-->
+<!--<tr>
+    <td><span class="icon config-physical"></span>12&quot; Vinyl</td>
+    <td>
+        <div class="dropdown pull-left">
+            <button class="dropdown-toggle btn-default btn-sm" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                Compulsory
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Statuatory</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Controlled: Fixed</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Controlled: Stat</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Reduced: Fixed</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Reduced: Stat</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Gratis</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Compulsory</a></li>
+            </ul>
+        </div>
+    </td>
+    <td>
+        <input type="text" />*****Year Datepicker
+    </td>
+    <td>
+        <input type="text" />
+    </td>
+    <td>
+        <input type="text" />
+    </td>
+    <td>
+        <input type="checkbox" />
+    </td>
+    <td><input type="text" /></td>
+    <td><input type="text" /></td>
+    <td><input type="text" /></td>
+    <td><input type="text" /></td>
+    <td>
+        <button class="btn btn-default narrow"><span class="icon add"></span></button>
+        <button class="btn btn-default narrow"><span class="icon remove"></span></button>
+    </td>
+</tr>-->

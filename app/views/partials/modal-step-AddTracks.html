@@ -1,0 +1,293 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Add Tracks</h3>
+    <button class="btn btn-default narrow close-modal" ng-click="$parent.cancel()"><span class="icon cancel"></span></button>
+</div>
+<div class="modal-body">
+    <section class="add-tracks">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="five-percent centered">CD #</th>
+                    <th class="five-percent centered">Index #</th>
+                    <th class="twenty-percent">Artist</th>
+                    <th class="twenty-percent">Title</th>
+                    <th class="fifteen-percent">Copyright</th>
+                    <!--<th class="ten-percent">Version</th>-->
+                    <th class="fifteen-percent">ISRC</th>
+                    <th class="five-percent">Duration</th>
+                    <th class="five-percent">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td class="five-percent centered">
+                        <input type="text" ng-model="newproductLink.cdNumber" class="sm centered" id="newproductLink-cdNumber" ng-class="{'field-error' : !newproductLink.cdNumber && modal_add_submit }" /></td>
+                    <td class="five-percent centered">
+                        <input type="text" ng-model="newproductLink.index" class="sm centered" id="newproductLink-index" ng-class="{'field-error' : !newproductLink.index && modal_add_submit }" /></td>
+                    <td class="twenty-percent">
+                        <div class="dropdown">
+                            <input class="dropdown-toggle" data-toggle="dropdown" type="text" ng-model="newproductLink.track.artist.name" ng-change="artistAutosuggest(newproductLink);" id="newproductLink-artist" ng-class="{'field-error' : !newproductLink.track.artist.name && modal_add_submit }" />
+                            <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="label" ng-show="newproductLink.track.artist.name.length > 2">
+                                <li ng-repeat="artist in artistList" ng-click="selectArtist(newproductLink,artist);">
+                                    <label>
+                                        <span ng-bind="artist.name"></span>
+                                    </label>
+                                </li>
+                                <li ng-if="artistList.length == 0 && newproductLink.track.artist.name.length > 0">No artists found</li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td class="twenty-percent">
+                        <div class="dropdown">
+                            <input class="dropdown-toggle" data-toggle="dropdown" type="text" ng-model="newproductLink.track.title" ng-change="trackAutosuggest(newproductLink);" id="newproductLink-title" ng-class="{'field-error' : !newproductLink.track.title && modal_add_submit }"/>
+                            <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="label" ng-show="newproductLink.track.title.length > 2">
+                                <li ng-repeat-start="track in trackList" ng-click="selectTrack(newproductLink, track);">
+                                    <label>
+                                        <span ng-bind="track.title"></span>&nbsp;by&nbsp;<span ng-bind="track.artist.name"></span><span ng-if="track.isrc">&nbsp;/&nbsp;<span ng-bind="track.isrc"></span></span>
+                                    </label>
+                                </li>
+                                <li ng-repeat-end ng-if="trackList.length == 0 && newproductLink.track.title.length > 0">No tracks found</li>
+                            </ul>
+                        </div>
+                        <!--
+                        <li ng-repeat-start="track in trackList" ng-click="selectTrack(newproductLink, track);">
+                            <label>
+                                {{track.title}} by {{track.artist.name}} <label ng-repeat-end ng-repeat-start="productLink in productLinks" ng-if="productLink.track.title == track.title"> / {{productLink.track.isrc}}</label>
+                            </label>
+                        </li>
+                        -->
+                    </td>
+                    <td class="fifteen-percent">
+                        <div ng-show="newproductLink.track.title.length > 0">
+                            select work
+                         <span ng-bind="newproductLink.track.id"></span>
+                        </div>
+                        <!-- Copyright Info if a Work is selected to attach to track from previously auto-suggest dropdown -->
+                    </td>
+                    <!--<td class="ten-percent">
+                     <div class="dropdown" dropdown is-open="status.isopen">
+                            <button type="button" class="btn btn-default dropdown-toggle" id="assign" data-toggle="dropdown">
+                                {{selectedVersionType.name}} <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="assign">
+                                <li ng-repeat="type in versionTypes"><a ng-click="selectVersionType(type);$event.preventDefault()">{{type.name}}</a></li>
+                            </ul>
+                        </div>
+                    </td>-->
+                    <td class="fifteen-percent">
+                        <input ng-model="newproductLink.track.isrc" id="newproductLink-isrc" type="text" /></td>
+                    <td class="five-percent">
+                        <input ng-model="newproductLink.track.duration" id="newproductLink-duration" type="text" class="sm" /></td>
+                    <td class="five-percent">
+                        <button class="btn btn-default narrow" ng-click="saveProductLink(newproductLink);" xng-click="addTempProductLink();"><span class="icon add"></span></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+    <section class="track-listing">
+        <table class="table fixed_headers">
+            <thead>
+                <tr>
+                    <th class="five-percent centered">  CD #</th>
+                    <th class="five-percent centered">  Index #</th>
+                    <th class="fifteen-percent">  Artist</th>
+                    <th class="fifteen-percent">  Title</th>
+                    <th class="fifteen-percent">  Copyright</th>
+                    <th class="ten-percent">  Pips #</th>
+                    <th class="twenty-percent">  ISRC</th>
+                    <th class="five-percent">  Duration</th>
+                    <th class="ten-percent">  Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat-start="productLink in productLinks" ng-show="productLink != selectedProductLink">
+                    <td class="five-percent centered">  <span ng-bind="productLink.cdNumber"></span></td>
+                    <td class="five-percent centered">  <span ng-bind="productLink.index"></span></td>
+                    <td class="fifteen-percent">  <span ng-bind="productLink.track.artist.name"></span></td>
+                    <td class="fifteen-percent">  <span ng-bind="productLink.track.title"></span></td>
+                    <td class="fifteen-percent">  <span ng-show="productLink.track.controlled=='YES'">UPMG &copy;</span></td>
+                    <td class="ten-percent">  <span ng-bind="productLink.track.copyrights[0].workCode"></span></td>
+                    <td class="twenty-percent">  <span ng-bind="productLink.track.isrc"></span></td>
+                    <td class="five-percent">  <span ng-bind="productLink.track.duration"></span></td>
+                    <td class="fifteen-percent">  
+                        <div style="display: inline-block">
+                            <button class="btn btn-default narrow" ng-click="editProductLink(productLink)"><span class="icon edit"></span></button>
+                            <button class="btn btn-default narrow" ng-click="deleteProductLink(productLink)"><span class="icon remove"></span></button>
+                            <span ng-show="productLink.isDirty==true">dirty</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="editing" ng-show="productLink == selectedProductLink">
+                    <td class="five-percent centered">
+                        <input type="text" ng-model="productLink.cdNumber" ng-change="isDirty=true" class="sm centered" /></td>
+                    <td class="five-percent centered">
+                        <input type="text" ng-model="productLink.index" ng-change="isDirty=true" class="sm centered" /></td>
+                    <td class="fifteen-percent">
+                        <div class="dropdown">
+                            <input class="dropdown-toggle" data-toggle="dropdown" type="text" ng-model="productLink.track.artist.name" ng-change="artistAutosuggest(productLink);isDirty=true" />
+                            <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="label" ng-show="productLink.track.artist.name.length > 2">
+                                <li ng-repeat="artist in artistList" ng-click="selectArtist(productLink,artist);">
+                                    <label>
+                                        <span ng-bind="artist.name"></span>
+                                    </label>
+                                </li>
+                                <li ng-if="artistList.length == 0 && productLink.track.artist.name.length > 0">No artists found</li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td class="fifteen-percent">
+                        <div class="dropdown">
+                            <input class="dropdown-toggle" data-toggle="dropdown" type="text" ng-model="productLink.track.title" ng-change="trackAutosuggest(productLink);isDirty=true" />
+                            <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="label" ng-show="productLink.track.title.length > 2">
+                                <li ng-repeat="track in trackList" ng-click="selectTrack(productLink, track);">
+                                    <label>
+                                        <span ng-bind="track.title"></span>&nbsp;by&nbsp;<span ng-bind="track.artist.name"></span>--<span ng-bind="productLink.isrc"></span>
+                                    </label>
+                                </li>
+                                <li ng-if="trackList.length == 0 && productLink.track.title.length > 0">No tracks found</li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td class="ten-percent"><span ng-show="productLink.track.controlled=='YES'">UPMG &copy; </span></td>
+                    <td class="ten-percent"><span ng-bind="productLink.track.copyrights[0].workCode"></span></td>
+                    <td class="twenty-percent">
+                        <input type="text" ng-model="productLink.track.isrc" class="productLink-track-isrc" ng-change="productLink.isDirty=true" /></td>
+                    <td class="five-percent">
+                        <input type="text" ng-model="productLink.track.duration" class="sm productLink-track-duration" ng-change="isDirty=true" ng-class="{'field-error' : !isValidField(productLink.track.duration) && modal_submit }" /></td>
+                    <td class="ten-percent"></td>
+                    <td></td>
+                </tr>
+                <tr class="editing" ng-show="productLink == selectedProductLink">
+
+                    <td class="twenty-percent right-aligned" colspan="3">
+                        <label>UMPG Control</label>
+                        <div class="btn-group">
+                            <button type="button" class="dropdown-toggle btn btn-default" data-toggle="dropdown">
+                                <span ng-bind="productLink.track.controlled"></span> <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li ng-repeat="controlOption in controlOptions" ng-click="selectcontrolOption(productLink, controlOption)"><span ng-bind="controlOption"></span></li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td class="twenty-percent">
+                        <div class="dropdown" ng-hide="productLink.track.controlled != 'YES'">
+                            <input class="dropdown-toggle" data-toggle="dropdown" type="text" ng-model="productLinkObject.worksSearch.title" ng-change="worksSearch(productLinkObject.worksSearch.title)" ng-click="clearTitleSearch(productLinkObject.worksSearch.title)" />
+                            <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="label" ng-show="worksList.length > 0">
+                                <li style="margin: 0; padding: 0" ng-repeat="work in worksList" ng-click="selectWork(productLinkObject, work);">
+                                    <label>
+                                        <span ng-bind="work.title"></span>&nbsp;(<span ng-bind="work.workCode"></span>)&nbsp;<span ng-bind="work.writers"></span>
+                                    </label>
+                                </li>
+                                <li ng-if="worksList.length == 0 && productLinkObject.worksSearch.title.length > 0">No works records found</li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td class="fifteen-percent">
+                        <button class="btn btn-default narrow" ng-click="addWork(productLinkObject)" ng-hide="productLink.track.controlled != 'YES'"><span class="icon add"></span></button>
+                    </td>
+                    <td class="thirtyfive-percent" colspan="3">
+                      
+                        
+
+                    </td>
+                </tr>
+                <tr  class="editing" ng-show="productLink == selectedProductLink">
+                    <td class="fifteen-percent right-aligned top" colspan="3">
+                        <span ng-hide="productLink.track.controlled != 'YES'">
+                            <label>Copyright</label>
+                        </span>
+                    </td>
+                    <td class="seventyfive-percent top" colspan="3">
+                        <span ng-hide="productLink.track.controlled != 'YES'"><span ng-bind="productlink.track.controlled"></span>
+                            <ul class="add-track-copyright-list">
+                                <li ng-repeat="copyright in productLink.track.copyrights">
+                                    <span class="track-copyright-info"><span ng-bind="copyright.title"></span>&nbsp;by&nbsp;<span ng-bind="copyright.writers"></span>&nbsp;(<span ng-bind="copyright.acquisitionLocationCode"></span>-<span ng-bind="copyright.workCode"></span>)</span>
+                                    <button class="btn btn-default narrow" ng-click="deleteWork(productLink, copyright)"><span class="icon remove"></span></button>
+                                </li>
+                            </ul>
+                        </span>
+                    </td>
+                    <td class="ten-percent right-aligned" colspan="2"></td>
+                </tr>
+
+
+                <tr ng-repeat-end="productLink in productLinks" class="editing" ng-show="productLink == selectedProductLink">
+                    <!--  <td class="twenty-percent right-aligned top" colspan="3">
+                        <label>Component Track</label>
+                        <div class="btn-group">
+                            <div class="dropdown">
+                                <button class="dropdown-toggle btn btn-default" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" ng-click="getTrackTypes()">
+                                    {{selectedTrackType.trackType}}
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                    <li ng-repeat="trackType in trackTypes">
+                                        <a href="" ng-click="selectTrackType(trackType);$event.preventDefault();">{{trackType.trackType}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="twenty-percent">
+                        <div class="dropdown">
+                            <input class="dropdown-toggle" data-toggle="dropdown" type="text" ng-model="productLink.componentTracksSearch.title" ng-change="sampleSuggest(productLink.componentTracksSearch.title, productLink)" ng-click="clearWorkTitleSearch(productLink.componentTracksSearch.title, productLink)" />
+                            <ul class="dropdown-menu dropdown-menu-form" role="menu" aria-labelledby="label" ng-show="productLink.componentTracksSuggest.length > 0">
+                                <li style="margin:0;padding:0" ng-repeat="track in productLink.componentTracksSuggest" ng-click="selectTrackSample(productLink,track);">
+                                    <label>
+                                        {{track.title}} by {{track.artist.name}}
+                                    </label>
+                                </li>
+                                <li ng-if="productLink.componentTracksSuggest.length == 0 && productLink.componentTracksSearch.title.length > 0">No works records found</li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td class="fifteen-percent"><button class="btn btn-default narrow" ng-disabled="!productLink.componentTracksSearch || disableAddSample" ng-click="addTrackSample(productLink)"><span class="icon add"></span></button></td>
+                    <td class="thirtyfive-percent" colspan="3"></td>
+                </tr>
+                <tr class="editing" ng-show="productLink == selectedProductLink">
+                    <td class="fifteen-percent right-aligned top" colspan="3">
+                       
+                        <label>Component Track</label>
+                        
+                    </td>
+                    <td class="seventyfive-percent" colspan="3" ng-if="productLink.trackSamples.length == 0">
+                        
+                    </td>
+                    <td class="seventyfive-percent" colspan="3" ng-if="productLink.trackSamples.length > 0">
+                        <span>
+                            <ul class="add-track-copyright-list">
+                                <li ng-repeat="track in productLink.trackSamples">
+                                    <span class="track-copyright-info">{{track.title}} by {{track.artist.name}}</span>
+                                      <span ng-if="track.type.trackTypeid==1">
+                                               Sample
+                                            </span>
+                                            <span ng-if="track.type.trackTypeid == 2">
+                                               Medley
+                                            </span>
+                                    <label>Duration</label> <input class="comp-track-duration" ng-model="track.duration" type="text" ng-class="{'field-error' : !isValidField(track.duration) && modal_submit }" /> <button class="btn btn-default narrow" ng-click="deleteTrackSample(productLink, track)"><span class="icon remove"></span></button>
+                                </li>
+                            </ul>
+                        </span>
+                    </td>-->
+                    <td class="ten-percent right-aligned" colspan="8">
+                        <button class="btn btn-default" ng-click="cancelEdit(productLink);">Cancel</button>
+                        <button class="btn btn-default" ng-click="saveProductLink(productLink)">Save</button>
+                    </td>
+                </tr>
+
+
+
+            </tbody>
+        </table>
+    </section>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="Back()">
+        Back
+    </button>
+    <button class="btn btn-default" ng-click="saveMe()">Save &amp; Close</button>
+    <button class="btn btn-default" ng-click="cancelMe()">Cancel</button>
+</div>

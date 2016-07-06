@@ -1,0 +1,242 @@
+﻿<section class="search-grid" id="Products-Grid" >
+    <section class="search-filters" ng-include="'app/views/partials/search-Filters.html'"></section>
+
+    <ul class="grid-header clearfix">
+        <li class="actions">
+            <button class="btn btn-default" ng-click="goToState('CreateProduct',{licensedata:licensedetail, products:products})"><span class="icon create-product"></span>Create Product</button>
+        </li>
+        <li class="pagination">
+            <pagination total-items="pagination.totalItems" items-per-page="pagination.numPerPage" ng-model="pagination.currentPage" ng-change="searchProducts(true)" max-size="pagination.maxSize" class="pagination-sm" boundary-links="true"
+                        previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+        </li>
+    </ul>
+    <section class="modal-search-wrapper">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th class="thirtyfive-percent"><a href="" ng-click="sortSearch('title')">Product Title<span ng-if="sortBy=='title'" class="{{sortArrow}}"></span></a></th>
+                <th class="twentyfive-percent"><a href="" ng-click="sortSearch('artist')">Artist<span ng-if="sortBy=='artist'" class="{{sortArrow}}"></span></a></th>
+                <th class="ten-percent">Tracks</th>
+                <th class="fifteen-percent"><a href="" ng-click="sortSearch('label')">Label<span ng-if="sortBy=='label'" class="{{sortArrow}}"></span></a></th>
+                <th class="ten-percent"><a href="" ng-click="sortSearch('licenses')">Licenses<span ng-if="sortBy=='licenses'" class="{{sortArrow}}"></span></a></th>
+                <th class="five-percent">Add</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat-start="product in products">
+                <td class="thirtyfive-percent"><a> <span ng-bind="product.title"></span></a></td>
+                <td class="twentyfive-percent"><span ng-bind="product.recsArtist.name"></span></td>
+                <td class="ten-percent"><button class="btn-default" ng-click="product.tracksCollapsed = !product.tracksCollapsed;clickExpandTracks(product)"><span ng-bind="product.recordingsNo"></span><span class="caret"></span></button></td>
+                <td class="fifteen-percent"><span ng-bind="product.recsLabel.name"></span></td>
+                <td class="ten-percent"><button class="btn-default" ng-disabled="product.licensesNo ==0" ng-click="isCollapsed = !isCollapsed;check(isCollapsed,product.product_id);"><span ng-bind="product.licensesNo"></span><span class="caret"></span></button></td>
+                <td class="five-percent"><button class="btn btn-default narrow" ng-click="selectProduct(product)" ng-disabled="product.selected"><span class=" icon add"></span></button></td>
+            </tr>
+
+            <tr>
+                <td colspan="20" collapse="product.tracksCollapsed">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Vol./Track</th>
+                                <th>Title</th>
+                                <th>Artist</th>
+                                <th>Length</th>
+                                <th>UMPG %</th>
+                                <th>PIPS #</th>
+                                <th>ISRC</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="productRecording in product.recordings">
+                                <td><span ng-bind="productRecording.cdNumber"></span>-<span ng-bind="productRecording.index"></span><!--({{recording.recsRecording.track_id}})({{recording.licenseRecordingId}})--></td>
+                                <td><span ng-bind="productRecording.track.title"></span></td>
+                                <td><span ng-bind="productRecording.track.artist.name"></span></td>
+                                <td><span ng-bind="productRecording.track.duration"></span></td>
+                                <td><span ng-bind="productRecording.umpgPercentageRollup | percentage:2"></span></td>
+                                <td><span ng-repeat="copyright in productRecording.track.copyrights"><span ng-bind="copyright.workCode"></span></span></td>
+                                <td><span ng-bind="productRecording.track.isrc"></span></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+
+
+            <tr ng-repeat-end>
+                <td colspan="20" collapse="isCollapsed">
+                    <table class="table table-hover grid-license">
+                        <thead>
+                            <tr>
+
+                                <th class="priority"><a href=""></a></th>
+                                <th class="assignee"><a href="">Assignee</a></th>
+                                <th class="id"><a href="">License #</a></th>
+                                <th class="title"><a href="">License Title</a></th>
+
+                                <th class="artists"><a href="">Artists</a></th>
+                                <th class="licensee"><a href="">Licensee</a></th>
+                                <th class="method"><a href="">Method</a></th>
+                                <th class="config"><a href="">Config</a></th>
+                                <th class="created-by"><a href="">Created By</a></th>
+                                <th class="type"><a href="">Type</a></th>
+                                <th class="status"><a href="">Status</a></th>
+                                <th class="created-date">Created</th>
+                                <th class="modified-date">Modified</th>
+                                <th class="signed-date">Signed</th>
+                            </tr>
+                        </thead>
+                        <tbody ng-repeat="license in product.licenses">
+                            <tr>
+                                <td ng-class="{'priority high':license.priorityId==1,'priority medium':license.priorityId==2,'priority low':license.priorityId==3,'priority inbox':license.priorityId==4}"></td>
+                                <td class="assignee"><span ng-bind="license.contact.fullName"></span></td>
+                                <td class="id"><span ng-bind="license.licenseNumber"></span></td>
+                                <td class="title"><a ui-sref="DetailLicense({licenseId: license.licenseId})"><span ng-bind="license.licenseName"></span></a></td>
+
+                                <td class="artists"><span ng-bind="license.artistRollup"></span></td>
+                                <td class="licensee"><span ng-bind="license.licensee.name"></span></td>
+                                <td class="method"><span ng-bind="license.licenseMethod.licenseMethod"></span></td>
+                                <td class="config"><span ng-class="{'icon config-physical': license.licenseConfigurationRollup=='P', 'icon config-digital': license.licenseConfigurationRollup=='D', 'icon config-both': license.licenseConfigurationRollup=='B'}"></span></td>
+                                <td class="created-by"><span ng-bind="license.contact2.fullName"></span></td>
+                                <td class="type"><span ng-bind="license.licenseType.licenseType"></span></td>
+                                <td class="status">
+                                    <span class="status-label">
+                                        <span ng-class="{'status-icon verifying': license.licenseStatus.licenseStatus=='Verifying', 'status-icon hold': license.licenseStatus.licenseStatus=='Hold', 'status-icon pending': license.licenseStatus.licenseStatus=='Pending', 'status-icon executed': license.licenseStatus.licenseStatus=='Executed', 'status-icon issued': license.licenseStatus.licenseStatus=='Issued', 'status-icon accepted': license.licenseStatus.licenseStatus=='Accepted', 'status-icon voided': license.licenseStatus.licenseStatus=='Voided', 'status-icon error': license.licenseStatus.licenseStatus=='Error'}">
+
+                                        </span>
+                                        <span ng-bind="license.licenseStatus.licenseStatus"></span>
+                                    </span>
+
+                                </td>
+                                <td class="created-date"><span ng-bind="license.createdDate | timezone | date:'MM/dd/yyyy'"></span></td>
+                                <td class="modified-date"><span ng-bind="license.modifiedDate | timezone | date:'MM/dd/yyyy'"></span></td>
+                                <td class="signed-date"><span ng-bind="license.signedDate | timezone | date:'MM/dd/yyyy'"></span></td>
+
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <div ng-if="selectedProducts.length > 0">
+        <h3>Selected Products</h3>
+        <section class="selected-products">
+            <table class="table nested dark">
+                <thead>
+                    <tr>
+
+                        <th class="twenty-percent">Product Title</th>
+                        <th class="twenty-percent">Artist</th>
+                        <th class="five-percent centered">Tracks</th>
+                        <th class="twenty-percent">Label</th>
+                        <th class="five-percent centered">Licenses</th>
+                        <th class="five-percent centered">Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat-start="product in selectedProducts">
+                        <td class="product-title"><a ui-sref="SearchMyView.DetailProduct({productId: product.product_id})"><span ng-bind="product.title"></span></a></td>
+                        <td class="artist"><span ng-bind="product.recsArtist.name"></span></td>
+                        <td class="tracks">
+                            <button class="btn-default" ng-click="product.tracksCollapsed = !product.tracksCollapsed;clickExpandTracks(product)"><span ng-bind="product.recordingsNo"></span><span class="caret"></span></button>
+                        </td>
+                        <td class="label-name"><span ng-bind="product.recsLabel.name"></span></td>
+                        <td>
+                            <button class="btn-default" ng-disabled="product.licensesNo ==0" ng-click="isCollapsed = !isCollapsed;expandRelatedLicenses(isCollapsed,product.product_id);"><span ng-bind="product.licensesNo"></span><span class="caret"></span></button>
+                        </td>
+                        <td class="centered"><button class="btn btn-default narrow" ng-click="removeSelected(product)"><span class="icon remove"></span></button></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="20" collapse="product.tracksCollapsed">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Vol./Track</th>
+                                        <th>Title</th>
+                                        <th>Artist</th>
+                                        <th>Length</th>
+                                        <th>UMPG %</th>
+                                        <th>PIPS #</th>
+                                        <th>ISRC</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="productRecording in product.recordings">
+                                        <td><span ng-bind="productRecording.cdNumber"></span>-<span ng-bind="productRecording.index"></span><!--({{recording.recsRecording.track_id}})({{recording.licenseRecordingId}})--></td>
+                                        <td><span ng-bind="productRecording.track.title"></span></td>
+                                        <td><span ng-bind="productRecording.track.artist.name"></span></td>
+                                        <td><span ng-bind="productRecording.track.duration"></span></td>
+                                        <td><span ng-bind="productRecording.umpgPercentageRollup | percentage:2"></span></td>
+                                        <td><span ng-repeat="copyright in productRecording.track.copyrights"><span ng-bind="copyright.workCode"></span></span></td>
+                                        <td><span ng-bind="productRecording.track.isrc"></span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+
+
+                    <tr ng-repeat-end>
+                        <td colspan="20" collapse="isCollapsed">
+                            <table class="table table-hover grid-license">
+                                <thead>
+                                    <tr>
+
+                                        <th class="priority"><a href=""></a></th>
+                                        <th class="assignee"><a href="">Assignee</a></th>
+                                        <th class="id"><a href="">License #</a></th>
+                                        <th class="title"><a href="" >License Title</a></th>
+
+                                        <th class="artists"><a href="">Artists</a></th>
+                                        <th class="licensee"><a href="">Licensee</a></th>
+                                        <th class="method"><a href="">Method</a></th>
+                                        <th class="config"><a href="">Config</a></th>
+                                        <th class="created-by"><a href="">Created By</a></th>
+                                        <th class="type"><a href="">Type</a></th>
+                                        <th class="status"><a href="">Status</a></th>
+                                        <th class="created-date">Created</th>
+                                        <th class="modified-date">Modified</th>
+                                        <th class="signed-date">Signed</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="license in product.licenses">
+                                    <tr>
+                                        <td ng-class="{'priority high':license.priorityId==1,'priority medium':license.priorityId==2,'priority low':license.priorityId==3,'priority inbox':license.priorityId==4}"></td>
+                                        <td class="assignee"><span ng-bind="license.contact.fullName"></span></td>
+                                        <td class="id"><span ng-bind="license.licenseNumber"></span></td>
+                                        <td class="title"><a ui-sref="DetailLicense({licenseId: license.licenseId})"><span ng-bind="license.licenseName"></span></a></td>
+
+                                        <td class="artists"><span ng-bind="license.artistRollup"></span></td>
+                                        <td class="licensee"><span ng-bind="license.licensee.name"></span></td>
+                                        <td class="method"><span ng-bind="license.licenseMethod.licenseMethod"></span></td>
+                                        <td class="config"><span ng-class="{'icon config-physical': license.licenseConfigurationRollup=='P', 'icon config-digital': license.licenseConfigurationRollup=='D', 'icon config-both': license.licenseConfigurationRollup=='B'}"></span></td>
+                                        <td class="created-by"><span ng-bind="license.contact2.fullName"></span></td>
+                                        <td class="type"><span ng-bind="license.licenseType.licenseType"></span></td>
+                                        <td class="status">
+                                            <span class="status-label">
+                                                <span ng-class="{'status-icon verifying': license.licenseStatus.licenseStatus=='Verifying', 'status-icon hold': license.licenseStatus.licenseStatus=='Hold', 'status-icon pending': license.licenseStatus.licenseStatus=='Pending', 'status-icon executed': license.licenseStatus.licenseStatus=='Executed', 'status-icon issued': license.licenseStatus.licenseStatus=='Issued', 'status-icon accepted': license.licenseStatus.licenseStatus=='Accepted', 'status-icon voided': license.licenseStatus.licenseStatus=='Voided', 'status-icon error': license.licenseStatus.licenseStatus=='Error'}">
+
+                                                </span>
+                                                <span ng-bind="license.licenseStatus.licenseStatus"></span>
+                                            </span>
+
+                                        </td>
+                                        <td class="created-date"><span ng-bind="license.createdDate | timezone | date:'MM/dd/yyyy'"></span></td>
+                                        <td class="modified-date"><span ng-bind="license.modifiedDate | timezone | date:'MM/dd/yyyy'"></span></td>
+                                        <td class="signed-date"><span ng-bind="license.signedDate | timezone | date:'MM/dd/yyyy'"></span></td>
+
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</section>

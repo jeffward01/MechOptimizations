@@ -1,0 +1,758 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+</head>
+
+<body style="margin:auto 20px;">
+    <section class="license-template" style="font-size:11pt; 'Hoefler Text', 'Liberation Serif', Times, 'Times New Roman', serif!important;">
+        <section class="address-header" style="position:relative; display:block; width:100%; margin:20pt auto; text-align:center;">
+            UNIVERSAL MUSIC PUBLISHING GROUP<br />
+            2100 Colorado Avenue<br />
+            Santa Monica, CA 90404<br />
+        </section><!-- End Address Header -->
+        <section class="title-bar" style="background-color:rgba(0,0,0,1.00); color:rgba(255,255,255,1.00); padding:3pt 6pt;">
+            <!-- IF Default Lincense Template -->
+            <span ng-if="$parent.templatePreviewData.Name != 'US DVD License Template'">MECHANICAL LICENSE</span>
+            <!-- END IF Default Lincense Template -->
+            <!-- IF DVD US Lincense Template -->
+            <span ng-if="$parent.templatePreviewData.Name == 'US DVD License Template'">SYNCHRONIZATION LICENSE</span>
+            <!-- END IF DVD US Lincense Template -->
+            <date style="float:right; position:relative;"><span ng-bind="effectiveDateCalculated | date:'MM/dd/yyyy'"></span></date>
+        </section><!-- End Title Bar -->
+        <section class="licensee-info" style="margin:10pt 0pt;">
+            <span ng-bind="selectedLicense.licensee.name"></span><br />
+            <span ng-bind="selectedLicense.licenseeContact.address[0].address1"></span>&nbsp;<span ng-bind="selectedLicense.licenseeContact.address[0].address2"></span><br />
+            <span ng-bind="selectedLicense.licenseeContact.address[0].city"></span>,&nbsp;<span ng-bind="selectedLicense.licenseeContact.address[0].state"></span>&nbsp;<span ng-bind="selectedLicense.licenseeContact.address[0].postalCode"></span><br />
+            Attn:&nbsp;<span ng-bind="selectedLicense.licenseeContact.fullName"></span>
+        </section><!-- End Licensee Info -->
+        <section class="licensee-list">
+            <ol>
+                <li style="padding:4pt 10pt;"> <b>SONG TITLE(S): </b><span ng-bind="LicensePreviewData.songTitles"></span></li>
+                <li style="padding:4pt 10pt;"><b>UMPG WRITER(S): </b><span ng-bind="LicensePreviewData.umpgText"></span></li>
+                <li style="padding:4pt 10pt;"><b>UMPG PUBLISHER(S): </b><span ng-bind="LicensePreviewData.umpgText"></span></li>
+                <li style="padding:4pt 10pt;"><b>UMPG SHARE(S): </b><span ng-bind="LicensePreviewData.umpgText"></span></li>
+                <li style="padding:4pt 10pt;"><b>PRODUCT TITLE(S): </b><span ng-bind="LicensePreviewData.productTitle"></span></li>
+                <li style="padding:4pt 10pt;"><b>ARTIST(S): </b><span ng-bind="LicensePreviewData.artistName"></span></li>
+                <li style="padding:4pt 10pt;"><b>LABEL/MANUFACTURER: </b><span ng-bind="LabelValue"></span><!-- Commented until we have from Simon { if Distributor then } <br /><b>DISTRIBUTOR:</b> #Distributor#--></li>
+                <li style="padding:4pt 10pt;">
+                    <b>CONFIGURATION(S): </b>
+                    <!-- IF Default Lincense Template -->
+                    <span ng-if="$parent.templatePreviewData.Name != 'US DVD License Template'">
+                        <span ng-bind="LicensePreviewData.configuration"></span>
+                    </span>
+                    <!-- END IF Default Lincense Template -->
+                    <!-- IF DVD US Lincense Template -->
+                    <span ng-if="$parent.templatePreviewData.Name == 'US DVD License Template'">
+                        DVD
+                    </span>
+                    <!-- END IF DVD US Lincense Template -->
+                </li>
+                <li style="padding:4pt 10pt;">
+                    <b>CATALOG NUMBER(S): </b><span ng-bind="LicensePreviewData.umpgText"></span><br />
+                    <b>UPC(S): </b><span ng-bind="LicensePreviewData.umpgText"></span><br />
+                    <b>ISRC(S): </b><span ng-bind="LicensePreviewData.umpgText"></span>
+                </li>
+                <li style="padding:4pt 10pt;"><b>TIMING(S): </b><span ng-bind="LicensePreviewData.umpgText"></span></li>
+                <li style="padding:4pt 10pt;"><b>DATE OF RELEASE: </b><span ng-bind="LicensePreviewData.umpgText"></span></li>
+                <!-- IF DVD US Lincense Template -->
+                <li style="padding:4pt 10pt;" ng-if="$parent.templatePreviewData.Name == 'US DVD License Template'"><b>TERM:</b> Commercial life of the Products (defined below)</li>
+                <!-- END IF DVD US Lincense Template -->
+                <li style="padding:4pt 10pt;">
+                    <b>TERRITORY: </b>
+                    <!-- IF Default License Template -->
+                    <span ng-if="$parent.templatePreviewData.Name != 'Canadian License Template'">United States of America, its territories and possessions</span>
+                    <!-- END IF Default Template -->
+                    <!-- IF Canadian License Template -->
+                    <span ng-if="$parent.templatePreviewData.Name == 'Canadian License Template'">Canada</span>
+                    <!-- END IF Canadian License Template -->
+                </li>
+                <li style="padding:4pt 10pt;"><b>ROYALTY RATES: </b><span ng-bind="LicensePreviewData.umpgText"></span></li>
+                <li style="padding:4pt 10pt;"><b>ADDITIONAL NOTES: </b><span ng-bind="LicensePreviewData.licenseNotes"></span></li>
+                <li style="padding:4pt 10pt;"><b>AGREEMENT NOTES: </b><span ng-bind="LicensePreviewData.agreementNotes"></span></li>
+            </ol>
+        </section><!-- End License List -->
+        <section class="legal-letter" style="page-break-after: always;">
+
+            <!-- *** IMPORTANT *** I added the ONLY in front of the IF Statements here because we need to
+                 replace the ENTIRE section for the three options below -->
+            <!-- ONLY IF Default Template -->
+            <section ng-if="$parent.templatePreviewData.Name == 'US License Template'">
+                <p>You have advised us that you wish to obtain a compulsory license to make and distribute phonorecords of the copyrighted works referred to herein, under the compulsory license provision of Section 115 of the Copyright Act.</p>
+                <p>Upon doing so, you shall have all rights which are granted to, and all the obligations which are imposed upon, users of said copyrighted work under the compulsory license provision of the Copyright Act, after phonorecords of the copyrighted work have been distributed to the public in the United States under the authority of the copyright owner by another person, except that with respect to phonorecords thereof made and distributed hereunder:</p>
+                <ul style="list-style:none; margin:0; padding:0;">
+                    <li style="padding:4pt 10pt">{{termOptionText}}</li>
+                    <li style="padding:4pt 10pt">This compulsory license covers and is limited to one particular recording of said copyrighted work as performed by the artist and on the phonorecord number identified above; and this compulsory license does not supersede nor in any way affect any prior agreements now in effect respecting phonorecords of said copyrighted work;</li>
+                    <li style="padding:4pt 10pt">In the event you fail to account to us and pay royalties as herein provided for, we may give written notice to you that, unless the default is remedied within 30 days of your receipt of the notice, this compulsory license will be automatically terminated.  Such termination shall render either the making or the distribution, or both, of all phonorecords for which royalties have not been paid, actionable as acts of infringement under, and fully subject to the remedies provided by, the Copyright Act;</li>
+                    <li style="padding:4pt 10pt">You need not serve or file the notice of intention to obtain a compulsory license required by the Copyright Act.</li>
+                </ul>
+                <p>We or our designee shall have the right to audit your records with respect to statements rendered pursuant to this license on thirty (30) days written notice once in any twelve (12) month period and only once per statement.</p>
+            </section>
+            <!-- END IF Default Template -->
+            <!-- ONLY IF US DVD Template -->
+            <section ng-if="$parent.templatePreviewData.Name == 'US DVD License Template'">
+                <p>You have advised us that you wish to do the following:</p>
+                <ul style="list-style:none; margin:0; padding:0;">
+                    <li style="padding:4pt 10pt">To obtain a compulsory license to make and distribute phonorecords of the copyrighted works referred to herein, under the compulsory license provision of Section 115 of the Copyright Act.</li>
+                    <li style="padding:4pt 10pt">
+                        Upon doing so, you shall have all rights which are granted to, and all the obligations which are imposed upon, users of said copyrighted work under the compulsory license provision of the Copyright Act,
+                        after phonorecords of the copyrighted work have been distributed to the public in the United States under the authority of the copyright owner by another person, except that with respect to phonorecords
+                        thereof made and distributed hereunder:; and to obtain a license from us to synchronize, reproduce and distribute the copyrighted works in the record label produced dual disc products specified herein.
+                        Phonorecords and dual disc products shall be collectively referred to as the “Products”.
+                    </li>
+                </ul>
+                <p>{{termOptionText}}</p>
+                <p>For such Products made and distributed, the royalty shall be the rate stated above;</p>
+                <p>This compulsory license covers and is limited to one particular recording of said copyrighted work as performed by the artist and on the Products identified above; and this compulsory license does not supersede nor in any way affect any prior agreements now in effect respecting phonorecords of said copyrighted work;</p>
+                <p>In the event you fail to account to us and pay royalties as herein provided for, we may give written notice to you that, unless the default is remedied within 30 days of your receipt of the notice, this compulsory license will be automatically terminated.  Such termination shall render either the making or the distribution, or both, of all Products for which royalties have not been paid, actionable as acts of infringement under, and fully subject to the remedies provided by, the Copyright Act;</p>
+                <p>You need not serve or file the notice of intention to obtain a compulsory license required by the Copyright Act.</p>
+                <p>We or our designee shall have the right to audit your records with respect to statements rendered pursuant to this license on thirty (30) days written notice once in any twelve (12) month period and only once per statement.</p>
+            </section>
+            <!-- END ONLY IF US DVD Template -->
+            <!-- ONLY IF Canadian License Template -->
+            <section ng-if="$parent.templatePreviewData.Name == 'Canadian License Template'">
+                <p>We own or control the mechanical recording rights in the copyrighted musical composition(s) listed above (hereinafter referred to as the “the Composition(s)”). </p>
+                <p>You have advised us that you wish to makeuse the Composition(s) in the recording(s) noted above. We accede to such use, upon condition that except as such rights and obligations are specifically varied herein.</p>
+                <p>We shall have all the rights and obligations of proprietors, and you shall have all the rights and obligations of users of copyrighted works.</p>
+                <ul style="list-style:none; margin:0; padding:0;">
+                    <li style="padding:4pt 10pt">{{termOptionText}}</li>
+                    <li style="padding:4pt 10pt">Licensee shall pay Licensor royalties at the Royalty Rate set forth herein for each reproduction of the musical work, in whole or in part, in every recording sold or otherwise distributed in the Territory under this license.</li>
+                    <li style="padding:4pt 10pt">This license is limited solely to the recorded performance of the Compositions which are identified above.</li>
+                    <li style="padding:4pt 10pt">In the event that you fail to comply with all of the terms hereof, we shall have the right to revoke this license by service of written notice thereof.</li>
+                    <li style="padding:4pt 10pt">You shall not use any adaptation or translation of the Composition(s), unless we grant to written permission to the contrary. You shall have the right to use the Composition(s) in every Recording manufactured in the Territory and sold or distributed under this license.</li>
+                    <li style="padding:4pt 10pt">On the label affixed to each contrivance manufactured by you, you will included the title(s) of the Composition(s), our name as publisher, the name of the performing rights society with which we are affiliated, and the last name of the composer and lyricist.</li>
+                    <li style="padding:4pt 10pt">We or our designee shall have the right to audit your books and records with respect to statements rendered pursuant to this license during regular business hours at your office. In the event such audit discloses an error in your statement in excess of ten (10%) percent, you shall bear the cost of said audit.</li>
+                    <li style="padding:4pt 10pt">You will not use or authorize the use of the Composition(s) in any manner whatsoever on the label, cover, sleeve, jacket, or box in which the recording is sold, except in a list of size type and prominence smaller than that used for the other musical compositions contained therein.</li>
+                </ul>
+            </section>
+            <!-- END IF Canadian License Template -->
+            <br />
+            Very truly yours,<br /><br />
+
+            Universal Music Publishing Group<br /><br />
+
+            <br />
+
+            <ul class="license-signatures" style="display:inline; clear:both;">
+                <li style="display:inline-block; width:350pt; height:60pt; vertical-align:top; padding-top: 0px;">
+                    <b style="margin-right:10pt;">By</b>
+                    <img style="margin-bottom:-20px;" src="http://media.umusicpub.com/umusicpub/US_Mechanical_Licensing/JordanLowysign.JPG" />
+                    <br />
+                    <div style="clear:both; margin-left:20pt; margin-right:10pt;">
+                        <p style="font-size:11pt; 'Hoefler Text', 'Liberation Serif', Times, 'Times New Roman', serif!important;">
+                            Jordan Lowy, Sr. Director
+                            <br />UMPG Authorized Signatory
+                        </p>
+                    </div>
+                </li>
+                <li style="display:inline-block; width:200pt; height:30pt; vertical-align:top; padding-top:20px;">
+                    <b style="margin-right:10pt;">Date</b>
+                    <span ng-bind="currentDate | date:'MM/dd/yyyy'"></span>
+                </li>
+            </ul>
+            <br />
+            <br />
+            <p>
+                We acknowledge the receipt of a copy hereof and the accuracy of the terms contained herein:<br /><br />
+                <span ng-bind="selectedLicense.licensee.name"></span>
+            </p>
+            <br />
+            <ul class="license-signatures" style="display:inline; clear:both;">
+                <li style="display:inline-block; width:350pt; height:60pt; vertical-align:top;">
+                    <b style="margin-right: 10pt;">By</b>
+                    <div style="display: none;" class="hideOnHtmlDisplayOnPdf">
+                        <p style="display: inline-block; font-size: 33px"><span ng-bind="signatureTag"></span></p>
+                    </div>
+                    <br />
+                </li>
+                <li class="signatureDateTagPdfChanges" style="display:inline-block; width:200pt; height:60pt; vertical-align:top;">
+                    <b style="margin-right:10pt;">Date</b> <p style="display: none;" class="hideOnHtmlDisplayOnPdf"><span ng-bind="signatureDateTag"></span></p>
+                </li>
+            </ul>
+            <br />
+            <p>*** All correspondence and licenses should be sent to the address appearing on the first page of this license.</p>
+            <p>
+                *** All royalties and statements should be sent to:<span class="address-block" style="display:block; position:absolute; border:none; right:0pt; text-align:left; margin-top:-12pt; width:50%;">
+                    <!-- IF Default License Template -->
+            <p style="margin-left:320px;  margin-top:-30px;" ng-if="$parent.templatePreviewData.Name != 'Canadian License Template'">
+                Universal Music Publishing Group<br />
+                99440 Collections Center Drive<br />
+                Chicago, IL  60693
+            </p>
+            <!-- END IF Default License Template -->
+            <!-- IF Canadian License Template -->
+            <p style="margin-left:320px; margin-top:-30px;" ng-if="$parent.templatePreviewData.Name == 'Canadian License Template'">
+                Universal Music Publishing Group Canada, a division of Universal Music Canada Inc.<br />
+                2450 Victoria Park Avenue<br />
+                Willowdale, ON M24 4A2<br />
+                Canada
+            </p>
+            <!-- END IF Canadian License Template -->
+            </span>
+            </p>
+            <br />
+            <br />
+        </section><!-- End Legal Letter -->
+
+        <div ng-repeat="product in selectedLicense.licensePreview.licenseProducts | orderBy: 'scheduleId'" style="page-break-before: always;">
+            <div ng-if="displayProductHeader(product)">
+                <section class="schedule-header">
+                    <br />
+                    <b>Schedule</b> <span ng-bind="displayScheduleLetter(product)"></span>
+                    <br />
+
+                    <ul style="list-style:none;">
+                        <li><b>Artist:</b> <span ng-bind="product.productHeader.artist.name"></span></li>
+                        <li><b>Product Title:</b> <span ng-bind="product.productHeader.title"></span></li>
+                        <li><b>Label:</b> <span ng-bind="product.productHeader.recordLabel.name"></span></li>
+                    </ul>
+                </section>
+                <!--Start Products Table-->
+                <section class="product-table">
+                    <br />
+                    <b>Products</b>
+                    <br /><br />
+
+                    <b><span ng-bind="product.productHeader.title"></span></b>
+                    <table style="width: 100%; text-align: left; border-collapse: collapse; font-size: 11pt !important;">
+                        <thead>
+                            <tr>
+                                <th class="upc" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 25%;">UPC</th>
+                                <th class="configuration" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 25%;">Configuration</th>
+                                <th class="catalog" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 20%;">Catalog #</th>
+                                <th class="release-date" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 20%;">Release Date</th>
+                            </tr>
+                        </thead>
+                        <!---->
+                        <tbody>
+                            <tr ng-repeat="config in product.productHeader.configurations | filter:{licenseProductConfiguration:''}">
+
+                                <td style="padding: 3pt 6pt; vertical-align: top;"><span ng-bind="config.upc"></span></td>
+
+                                <td style="padding: 3pt 6pt; vertical-align: top;"><span ng-bind="config.configuration.name"></span></td>
+                                <td style="padding: 3pt 6pt; vertical-align: top;"><span ng-bind="config.licenseProductConfiguration.catalogNumber"></span></td><!--USL-1169-->
+                                <!-- USL-1169
+                                <td ng-repeat="x in product.productHeader | filter:emptyOrNull" ng-if="x.catalogNumber.length > 1 " style="padding: 3pt 6pt; vertical-align: top;">{{x.catalogNumber}}{{config.licenseProductConfiguration.catalogNumber}}</td>
+                                <td style="padding: 3pt 6pt; vertical-align: top;"></td>
+                                -->
+                                <!--Jeff Added blank cell to allow release date to display properly. Catalog nuymber was displaying 12 blank cells and pushing the date far right.-->
+                                <!--USL-1169 Steve commented blank cell after fixing the catalog number display -->
+                                <td style="padding: 3pt 6pt; vertical-align: top;"><span ng-bind="config.releaseDate | timezone | date:'MM/dd/yyyy'"></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br />
+
+                </section>
+                <!--^^End Products Table ^^-->
+
+            </div>
+            <div ng-repeat="record in product.recordings">
+                <section class="rates-table" style="page-break-inside:avoid;">
+                    <br />
+
+                    <!--EXAMPLE SAMPLE TABLE-->
+                    <table class="physical-digital" style="width:100%; text-align:left; border-collapse:collapse; font-size:11pt!important;" ng-if="record.hasSample && writerExistsOnRecord(record)">
+
+                        <thead>
+                            <!--
+                            <tr>
+                                <th rowspan="2" class="track-writer" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 40%;">
+                                    Song Title / Timing / ISRC –
+                                    sample(s) of <span class="sample-track">“SAMPLED SONG TITLE”</span><br/>
+                                    Writer(s) <br/>Publisher(s) (Affiliation)
+                                </th>
+                                <th rowspan="2" class="track-writer" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 20%;">
+                                    <div ng-if="displaySpecialStatusHeader(record)">Special Status</div></th>
+                                <th rowspan="2" class="track-writer" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 15%;">Rate Type</th>
+                                <th rowspan="2" class="split" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 10%; text-align: center;">Collectable %</th>
+                                <th colspan="2" class="rates" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; text-align: center; border-bottom: none;">
+                                    Rates
+                                    <span style="display: block; width: 100%; height: 4pt; border: solid 1pt #000000; border-bottom: none;"></span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th height="29" class="base-rate" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 10%; text-align: center;">Base</th>
+                                <th class="pro-rata-rate" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 10%; text-align: center;">Pro-Rata</th>
+                            </tr>
+                                -->
+                            <tr>
+                                <th rowspan="2" class="track-writer" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 40%;">
+                                    Song Title / Timing / ISRC<br />
+                                    Writer(s) <br />Publisher(s) (Affiliation)
+                                </th>
+                                <th rowspan="2" class="track-writer" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 20%;">
+                                    <div ng-if="displaySpecialStatusHeader(record)">Special Status</div>
+                                </th>
+                                <th rowspan="2" class="track-writer" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 20%;">Rate Type</th>
+                                <th rowspan="2" class="split" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 5%; text-align: center;">Collectable %</th>
+                                <th colspan="3" class="rates" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; text-align: center; border-bottom: none;">
+                                    Rates
+                                    <span style="display: block; width: 100%; height: 4pt; border: solid 1pt #000000; border-bottom: none;"></span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th class="base-rate" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 10%; text-align: center;">Threshold</th>
+                                <th class="base-rate no-wrap" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 5%; text-align: center;">Base</th>
+                                <th class="pro-rata-rate" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 5%; text-align: center;">Pro-Rata</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody ng-repeat="writer in record.writers">
+                            <tr ng-if="$index==0">
+                                <td colspan="6" class="track-writer" style="padding: 3pt 6pt; vertical-align: top;">
+
+                                    <span ng-bind="record.track.title"></span>&nbsp;/&nbsp;<span ng-bind="record.track.duration | limitTo:-5"></span><span ng-if="record.track.isrc">&nbsp;/&nbsp;<span ng-bind="record.track.isrc"></span></span><!--<span ng-if="sample.title">Contains sample(s) of <span ng-repeat="sample in recording.track.copyrights[0].sampledWorks" class="sample-track">{{sample.title}}<span class="list-comma">, </span></span></span> -->
+
+                                    <span>
+                                        <span ng-if="record.hasSample">
+                                            - (Contains sample(s) of
+                                            <span ng-repeat="sample in record.track.copyrights[0].sampledWorks" class="sample-track">
+                                                "<span ng-bind="sample.title"></span>"<span ng-if="!$last">, </span>
+
+                                            </span>
+                                            )
+                                        </span>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr ng-if="displayWriter(writer)">
+                                <td colspan="6" ng-if="writer.licenseProductRecordingWriter.rateList[0].writerRateInclude" class="track-writer" style="padding: 3pt 6pt; vertical-align: top; font-weight:bold;">
+                                    <span ng-bind="writer.name"></span> 
+                                </td>
+                            </tr>
+                            <tr ng-if="displayWriter(writer)">
+                                <td colspan="6">
+                                    <span ng-repeat="originalPublisher in writer.originalPublishers | filter:{zeroValue:false}">
+                                        <!--<span style="color: red">(type 1) <br /></span>-->
+
+                                        <span style="float: left; margin-right: 5px;" ng-repeat="administrator in originalPublisher.administrators">
+                                            <span ng-if='!originalPublisher.SeExists && administrator.capacityCode=="AM" && !originalPublisher.zeroValue'>
+                                                <span ng-bind="administrator.name"></span><span style="margin-left: 4px; margin-right: 4px">/</span>
+                                                <span ng-bind="originalPublisher.name"></span>
+                                                <span ng-repeat='affiliation in administrator.affiliations | filter:{incomeGroup:"Performance"}'>
+                                                    <span ng-repeat='a in affiliation.affiliations'>
+                                                        (<span ng-bind="a.societyAcronym"></span>)
+                                                    </span>
+                                                </span>
+                                            </span>
+                                            <span ng-if='originalPublisher.SeExists && administrator.capacityCode=="SE" && !originalPublisher.zeroValue'>
+                                                <span ng-bind="administrator.name"></span> 
+                                                <span ng-repeat='affiliation in administrator.affiliations | filter:{incomeGroup:"Performance"}'>
+                                                    <span ng-repeat='a in affiliation.affiliations'>
+                                                        (<span ng-bind="a.societyAcronym"></span>)
+                                                    </span> <span style="margin-left: 4px; margin-right: 4px">/</span>
+                                                    <span ng-bind="originalPublisher.name"></span>
+                                                </span>
+                                            </span>
+                                        </span>
+                                        <br />
+                                    </span>
+                                    <!-- pre
+                                    <span ng-repeat="originalPublisher in writer.originalPublishers | filter:{zeroValue:false}">
+                                        <span style="margin-left: 5px;">{{originalPublisher.name}}</span>
+                                        <span ng-if='!originalPublisher.SeExists' ng-repeat='aff in originalPublisher.affiliations | filter:{incomeGroup:"Performance"}'>
+                                            <span ng-repeat='aa in aff.affiliations'>
+                                                ({{aa.societyAcronym}})
+                                            </span>
+                                        </span>
+                                        <span style="float: left; margin-right: 5px;" ng-repeat="administrator in originalPublisher.administrators">
+                                            <span ng-if='!originalPublisher.SeExists && administrator.capacityCode=="AM" && !originalPublisher.zeroValue'>
+                                                {{administrator.name}} <span>&nbsp<span>/</span> </span>
+                                            </span>
+                                            <span ng-if='originalPublisher.SeExists && administrator.capacityCode=="SE" && !originalPublisher.zeroValue'>
+                                                {{administrator.name}}
+                                                <span ng-repeat='affiliation in administrator.affiliations | filter:{incomeGroup:"Performance"}'>
+                                                    <span ng-repeat='a in affiliation.affiliations'>
+                                                        ({{a.societyAcronym}})
+                                                    </span>
+                                                </span>
+                                            </span>
+                                        </span>
+                                        <br />
+                                    </span>
+                                    -->
+                                </td>
+                            </tr>
+
+
+                            <tr ng-if="displayWriter(writer)" ng-repeat="rate in writer.licenseProductRecordingWriter.rateList | orderBy: ['configuration_name','product_configuration_id']">
+                                <td ng-if="rate.writerRateInclude" class="track-writer" style="padding: 3pt 6pt 3pt 26pt; vertical-align: top; width: 40%;">
+                                    <div ng-if="displayEscaletedRates(writer.licenseProductRecordingWriter.rateList, rate)"><span ng-bind="rate.configuration_name"></span><span ng-if="getProductConfigurationUpc(rate.product_configuration_id)">(<span ng-bind="getProductConfigurationUpc(rate.product_configuration_id)"></span>)</span></div>
+                                </td>
+                                <td ng-if="rate.writerRateInclude" class="track-writer" style="padding:3pt 6pt; vertical-align:top; width:20%;"><span ng-bind="displaySpecialStatus(rate)"></span></td>
+                                <td ng-if="rate.writerRateInclude" class="track-writer no-wrap" style="padding: 3pt 6pt; vertical-align: top; width: 20%;">
+                                    <div ng-if="displayEscaletedRates(writer.licenseProductRecordingWriter.rateList, rate)"><span ng-bind="rate.rateType.rateType"></span></div>
+                                </td>
+                                <td ng-if="rate.writerRateInclude" class="split" style="padding:3pt 6pt; vertical-align:top; width:5%; text-align:center;"><span ng-bind="getSplit(writer)"></span>%</td>
+                                <td ng-if="rate.writerRateInclude" class="base-rate" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;"><span ng-bind="rate.escalatedRate"></span></td>
+                                <td ng-if="rate.writerRateInclude" class="base-rate no-wrap" style="padding: 3pt 6pt; vertical-align: top; width: 10%; text-align: center;">
+                                    <span ng-if="rate.rateType.rateTypeId == 3 || rate.rateType.rateTypeId ==4 || rate.rateType.rateTypeId ==10 || rate.rateType.rateTypeId ==6 || rate.rateType.rateTypeId ==7 || rate.rateType.rateTypeId ==11">
+                                       <span ng-bind="rate.percentOfStat"></span>% of Stat
+                                    </span>
+                                    <span ng-if="rate.rateType.rateTypeId != 1 && rate.rateType.rateTypeId != 3 && rate.rateType.rateTypeId !=4 && rate.rateType.rateTypeId !=10 && rate.rateType.rateTypeId !=6 && rate.rateType.rateTypeId !=7 && rate.rateType.rateTypeId !=11">
+                                        <span ng-bind="rate.rate"></span>
+                                    </span>
+                                    <span ng-if="rate.rateType.rateTypeId == 1">
+                                        <span ng-bind="rate.rate | displayStat"></span>
+                                    </span>
+
+                                </td>
+                                <td ng-if="rate.writerRateInclude" class="pro-rata-rate" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">{{rate.proRataRate}}</td>
+                            </tr>
+
+                            <!--<tr ng-if="displayWriter(writer)" ng-repeat="rate in writer.licenseProductRecordingWriter.rateList | orderBy: ['configuration_name','product_configuration_id']">-->
+                            <!--<tr ng-if="displayWriter(writer)" ng-repeat="rate in writer.licenseProductRecordingWriter.rateList">-->
+                            <!--<td ng-if="rate.writerRateInclude" class="track-writer" style="padding:3pt 6pt; vertical-align:top; width:40%;">{{rate.configuration_name}}TEST <span ng-if="getProductConfigurationUpc(rate.product_configuration_id)">({{getProductConfigurationUpc(rate.product_configuration_id)}})</span></td>-->
+                            <!-- <td ng-if="writer.licenseProductRecordingWriter.rateList[0].writerRateInclude" class="track-writer" style="padding: 3pt 6pt; vertical-align: top; width: 40%;">{{writer.licenseProductRecordingWriter.rateList[0].configuration_name}}<span ng-if="getProductConfigurationUpc(writer.licenseProductRecordingWriter.rateList[0].configuration_id)">({{getProductConfigurationUpc(writer.licenseProductRecordingWriter.rateList[0].configuration_id)}})</span></td> Jeff turned this off, Jeff added a new line below this one AND an ng-repeat 'rate' above ths one. Testing Needed.-->
+                            <!--
+                            <td ng-if="rate.writerRateInclude" class="track-writer" style="padding: 3pt 6pt 3pt 26pt; vertical-align: top; width: 40%;">{{rate.configuration_name}} <span ng-if="getProductConfigurationUpc(rate.product_configuration_id)">({{getProductConfigurationUpc(rate.product_configuration_id)}})</span></td>
+                            <td ng-if="writer.licenseProductRecordingWriter.rateList[0].writerRateInclude" class="track-writer" style="padding: 3pt 6pt; vertical-align: top; width: 20%;">{{displaySpecialStatus(writer.licenseProductRecordingWriter.rateList[0])}}</td>
+                            <td ng-if="writer.licenseProductRecordingWriter.rateList[0].writerRateInclude" class="track-writer no-wrap" style="padding: 3pt 6pt; vertical-align: top; width: 10%;">{{writer.licenseProductRecordingWriter.rateList[0].rateType.rateType}}</td>
+                            <td ng-if="writer.licenseProductRecordingWriter.rateList[0].writerRateInclude" class="split" style="padding: 3pt 6pt; vertical-align: top; width: 10%; text-align: center;">{{getSplit(writer)}}%</td>
+                            <td ng-if="writer.licenseProductRecordingWriter.rateList[0].writerRateInclude" class="base-rate no-wrap" style="padding: 3pt 6pt; vertical-align: top; width: 10%; text-align: center;">
+                                <span ng-if="writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId == 3 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==4 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==10 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==6 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==7 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==11">
+                                        Stat
+                                    </span>
+                                <span ng-if="writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId != 3 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=4 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=10 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=6 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=7 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=11">
+                                        {{writer.licenseProductRecordingWriter.rateList[0].rate}}
+                                    </span>
+                            </td>
+                            <td ng-if="writer.licenseProductRecordingWriter.rateList[0].writerRateInclude" class="pro-rata-rate" style="padding: 3pt 6pt; vertical-align: top; width: 10%; text-align: center;">
+                                <span ng-if="writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId == 3 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==4 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==10 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==6 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==7 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==11">
+                                        {{writer.licenseProductRecordingWriter.rateList[0].percentOfStat}}% of Stat
+                                    </span>
+                                <span ng-if="writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId != 3 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=4 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=10 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=6 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=7 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=11">
+                                        {{writer.licenseProductRecordingWriter.rateList[0].proRataRate}}
+                                    </span>
+                            </td>
+                            </tr>
+                            -->
+                        </tbody>
+                    </table>
+                    <br />
+
+                    <br />
+                    <table class="physical-digital" style="width:100%; text-align:left; border-collapse:collapse; font-size:11pt!important;" ng-if="!record.hasSample && getCurrentConfigurations(record) ==='PhysicalOrDigital' && writerExistsOnRecord(record)">
+                        <!-- EXAMPLE TABLE WITH PHYSICAL RATES ONLY -->
+                        <thead>
+                            <tr>
+                                <th rowspan="2" class="track-writer" style="padding:3pt 6pt; vertical-align:bottom; white-space:nowrap; border-bottom:solid 1px #000000; width:40%;">
+                                    Song Title / Timing / ISRC<br />
+                                    Writer(s) <br />Publisher(s) (Affiliation)
+                                </th>
+                                <th rowspan="2" class="track-writer" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 20%;"><div ng-if="displaySpecialStatusHeader(record)">Special Status</div></th>
+                                <th rowspan="2" class="track-writer" style="padding:3pt 6pt; vertical-align:bottom; white-space:nowrap; border-bottom:solid 1px #000000; width:20%;">Rate Type</th>
+                                <th rowspan="2" class="split" style="padding:3pt 6pt; vertical-align:bottom; white-space:nowrap; border-bottom:solid 1px #000000; width:10%; text-align:center;">Collectable %</th>
+                                <th colspan="2" class="rates" style="padding:3pt 6pt; vertical-align:bottom; white-space:nowrap; text-align:center; border-bottom:none;">
+                                    Rates
+                                    <span style="display:block; width:100%; height:4pt; border:solid 1pt #000000; border-bottom:none;"></span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th height="29" class="base-rate" style="padding:3pt 6pt; vertical-align:bottom; white-space:nowrap; border-bottom:solid 1px #000000; width:10%; text-align:center;">Base</th>
+                                <th class="pro-rata-rate" style="padding:3pt 6pt; vertical-align:bottom; white-space:nowrap; border-bottom:solid 1px #000000; width:10%; text-align:center;">Pro-Rata</th>
+                            </tr>
+                        </thead>
+                        <tbody ng-repeat="writer in record.writers">
+                            <tr ng-if="$index==0">
+                                <td class="track-writer" style="padding: 3pt 6pt; vertical-align: top; width: 55%;">
+                                    <span ng-bind="record.track.title"></span>&nbsp;/&nbsp;<span ng-bind="record.track.duration | limitTo:-5"></span><span ng-if="record.track.isrc">&nbsp;/&nbsp;<span ng-bind="record.track.isrc"></span></span>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr ng-if="displayWriter(writer)">
+                                <td class="track-writer" style="padding:3pt 6pt; vertical-align:top; width:55%; font-weight:bold;">
+                                    <span ng-bind="writer.name"></span>
+                                </td>
+                            </tr>
+                            <tr ng-if="displayWriter(writer)">
+                                <td colspan="5">
+                                    <span ng-repeat="originalPublisher in writer.originalPublishers | filter:{zeroValue:false}">
+                                        <!--<span style="color: red">(type 2) <br /></span>-->
+
+                                        <span style="float: left; margin-right: 5px;" ng-repeat="administrator in originalPublisher.administrators">
+                                            <span ng-if='!originalPublisher.SeExists && administrator.capacityCode=="AM" && !originalPublisher.zeroValue'>
+                                                <span ng-bind="administrator.name"></span><span style="margin-left: 4px; margin-right: 4px">/</span>
+                                                <span ng-bind="originalPublisher.name"></span>
+                                                <span ng-repeat='affiliation in administrator.affiliations | filter:{incomeGroup:"Performance"}'>
+                                                    <span ng-repeat='a in affiliation.affiliations'>
+                                                        (<span ng-bind="a.societyAcronym"></span>)
+                                                    </span>
+                                                </span>
+                                            </span>
+                                            <span ng-if='originalPublisher.SeExists && administrator.capacityCode=="SE" && !originalPublisher.zeroValue'>
+                                                <span ng-bind="administrator.name"></span>
+                                                <span ng-repeat='affiliation in administrator.affiliations | filter:{incomeGroup:"Performance"}'>
+                                                    <span ng-repeat='a in affiliation.affiliations'>
+                                                        (<span ng-bind="a.societyAcronym"></span>)
+                                                    </span> <span style="margin-left: 4px; margin-right: 4px">/</span>
+                                                    <span ng-bind="originalPublisher.name"></span>
+                                                </span>
+                                            </span>
+                                        </span>
+
+                                        <br />
+                                    </span>
+                                    <!-- pre fix
+                                    <span ng-repeat="originalPublisher in writer.originalPublishers | filter:{zeroValue:false}">
+                                        <span style="margin-left: 5px;">{{originalPublisher.name}}</span>
+                                        <span ng-if='!originalPublisher.SeExists' ng-repeat='aff in originalPublisher.affiliations | filter:{incomeGroup:"Performance"}'>
+                                            <span ng-repeat='aa in aff.affiliations'>
+                                                ({{aa.societyAcronym}})
+                                            </span>
+                                        </span>
+                                        <span style="float: left; margin-right: 5px;" ng-repeat="administrator in originalPublisher.administrators">
+                                            <span ng-if='!originalPublisher.SeExists && administrator.capacityCode=="AM" && !originalPublisher.zeroValue'>
+                                                {{administrator.name}} <span>&nbsp<span>/</span> </span>
+                                            </span>
+                                            <span ng-if='originalPublisher.SeExists && administrator.capacityCode=="SE" && !originalPublisher.zeroValue'>
+                                                {{administrator.name}} <!-UNiversal Music - MGB Songs?-> <span ng-if="administrator.name != ''"><span>&nbsp<span>/</span> </span> </span>
+                                                 <-- Jeff moved this 'UMPG MGB France to below the SE Publishers per Samira's request'->
+                                                <span ng-repeat='affiliation in administrator.affiliations | filter:{incomeGroup:"Performance"}'>
+                                                    <span ng-repeat='a in affiliation.affiliations'>
+                                                        ({{a.societyAcronym}})<!- <span>&nbsp<span>/</span> </span>  ->
+                                                    </span>
+                                                </span>
+                                            </span>
+                                            <-SE Publisher Ends Above--
+                                        </span>
+                                        <br />
+                                    </span>
+                                    -->
+                                </td>
+                                <!------
+                                <span ng-if="!$last">, </span>-->
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr ng-if="displayWriter(writer)" ng-repeat="rate in writer.licenseProductRecordingWriter.rateList | orderBy: ['configuration_name','product_configuration_id']">
+                                <!--<tr ng-if="displayWriter(writer)" ng-repeat="rate in writer.licenseProductRecordingWriter.rateList">-->
+                                <td ng-if="rate.writerRateInclude" class="track-writer" style="padding: 3pt 6pt 3pt 26pt; vertical-align:top; width:40%;"><span ng-bind="rate.configuration_name"></span><span ng-if="getProductConfigurationUpc(rate.product_configuration_id)">({{getProductConfigurationUpc(rate.product_configuration_id)}})</span></td>
+                                <td ng-if="rate.writerRateInclude" class="track-writer" style="padding:3pt 6pt; vertical-align:top; width:20%;"><span ng-bind="displaySpecialStatus(rate)"></span></td>
+                                <td ng-if="rate.writerRateInclude" class="track-writer no-wrap" style="padding:3pt 6pt; vertical-align:top; width:20%;"><span ng-bind="rate.rateType.rateType"></span></td>
+                                <td ng-if="rate.writerRateInclude" class="split" style="padding:3pt 6pt; vertical-align:top; width:5%; text-align:center;"><span ng-bind="getSplit(writer)  | setDecimal:2"></span>%</td>
+                                <td ng-if="rate.writerRateInclude" class="base-rate no-wrap" style="padding:3pt 6pt; vertical-align:top; width:5%; text-align:center;">
+                                    <span ng-if="rate.rateType.rateTypeId == 3 || rate.rateType.rateTypeId ==4 || rate.rateType.rateTypeId ==10 || rate.rateType.rateTypeId ==6 || rate.rateType.rateTypeId ==7 || rate.rateType.rateTypeId ==11">
+                                        <span ng-bind="rate.percentOfStat"></span>% of Stat
+                                    </span>
+                                    <span ng-if="rate.rateType.rateTypeId != 1 && rate.rateType.rateTypeId != 3 && rate.rateType.rateTypeId !=4 && rate.rateType.rateTypeId !=10 && rate.rateType.rateTypeId !=6 && rate.rateType.rateTypeId !=7 && rate.rateType.rateTypeId !=11">
+                                        <span ng-bind="rate.rate"></span>
+                                    </span>
+                                    <span ng-if="rate.rateType.rateTypeId == 1">
+                                        <span ng-bind="rate.rate | displayStat"></span>
+                                    </span>
+                                </td>
+                                <td ng-if="rate.writerRateInclude" class="pro-rata-rate" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">
+                                    <span ng-bind="rate.proRataRate"></span>
+                                </td>
+                            </tr>
+
+                            <!-- Medley Component Track Row Here
+                               <tr ng-if="$index==0">
+                                  <td class="track-writer" style="padding:3pt 6pt; vertical-align:top; width:55%; padding-left:30px;">
+                                      {{record.track.title}} {{record.track.duration}} - {{displayIsrc(record.track.isrc)}}
+                                  </td>
+                                  <td style="padding:3pt 6pt; vertical-align:top;"></td>
+                                  <td colspan="2" style="padding:3pt 6pt; vertical-align:top;"></td>
+                            </tr>
+                              <tr>
+                                  <td rowspan="2" class="track-writer" style="padding:3pt 6pt; vertical-align:top; width:55%; padding-left:30px;">
+                                      {{writer.name}}<br />
+                                      {{joinValues(writer.originalPublishers,'name')}}
+                                  </td>
+                                  <td style="padding:3pt 6pt; vertical-align:top;"></td>
+                                  <td colspan="2" class="rate-type" style="padding:3pt 6pt; vertical-align:top; text-align:center; background-color:#EFEFEF;">{{getRateTypes('P', writer)}}</td>
+                              </tr>
+                              <tr>
+                                  <td class="split" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">{{writer.licenseProductRecordingWriter.split}}</td>
+                                  <td class="base-rate" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">{{getRate('P','rate',writer)}}</td>
+                                  <td class="pro-rata-rate" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">{{getRate('P','proRataRate',writer)}}</td>
+                              </tr>
+                              -->
+                        </tbody>
+                    </table>
+                    <br />
+
+                    <br />
+
+                    <table class="physical-digital" style="width:100%; text-align:left; border-collapse:collapse; font-size:11pt!important;" ng-if="!record.hasSample && getCurrentConfigurations(record) ==='EscaletedRates' && writerExistsOnRecord(record)">
+                        <!-- EXAMPLE TABLE WITH PHYSICAL WITH ESC RATES -->
+                        <thead>
+                            <tr>
+                                <th rowspan="2" class="track-writer" style="padding:3pt 6pt; vertical-align:bottom; white-space:nowrap; border-bottom:solid 1px #000000; width:40%;">
+                                    Song Title / Timing / ISRC<br />
+                                    Writer(s) <br />Publisher(s) (Affiliation)
+                                </th>
+                                <th rowspan="2" class="track-writer" style="padding:3pt 6pt; vertical-align:bottom; white-space:nowrap; border-bottom:solid 1px #000000; width:20%;"><div ng-if="displaySpecialStatusHeader(record)">Special Status</div></th>
+                                <th rowspan="2" class="track-writer" style="padding:3pt 6pt; vertical-align:bottom; white-space:nowrap; border-bottom:solid 1px #000000; width:20%;">Rate Type</th>
+                                <th rowspan="2" class="split" style="padding:3pt 6pt; vertical-align:bottom; white-space:nowrap; border-bottom:solid 1px #000000; width:5%; text-align:center;">Collectable %</th>
+                                <th colspan="3" class="rates" style="padding:3pt 6pt; vertical-align:bottom; white-space:nowrap; text-align:center; border-bottom:none;">
+                                    Rates
+                                    <span style="display:block; width:100%; height:4pt; border:solid 1pt #000000; border-bottom:none;"></span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th class="base-rate" style="padding:3pt 6pt; vertical-align:bottom; white-space:nowrap; border-bottom:solid 1px #000000; width:10%; text-align:center;">Threshold</th>
+                                <th class="base-rate no-wrap" style="padding:3pt 6pt; vertical-align:bottom; white-space:nowrap; border-bottom:solid 1px #000000; width:5%; text-align:center;">Base</th>
+                                <th class="pro-rata-rate" style="padding:3pt 6pt; vertical-align:bottom; white-space:nowrap; border-bottom:solid 1px #000000; width:5%; text-align:center;">Pro-Rata</th>
+                            </tr>
+                        </thead>
+                        <tbody ng-repeat="writer in record.writers">
+
+                            <tr ng-if="$index==0">
+                                <td colspan="8" class="track-writer" style="padding:3pt 6pt; vertical-align:top; width:55%;">
+                                    <span ng-bind="record.track.title"></span>&nbsp;/&nbsp;<span ng-bind="record.track.duration | limitTo:-5"></span><span ng-if="record.track.isrc">&nbsp;/&nbsp;<span ng-bind="record.track.isrc"></span></span>
+                                </td>
+                            </tr>
+                            <tr ng-if="displayWriter(writer)">
+                                <td colspan="8" class="track-writer" style="padding:3pt 6pt; vertical-align:top; width:55%; font-weight:bold;">
+                                    <span ng-bind="writer.name"></span>
+                                </td>
+                            </tr>
+                            <tr ng-if="displayWriter(writer)">
+                                <td colspan="5">
+                                    <span ng-repeat="originalPublisher in writer.originalPublishers | filter:{zeroValue:false}">
+                                        <!-- <span style="color: red">(type 3) <br /></span>-->
+
+                                        <span style="float: left; margin-right: 5px;" ng-repeat="administrator in originalPublisher.administrators">
+                                            <span ng-if='!originalPublisher.SeExists && administrator.capacityCode=="AM" && !originalPublisher.zeroValue'>
+                                                <span ng-bind="administrator.name"></span><span style="margin-left: 4px; margin-right: 4px">/</span>
+                                                <span ng-bind="originalPublisher.name"></span>
+                                                <span ng-repeat='affiliation in administrator.affiliations | filter:{incomeGroup:"Performance"}'>
+                                                    <span ng-repeat='a in affiliation.affiliations'>
+                                                        (<span ng-bind="a.societyAcronym"></span>)
+                                                    </span>
+                                                </span>
+                                            </span>
+                                            <span ng-if='originalPublisher.SeExists && administrator.capacityCode=="SE" && !originalPublisher.zeroValue'>
+                                                <span ng-bind="administrator.name"></span>
+                                                <span ng-repeat='affiliation in administrator.affiliations | filter:{incomeGroup:"Performance"}'>
+                                                    <span ng-repeat='a in affiliation.affiliations'>
+                                                        (<span ng-bind="a.societyAcronym"></span>)
+                                                    </span> <span style="margin-left: 4px; margin-right: 4px">/</span>
+                                                    <span ng-bind="originalPublisher.name"></span>
+                                                </span>
+                                            </span>
+                                        </span>
+
+                                        <br />
+                                    </span>
+
+                                    <!-- pre fix
+                                    <span ng-repeat="originalPublisher in writer.originalPublishers | filter:{zeroValue:false}">
+                                        <span style="margin-left: 5px;">{{originalPublisher.name}}</span>
+                                        <span ng-if='!originalPublisher.SeExists' ng-repeat='aff in originalPublisher.affiliations | filter:{incomeGroup:"Performance"}'>
+                                            <span ng-repeat='aa in aff.affiliations'>
+                                                ({{aa.societyAcronym}})
+                                            </span>
+                                        </span>
+                                        <span style="float: left; margin-right: 5px;" ng-repeat="administrator in originalPublisher.administrators">
+                                            <span ng-if='!originalPublisher.SeExists && administrator.capacityCode=="AM" && !originalPublisher.zeroValue'>
+                                                {{administrator.name}} <!-<span>&nbsp<span>/</span> </span> Jeff removed this, refrence licesne 4620 on DE ->
+                                            </span>
+                                            <span ng-if='originalPublisher.SeExists && administrator.capacityCode=="SE" && !originalPublisher.zeroValue'>
+                                                {{administrator.name}}
+                                                <span ng-repeat='affiliation in administrator.affiliations | filter:{incomeGroup:"Performance"}'>
+                                                    <span ng-repeat='a in affiliation.affiliations'>
+                                                        ({{a.societyAcronym}})
+                                                    </span>
+                                                </span>
+                                            </span>
+                                        </span>
+                                        <br />
+                                    </span>
+                                    -->
+                                </td>
+                            </tr>
+                            <tr ng-if="displayWriter(writer)" ng-repeat="rate in writer.licenseProductRecordingWriter.rateList | orderBy: ['configuration_name','product_configuration_id']">
+                                <td ng-if="rate.writerRateInclude" class="track-writer" style="padding: 3pt 6pt 3pt 26pt; vertical-align: top; width: 40%;">
+                                    <div ng-if="displayEscaletedRates(writer.licenseProductRecordingWriter.rateList, rate)">{{rate.configuration_name}} <span ng-if="getProductConfigurationUpc(rate.product_configuration_id)">({{getProductConfigurationUpc(rate.product_configuration_id)}})</span></div>
+                                </td>
+                                <td ng-if="rate.writerRateInclude" class="track-writer" style="padding:3pt 6pt; vertical-align:top; width:20%;">{{displaySpecialStatus(rate)}}</td>
+                                <td ng-if="rate.writerRateInclude" class="track-writer no-wrap" style="padding: 3pt 6pt; vertical-align: top; width: 20%;">
+                                    <div ng-if="displayEscaletedRates(writer.licenseProductRecordingWriter.rateList, rate)">{{rate.rateType.rateType}}</div>
+                                </td>
+                                <td ng-if="rate.writerRateInclude" class="split" style="padding:3pt 6pt; vertical-align:top; width:5%; text-align:center;"><span ng-bind="getSplit(writer)"></span>%</td>
+                                <td ng-if="rate.writerRateInclude" class="base-rate" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;"><span ng-bind="rate.escalatedRate"></span></td>
+                                <td ng-if="rate.writerRateInclude" class="base-rate no-wrap" style="padding: 3pt 6pt; vertical-align: top; width: 10%; text-align: center;">
+                                    <span ng-if="rate.rateType.rateTypeId == 3 || rate.rateType.rateTypeId ==4 || rate.rateType.rateTypeId ==10 || rate.rateType.rateTypeId ==6 || rate.rateType.rateTypeId ==7 || rate.rateType.rateTypeId ==11">
+                                        <span ng-bind="rate.percentOfStat"></span>% of Stat
+                                    </span>
+                                    <span ng-if="rate.rateType.rateTypeId != 1 && rate.rateType.rateTypeId != 3 && rate.rateType.rateTypeId !=4 && rate.rateType.rateTypeId !=10 && rate.rateType.rateTypeId !=6 && rate.rateType.rateTypeId !=7 && rate.rateType.rateTypeId !=11">
+                                        <span ng-bind="rate.rate"></span>
+                                    </span>
+                                    <span ng-if="rate.rateType.rateTypeId == 1">
+                                        <span ng-bind="rate.rate | displayStat "></span>
+                                    </span>
+                                </td>
+                                <td ng-if="rate.writerRateInclude" class="pro-rata-rate" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;"><span ng-bind="rate.proRataRate"></span></td>
+                            </tr>
+
+                            <!-- IF Medley Track
+
+                            <tr ng-if="$index==0">
+                                <td class="track-writer" style="padding:3pt 6pt; vertical-align:top; width:55%; padding-left:30px;">
+                                    {{record.track.title}} {{record.track.duration}} - {{displayIsrc(record.track.isrc)}}
+                                </td>
+                                <td class="split" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">&nbsp;</td>
+                                <td colspan="3" style="padding:3pt 6pt; vertical-align:top;"></td>
+
+                            </tr>
+                            <tr>
+                                <td rowspan="2" class="track-writer" style="padding:3pt 6pt; vertical-align:top; width:55%; padding-left:30px;">
+                                    {{writer.name}}<br />
+                                    {{joinValues(writer.originalPublishers,'name')}}
+                                </td>
+                                <td style="padding:3pt 6pt; vertical-align:top;"></td>
+                                <td colspan="3" class="rate-type" style="padding:3pt 6pt; vertical-align:top; text-align:center; background-color:#EFEFEF;">{{getRateTypes('P', writer)}}</td>
+
+                            </tr>
+                            <tr>
+                                <td class="split" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">{{writer.licenseProductRecordingWriter.split}}</td>
+                                <td class="base-rate" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">
+                                    <div ng-repeat-start="rate in writer.licenseProductRecordingWriter.rateList">
+                                        <p>{{rate.escalatedRate}}</p>
+                                    </div>
+                                    <div ng-repeat-end=""></div>
+                                </td>
+                                <td class="base-rate" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">
+                                    <div ng-repeat-start="rate in writer.licenseProductRecordingWriter.rateList">
+                                        <p>{{rate.rate}}</p>
+                                    </div>
+                                    <div ng-repeat-end=""></div>
+                                </td>
+                                <td class="pro-rata-rate" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">
+                                    <div ng-repeat-start="rate in writer.licenseProductRecordingWriter.rateList">
+                                        <p>{{rate.proRataRate}}</p>
+                                    </div>
+                                    <div ng-repeat-end=""></div>
+                                </td>
+                            </tr>
+                                -->
+
+                        </tbody>
+                    </table>
+                    <br />
+                </section>
+            </div>
+
+        </div>
+        <footer>
+            <ul style="list-style:none; display:table; margin:0pt; padding:6pt; width:100%;">
+                <li style="display:inline-block; width:33%; text-align:left;">License #&nbsp;<span ng-bind="selectedLicense.licenseNumber"></span></li>
+                <li style="display:inline-block; width:33%;">&nbsp;</li>
+                <li style="display:inline-block; width:33%; text-align:right;">Effective Date&nbsp;<span ng-bind="effectiveDateCalculated | date:'MM/dd/yyyy' "></span></li>
+            </ul>
+        </footer>
+    </section><!-- End License Template -->
+
+</body>
+</html>
