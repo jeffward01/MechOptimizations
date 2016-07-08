@@ -2,7 +2,7 @@
     <section class="license-overview shadow">
         <section class="license-header">
             <span class="priority-report">
-                <input type="checkbox" securitydisable actions="ProductPriorityReport" ng-model="productDetail.mechsPriority" ng-click="updateProductPriority(productDetail.id, productDetail.mechsPriority)" /><label>Priority1 Report</label>
+                <input type="checkbox" securitydisable actions="ProductPriorityReport" ng-model="productDetail.mechsPriority" ng-click="updateProductPriority(productDetail.id, productDetail.mechsPriority)" /><label>Priority Report</label>
             </span>
             <span class="product-icon"></span>
             <h2><span ng-bind="productDetail.title"></span></h2>
@@ -93,37 +93,54 @@
 
 
 
-    <section class="dropdown clearfix">
+<section class="dropdown clearfix">
+    <pre>{{configurationFilters | json}}</pre>
+    <div class="btn-group pull-right" dropdown>
 
-        <div class="btn-group pull-right" dropdown>
-            <div class="dropdown dropdown-btn" style="display: inline-block; margin-bottom: -10px">
-                <button type="button" class="dropdown-toggle btn btn-default pull-left" id="dLabel" data-toggle="dropdown" ng-click="isSelectConfigCollapsed=!isSelectConfigCollapsed">
-                    <span class="fos" ng-if="selectedConfigFilter.Name.length > 3"><span ng-bind="selectedConfigFilter.Name"></span><span class="{{setCaret(isSelectConfigCollapsed)}}"></span></span>
 
-                    <!--<span ng-if="selectedWriterFilter.Name == null"><span>Select Writer Filter</span><span class="{{setCaret(isSelectConfigCollapsed)}}"></span></span>-->
-                </button>
 
-                <ul class="dropdown-menu" aria-labelledby="dLabel">
-                    <li ng-repeat="configurationFilter in configurationFilters | orderBy:['Id'] track by $index" ng-click="selectWriterFilter(writerFilter);isSelectConfigCollapsed=true;">
-                        <a href=""><span ng-bind="configurationFilter.Name"></span></a>
-                    </li>
-                </ul>
-            </div>
-            <div class="dropdown dropdown-btn" style="display: inline-block">
-                <button type="button" class="dropdown-toggle btn btn-default" id="aLabel" data-toggle="dropdown" ng-click="isSelectWritersCollapsed=!isSelectWritersCollapsed">
-                    <span ng-if="selectedWriterFilter.Name.length > 3"><span ng-bind="selectedWriterFilter.Name"></span><span class="{{setCaret(isSelectWritersCollapsed)}}"></span></span>
-                    <span ng-if="selectedWriterFilter.Name == null"><span>Select Writer Filter</span><span class="{{setCaret(isSelectWritersCollapsed)}}"></span></span>
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="aLabel">
-                    <li ng-repeat="writerFilter in writerFilters | orderBy:['Id'] track by $index" ng-click="updateWriters();selectWriterFilter(writerFilter);isSelectWritersCollapsed=true;">
-                        <a href=""><span ng-bind="writerFilter.Name"></span></a>
-                    </li>
-                </ul>
-            </div>
+        <div class="dropdown dropdown-btn" style="display: inline-block; margin-bottom: -10px" id="writerConfigDropDown">
+            <button  type="button" class="dropdown-toggle btn btn-default pull-left configFilterBtn" id="dLabel" data-toggle="dropdown" ng-click="isSelectConfigCollapsed=!isSelectConfigCollapsed" ng-blur="isSelectConfigCollapsed = true">
+                <span ng-hide="allSelected">Configuration Filters</span><span ng-show="allSelected">All Configurations</span><span class="{{setCaret(isSelectConfigCollapsed)}}"></span>
+
+                <!--<span ng-if="selectedWriterFilter.Name == null"><span>Select Writer Filter</span><span class="{{setCaret(isSelectConfigCollapsed)}}"></span></span>-->
+            </button>
+
+            <ul class="dropdown-menu" aria-labelledby="dLabel">
+                <li >
+                    <a>
+                        <input type="checkbox" ng-model="allSelected" ng-click="$event.stopPropagation();toggleAll()" />
+                        <span ng-show="allSelected">All Selected</span>
+                        <span ng-hide="allSelected">Select All</span>
+                    </a>
+                </li>
+
+
+                <li ng-repeat="config in configurationFilters | orderBy:['Id'] track by $index" >
+                    <!--<a href=""><span ng-bind="configurationFilter.Name"></span></a>-->
+
+                    <!--<a ><input ng-click="$event.stopPropagation()" type="checkbox" ng-model="activeConfigFilter" ng-change="getSelected(activeConfigFilter)" ng-true-value="{{config.id}}" ng-false-value="{{-config.id}}"/><span ng-if="$index == 0 || $index == 1">{{config.Name}}</span><span ng-if="config.configuration.name != null" class="icon config-physical" ng-class="config.configuration.id | returnConfigurationIcon"></span>&nbsp;<span  ng-if="$index != 0 || $index != 1"  ng-bind="config.configuration.name"></span><span ng-if="config.upc != null">&nbsp;({{config.upc}})&nbsp;</span></a>-->
+                    <a><input ng-click="$event.stopPropagation();cbChecked();isSelectConfigCollapsed = false" type="checkbox" id="{{config.id}}" ng-model="config.checked"/><span></span><span ng-if="config.configuration.name != null" class="icon config-physical" ng-class="config.configuration.id | returnConfigurationIcon"></span>&nbsp;<span ng-bind="config.configuration.name"></span><span ng-if="config.upc != null">&nbsp;({{config.upc}})&nbsp;</span></a>
+
+
+                </li>
+            </ul>
         </div>
 
+        <div class="dropdown dropdown-btn" style="display: inline-block" id="writerFilterDropDown">
+            <button type="button" class="dropdown-toggle btn btn-default" id="aLabel" data-toggle="dropdown" ng-click="isSelectWritersCollapsed=!isSelectWritersCollapsed" ng-blur="isSelectWritersCollapsed = true">
+                <span ng-if="selectedWriterFilter.Name.length > 3"><span ng-bind="selectedWriterFilter.Name"></span><span class="{{setCaret(isSelectWritersCollapsed)}}"></span></span>
+                <span ng-if="selectedWriterFilter.Name == null"><span>Select Writer Filter</span><span class="{{setCaret(isSelectWritersCollapsed)}}"></span></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="aLabel">
+                <li ng-repeat="writerFilter in writerFilters | orderBy:['Id'] track by $index" ng-click="updateWriters();selectWriterFilter(writerFilter);isSelectWritersCollapsed=true;">
+                    <a href=""><span ng-bind="writerFilter.Name"></span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
 
-    </section>  <!--End Button Region-->
+</section>  <!--End Button Region-->
 
 
     <tabset class="license-content clearfix">
@@ -154,10 +171,10 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="twenty-percent">Product Title Link</td>
-                        <td class="twenty-percent">Artist Name</td>
+                        <td class="twenty-percent"><a><span ng-bind="productDetail.title"></span></a></td>
+                        <td class="twenty-percent"><span ng-bind="productDetail.artist.name"></span></td>
                         <td class="five-percent"><button class="btn-default" ng-disabled="productDetail.recordings.length == 0" ng-click="toggleCollapseTracks()">{{productDetail.recordings.length}}<span class="{{setCaret(trackCollapsed)}}"></span></button></td>
-                        <td class="ten-percent">Sony Music Entertainment</td>
+                        <td class="ten-percent"><span ng-bind="productDetail.recordLabel.name"></span></td>
                         <td class="twenty-percent">CD (8564781841415656)</td>
                         <td class="five-percent">0.00%</td>
                         <td class="five-percent">1Q16</td>

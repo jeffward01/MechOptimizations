@@ -709,3 +709,8 @@ span.priority.low {background-color:#336600;}
 .writerExpandBtn {
     margin-right: 10px;
 }
+
+.configFilterBtn {
+    min-width: 130px;
+    text-align: center;
+}
