@@ -289,6 +289,7 @@ app.controller('productDetailsController',
                 angular.forEach($scope.productDetail.configurations,
                     function (config) {
                         //Select All Config Filters on load
+                        $scope.allSelected = true;
                         config.checked = true;
                         $scope.configurationFilters.push(config);
                     });
@@ -496,19 +497,19 @@ app.controller('productDetailsController',
         */
 
         //Configuration Filter, 'All Selected' Checkbox
-        $scope.allSelected = true;
+
 
         $scope.toggleAll = function () {
+            var toggleAllSelected = !$scope.allSelected;
             var bool = true;
             if ($scope.allSelected) {
                 bool = false;
             }
             angular.forEach($scope.configurationFilters, function (v, k) {
-                v.checked = !bool;
-                $scope.allSelected = !bool;
+                v.checked = bool;
+                $scope.allSelected = toggleAllSelected;
             });
         }
-
 
         $scope.cbChecked = function () {
             $scope.allSelected = true;
@@ -517,7 +518,42 @@ app.controller('productDetailsController',
                     $scope.allSelected = false;
                 }
             });
+       
+          //  $scope.allSelected = false;
+            alert($scope.allSelected);
         }
+
+        $scope.monitorAllSelected = function () {
+            $scope.allSelected = true;
+            angular.forEach($scope.configurationFilters, function (v, k) {
+                if (!v.checked) {
+                    $scope.allSelected = false;
+                }
+            });
+        }
+
+
+
+
+        //$scope.cbChecked = function () {
+        //    $scope.allSelected = true;
+        //    angular.forEach($scope.configurationFilters, function (v, k) {
+        //        if (!v.checked) {
+        //            $scope.allSelected = false;
+        //        }
+        //    });
+        //}
+
+        //$scope.toggleAll = function () {
+        //    var bool = true;
+        //    if ($scope.allSelected) {
+        //        bool = false;
+        //    }
+        //    angular.forEach($scope.configurationFilters, function (v, k) {
+        //        v.checked = !bool;
+        //        $scope.allSelected = !bool;
+        //    });
+        //}
 
  
     }]);

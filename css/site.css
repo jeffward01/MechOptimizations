@@ -714,3 +714,13 @@ span.priority.low {background-color:#336600;}
     min-width: 130px;
     text-align: center;
 }
+
+.margin-right-10 {
+    margin-right: 10px;
+}
+.removeConfigBtn {
+    margin-left: 5px;
+}
+.inline-flex {
+    display: inline-flex;
+}
