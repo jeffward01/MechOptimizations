@@ -93,302 +93,330 @@
 
 
     <tabset class="license-content clearfix">
-        <tab heading="Product Content">
+    <tab heading="Product Content">
 
 
 
 
-            <section class="clearfix">
+    <section class="clearfix">
 
 
-                <button class="btn btn-default pull-right collapseAllWriterProductBtn" ng-show="publishersClosed" ng-click="toggleCollapseAllPublishers()"><span class="icon add"></span>Expand All Publishers</button>
-                <button class="btn btn-default pull-right collapseAllWriterProductBtn" ng-show="!publishersClosed" ng-click="toggleCollapseAllPublishers()"><span class="icon remove"></span>Collapse All Publishers</button>
+        <button class="btn btn-default pull-right collapseAllWriterProductBtn" ng-show="publishersClosed" ng-click="toggleCollapseAllPublishers()"><span class="icon add"></span>Expand All Publishers</button>
+        <button class="btn btn-default pull-right collapseAllWriterProductBtn" ng-show="!publishersClosed" ng-click="toggleCollapseAllPublishers()"><span class="icon remove"></span>Collapse All Publishers</button>
 
-                <div class="productBtn">
-                    <button class="btn btn-default pull-right collapseAllWriterProductBtn writerExpandBtn" ng-show="writersClosed" ng-click="toggleCollapseAllWriters()"><span class="icon add"></span>Expand All Writers</button>
-                    <button class="btn btn-default pull-right collapseAllWriterProductBtn writerExpandBtn" ng-show="!writersClosed" ng-click="toggleCollapseAllWriters()"><span class="icon remove"></span>Collapse All Writers</button>
-                </div>
-
-
-
-
-
-                <div class="btn-group pull-right" dropdown>
-
-                    <div class="dropdown dropdown-btn" style="display: inline-block; margin-bottom: -10px" id="writerConfigDropDown">
-                        <button type="button" class="dropdown-toggle btn btn-default pull-left configFilterBtn margin-right-10" id="dLabel" data-toggle="dropdown" ng-click="isSelectConfigCollapsed=!isSelectConfigCollapsed" ng-blur="isSelectConfigCollapsed = true">
-                            <span ng-hide="allSelected">Configuration Filters</span><span ng-show="allSelected">All Configurations</span><span class="{{setCaret(isSelectConfigCollapsed)}}"></span>
-
-                            <!--<span ng-if="selectedWriterFilter.Name == null"><span>Select Writer Filter</span><span class="{{setCaret(isSelectConfigCollapsed)}}"></span></span>-->
-                        </button>
-
-                        <ul class="dropdown-menu" aria-labelledby="dLabel">
-                            <li>
-                                <a>
-                                    <input type="checkbox" ng-model="allSelected" ng-click="$event.stopPropagation();toggleAll()" />
-                                    <span ng-show="allSelected">All Selected</span>
-                                    <span ng-hide="allSelected">Select All</span>
-                                </a>
-                            </li>
-
-
-                            <li ng-repeat="config in configurationFilters | orderBy:['id'] track by $index">
-                                <!--<a href=""><span ng-bind="configurationFilter.Name"></span></a>-->
-                                <!--<a ><input ng-click="$event.stopPropagation()" type="checkbox" ng-model="activeConfigFilter" ng-change="getSelected(activeConfigFilter)" ng-true-value="{{config.id}}" ng-false-value="{{-config.id}}"/><span ng-if="$index == 0 || $index == 1">{{config.Name}}</span><span ng-if="config.configuration.name != null" class="icon config-physical" ng-class="config.configuration.id | returnConfigurationIcon"></span>&nbsp;<span  ng-if="$index != 0 || $index != 1"  ng-bind="config.configuration.name"></span><span ng-if="config.upc != null">&nbsp;({{config.upc}})&nbsp;</span></a>-->
-                                <a><input ng-click="$event.stopPropagation();cbChecked();isSelectConfigCollapsed = false" type="checkbox" id="{{config.id}}" ng-model="config.checked" /><span></span><span ng-if="config.configuration.name != null" class="icon config-physical" ng-class="config.configuration.id | returnConfigurationIcon"></span>&nbsp;<span ng-bind="config.configuration.name"></span><span ng-if="config.upc != null">&nbsp;({{config.upc}})&nbsp;</span></a>
-
-
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="dropdown dropdown-btn" style="display: inline-block" id="writerFilterDropDown">
-                        <button type="button" class="dropdown-toggle btn btn-default margin-right-10" id="aLabel" data-toggle="dropdown" ng-click="isSelectWritersCollapsed=!isSelectWritersCollapsed" ng-blur="isSelectWritersCollapsed = true">
-                            <span ng-if="selectedWriterFilter.Name.length > 3"><span ng-bind="selectedWriterFilter.Name"></span><span class="{{setCaret(isSelectWritersCollapsed)}}"></span></span>
-                            <span ng-if="selectedWriterFilter.Name == null"><span>Select Writer Filter</span><span class="{{setCaret(isSelectWritersCollapsed)}}"></span></span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="aLabel">
-                            <li ng-repeat="writerFilter in writerFilters | orderBy:['Id'] track by $index" ng-click="updateWriters();selectWriterFilter(writerFilter);isSelectWritersCollapsed=true;">
-                                <a href=""><span ng-bind="writerFilter.Name"></span></a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="inline-flex clearfix">
-                    <div ng-repeat="config in configurationFilters | filter:{checked: true}">
-                        <button style="margin-right: 10px">
-                            <span ng-if="config.configuration.name != null"  class="icon config-physical" ng-class="config.configuration.id | returnConfigurationIcon"></span>&nbsp;<span ng-bind="config.configuration.name"></span><span ng-if="config.upc != null">&nbsp;({{config.upc}})&nbsp;</span><span ng-click="config.checked = false;cbChecked();" class="fa fa-remove removeConfigBtn"></span>
-                        </button>
-                    </div>
-                </div>
-             
-            </section>
-
-        <!--<pre>{{configurationFilters | json}}</pre>
-        <pre>All Selected: {{allSelected | json}}</pre>-->
+        <div class="productBtn">
+            <button class="btn btn-default pull-right collapseAllWriterProductBtn writerExpandBtn" ng-show="writersClosed" ng-click="toggleCollapseAllWriters()"><span class="icon add"></span>Expand All Writers</button>
+            <button class="btn btn-default pull-right collapseAllWriterProductBtn writerExpandBtn" ng-show="!writersClosed" ng-click="toggleCollapseAllWriters()"><span class="icon remove"></span>Collapse All Writers</button>
+        </div>
 
 
 
 
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th class="twenty-percent">Product Title</th>
-                        <th class="twenty-percent">Artist</th>
-                        <th class="five-percent">Tracks</th>
-                        <th class="ten-percent">Label</th>
-                        <th class="twenty-percent">Configuration (UPC)</th>
-                        <th class="five-percent">Licensed</th>
-                        <th class="five-percent">Paid Quarter</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="twenty-percent"><a><span ng-bind="productDetail.title"></span></a></td>
-                        <td class="twenty-percent"><span ng-bind="productDetail.artist.name"></span></td>
-                        <td class="five-percent"><button class="btn-default" ng-disabled="productDetail.recordings.length == 0" ng-click="toggleCollapseTracks()">{{productDetail.recordings.length}}<span class="{{setCaret(trackCollapsed)}}"></span></button></td>
-                        <td class="ten-percent"><span ng-bind="productDetail.recordLabel.name"></span></td>
-                        <td class="twenty-percent">CD (8564781841415656)</td>
-                        <td class="five-percent">0.00%</td>
-                        <td class="five-percent">1Q16</td>
-                    </tr>
-                </tbody>
+
+        <div class="btn-group pull-right" dropdown>
+
+            <div class="dropdown dropdown-btn" style="display: inline-block; margin-bottom: -10px" id="writerConfigDropDown">
+                <button type="button" class="dropdown-toggle btn btn-default pull-left configFilterBtn margin-right-10" id="dLabel" data-toggle="dropdown" ng-click="isSelectConfigCollapsed=!isSelectConfigCollapsed" ng-blur="isSelectConfigCollapsed = true">
+                    <span ng-hide="allSelected">Configuration Filters</span><span ng-show="allSelected">All Configurations</span><span class="{{setCaret(isSelectConfigCollapsed)}}"></span>
+
+                    <!--<span ng-if="selectedWriterFilter.Name == null"><span>Select Writer Filter</span><span class="{{setCaret(isSelectConfigCollapsed)}}"></span></span>-->
+                </button>
+
+                <ul class="dropdown-menu" aria-labelledby="dLabel">
+                    <!--<li>
+                        <a>
+                            <input type="checkbox" ng-model="allSelected" ng-click="$event.stopPropagation();toggleAll()"/>
+                            <span ng-show="allSelected">All Selected</span>
+                            <span ng-hide="allSelected">Select All</span>
+                        </a>
+                    </li>-->
 
 
-            </table>
+                    <li ng-repeat="config in configurationFilters | orderBy:['id'] track by $index">
+                        <!--<a href=""><span ng-bind="configurationFilter.Name"></span></a>-->
+                        <!--<a ><input ng-click="$event.stopPropagation()" type="checkbox" ng-model="activeConfigFilter" ng-change="getSelected(activeConfigFilter)" ng-true-value="{{config.id}}" ng-false-value="{{-config.id}}"/><span ng-if="$index == 0 || $index == 1">{{config.Name}}</span><span ng-if="config.configuration.name != null" class="icon config-physical" ng-class="config.configuration.id | returnConfigurationIcon"></span>&nbsp;<span  ng-if="$index != 0 || $index != 1"  ng-bind="config.configuration.name"></span><span ng-if="config.upc != null">&nbsp;({{config.upc}})&nbsp;</span></a>-->
+                        <a ><input ng-click="$event.stopPropagation();cbChecked();isSelectConfigCollapsed = false" type="checkbox" id="{{config.id}}" ng-model="config.checked"/><span ng-if="config.configuration.name != null" class="icon config-physical" ng-class="config.configuration.id | returnConfigurationIcon"></span>&nbsp;<span ng-bind="config.configuration.name"></span><span ng-if="config.upc != null">&nbsp;({{config.upc}})&nbsp;</span></a>
+
+
+                    </li>
+
+
+                </ul>
+            </div>
+
+            <div class="dropdown dropdown-btn" style="display: inline-block" id="writerFilterDropDown">
+                <button type="button" class="dropdown-toggle btn btn-default margin-right-10" id="aLabel" data-toggle="dropdown" ng-click="isSelectWritersCollapsed=!isSelectWritersCollapsed" ng-blur="isSelectWritersCollapsed = true">
+                    <span ng-if="selectedWriterFilter.Name.length > 3"><span ng-bind="selectedWriterFilter.Name"></span><span class="{{setCaret(isSelectWritersCollapsed)}}"></span></span>
+                    <span ng-if="selectedWriterFilter.Name == null"><span>Select Writer Filter</span><span class="{{setCaret(isSelectWritersCollapsed)}}"></span></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="aLabel">
+                    <li ng-repeat="writerFilter in writerFilters | orderBy:['Id'] track by $index" ng-click="updateWriters();selectWriterFilter(writerFilter);isSelectWritersCollapsed=true;">
+                        <a href=""><span ng-bind="writerFilter.Name"></span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="inline-flex clearfix">
+            <div ng-repeat="config in configurationFilters | filter:{checked: true}">
+                <button style="margin-right: 10px">
+                    <span ng-if="config.configuration.name != null"  class="icon config-physical" ng-class="config.configuration.id | returnConfigurationIcon"></span>&nbsp;<span ng-bind="config.configuration.name"></span><span ng-if="config.upc != null">&nbsp;({{config.upc}})&nbsp;</span><span ng-click="config.checked = false;cbChecked();" class="icon icon-sm remove removeConfigBtn"></span>
+                </button>
+            </div>
+        </div>
+
+        <!--<div ng-repeat="configuration in configurationFilters | filter:{checked: true}"> Modal-EditRates.html
+            <ul class="applied-filters">
+                <li class="filter-wrapper"><span class="filter-item"><span ng-if="configuration.configuration.name != null" class="icon config-physical" ng-class="configuration.configuration.id | returnConfigurationIcon"></span>&nbsp;<span ng-bind="configuration.configuration.name"></span>&nbsp;<span ng-show="configuration.upc != null">(<span ng-bind="configuration.upc"></span>)</span><span class="icon icon-sm remove" ng-click="$event.stopPropagation();cbChecked();isSelectConfigCollapsed = false"></span></span></li>
+            </ul>
+        </div>
+
+        <ul class="applied-filters">
+            <li><label>Selected:</label> </li>
+
+            <li class="filter-wrapper" ng-if="selectedConfigurations.length != 0">Configuration(s)<span class="filter-item" ng-repeat="configuration in configurationFilters | filter:{checked: true}"><span ng-bind="configuration.configuration.name"></span>&nbsp;<span ng-show="configuration.upc != null">(<span ng-bind="configuration.upc"></span>)</span><span class="icon icon-sm remove" ng-click="unselectConfiguration(configuration);$event.preventDefault()"></span></span></li>
+
+        </ul>-->
+        <!--<pre>{{productOverview | json}}</pre>-->
+    </section>
+
+    <!--<pre>{{configurationFilters | json}}</pre>
+    <pre>All Selected: {{allSelected | json}}</pre>-->
 
 
 
-            <table class="table" ng-show="!trackCollapsed">
-                <thead>
-                    <tr>
-                        <th class="one-percent centered">Vol. / Track</th>
-                        <th class="twentyeight-percent">Title</th>
-                        <th></th>
-                        <th class="twentyfive-percent">Artist</th>
-                        <th class="five-percent">Writers</th>
-                        <th class="five-percent">Length</th>
-                        <th class="five-percent">UMPG %</th>
-                        <th class="five-percent">PIPS #</th>
-                        <th class="twenty-percent">ISRC</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat-start="recording in productDetail.recordings">
-                        <td class="one-percent centered"><span> {{recording.cdNumber}}-{{recording.index}}</span></td>
-                        <td class="twentyeight-percent top">
-                            <span ng-bind="recording.track.title"></span>
-                            <!-- IF Contains Sample || I made up the names for sampled.recording.track.title and sampled.recording.track.artist.name below || -->
-                            <br ng-if="recording.hasSample"><br />
-                            <span ng-if="recording.hasSample">
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th class="twenty-percent">Product Title</th>
+            <th class="twenty-percent">Artist</th>
+            <th class="five-percent">Tracks</th>
+            <th class="ten-percent">Label</th>
+            <th class="twenty-percent">Configuration (UPC)</th>
+            <th class="five-percent text-center">Licensed</th>
+            <th class="five-percent text-center">Paid Quarter</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="twenty-percent"><a><span ng-bind="productDetail.title"></span></a></td>
+            <td class="twenty-percent"><span ng-bind="productDetail.artist.name"></span></td>
+            <td class="five-percent"><button class="btn-default" ng-disabled="productDetail.recordings.length == 0" ng-click="toggleCollapseTracks()">{{productDetail.recordings.length}}<span class="{{setCaret(trackCollapsed)}}"></span></button></td>
+            <td class="ten-percent"><span ng-bind="productDetail.recordLabel.name"></span></td>
+            <td class="twenty-percent">CD (8564781841415656)</td>
+            <td class="five-percent text-center">0.00%</td>
+            <td class="five-percent text-center">1Q16</td>
+        </tr>
+        </tbody>
+
+
+    </table>
+
+
+
+    <table class="table" ng-show="!trackCollapsed">
+        <thead>
+        <tr>
+            <th class="one-percent centered">Vol. / Track</th>
+            <th class="twentyeight-percent">Title</th>
+            <th></th>
+            <th class="twentyfive-percent">Artist</th>
+            <th class="five-percent">Writers</th>
+            <th class="five-percent">Length</th>
+            <th class="five-percent">UMPG %</th>
+            <th class="five-percent">PIPS #</th>
+            <th class="fifteen-percent">ISRC</th>
+            <th class="five-percent  text-center">Licensed</th>
+            <th class="five-percent">Paid Quarter</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat-start="recording in productDetail.recordings">
+            <td class="one-percent centered"><span> {{recording.cdNumber}}-{{recording.index}}</span></td>
+            <td class="twentyeight-percent top">
+                <span class="bold-font" ng-bind="recording.track.title"></span>
+                <!-- IF Contains Sample || I made up the names for sampled.recording.track.title and sampled.recording.track.artist.name below || -->
+                <br ng-if="recording.hasSample"><br/>
+                <span ng-if="recording.hasSample">
                                 (Contains sample(s) of
                                 <span ng-repeat="sample in recording.track.copyrights[0].sampledWorks" class="sample-track">
                                     "<span ng-bind="sample.title"></span>"<span ng-if="!$last">, </span>
                                 </span>
                                 )
                             </span>
-                        </td>
-                        <td>
-                            <span ng-if="recording.hasSample" class="badge sample pull-right">SAMPLE</span>
+            </td>
+            <td>
+                <span ng-if="recording.hasSample" class="badge sample pull-right">SAMPLE</span>
 
-                        </td>
+            </td>
 
-                        <td class="twentyfive-percent top"><span ng-bind="recording.track.artist.name"></span></td>
-                        <td class="five-percent top"><button class="btn-default" ng-disabled="recording.track.writerCount == 0" ng-click="collapseWriters(recording)"><span>{{recording.filteredWriterCount}}</span><span class="{{setCaret(recording.writersCollapsed)}}"></span></button></td>
-                        <td class="five-percent top"><span ng-bind="recording.track.duration | limitTo:-5"></span></td>
-                        <td class="five-percent top"><span ng-bind="recording.umpgPercentageRollup | percentage:2"></span></td>
-                        <td class="five-percent top"><span ng-repeat="copyright in recording.track.copyrights"><span ng-bind="copyright.workCode"></span><br /></span></td>
-                        <td class="twenty-percent top"><span ng-bind="recording.track.isrc"></span></td>
+            <td class="twentyfive-percent top"><span ng-bind="recording.track.artist.name"></span></td>
+            <td class="five-percent top"><button class="btn-default" ng-disabled="recording.track.writerCount == 0" ng-click="collapseWriters(recording)"><span>{{recording.filteredWriterCount}}</span><span class="{{setCaret(recording.writersCollapsed)}}"></span></button></td>
+            <td class="five-percent top"><span ng-bind="recording.track.duration | limitTo:-5"></span></td>
+            <td class="five-percent top"><span ng-bind="recording.umpgPercentageRollup | percentage:2"></span></td>
+            <td class="five-percent top"><span ng-repeat="copyright in recording.track.copyrights"><span ng-bind="copyright.workCode"></span><br /></span></td>
+            <td class="fifteen-percent top"><span ng-bind="recording.track.isrc"></span></td>
+            <td class="five-percent top text-center">0.0000/1.0000</td>
+            <td class="five-percent top text-center">1Q16</td>
+
+        </tr>
+        <tr ng-repeat-end>
+            <td class="table-cell-light" colspan="12" collapse="recording.writersCollapsed">
+                <table class="table nested">
+                    <thead>
+                    <tr>
+                        <th class="ten-percent-percent">Writer</th>
+                        <th class="ten-percent centered">Publisher</th>
+                        <th class="fifteen-percent centered">Capacity</th>
+                        <th class="ten-percent">Collectable %</th>
+                        <th class="ten-percent centered">Affiliation</th>
+                        <th class="ten-percent">CAE / IPI</th>
+                        <th class="twenty-percent">Recent Writer Note</th>
+                        <!--<th class="five-percent"></th>
+                        <th class="five-percent"></th>-->
                     </tr>
-                    <tr ng-repeat-end>
-                        <td class="table-cell-light" colspan="10" collapse="recording.writersCollapsed">
-                            <table class="table nested">
+                    </thead>
+                    <tbody ng-repeat="writer in recording.writers | filter: writerFilter">
+                    <tr class="details-writer-row" ng-style="{{writerBackground(writer.controlled)}}">
+                        <td class="ten-percent top"><span ng-bind="writer.name"></span></td>
+                        <td class="ten-percent centered top">
+                            <button class="btn-default" ng-disabled="writer.originalPublishers.length == 0" ng-click="collapsePublishers(writer)"><span ng-bind="writer.originalPublishers.length"></span><span class="{{setCaret(writer.publishersCollapsed)}}"></span></button>
+                        </td>
+                        <td class="fifteen-percent centered top"><span ng-bind="writer.capacityCode"></span></td>
+                        <!--<td class="fifteen-percent centered top"><span ng-bind="writer.contribution"></span>%</td> Collectable %-->
+                        <td class="ten-percent">33.33%</td>
+                        <td class="ten-percent centered top"><span ng-bind="writer.affiliationsString"></span></td>
+                        <td class="ten-percent top"><span ng-bind="writer.caeNumber"></span></td>
+                        <td class="twenty-percent">Sample Recent Writer Note</td>
+                        <!--<td class="five-percent top"></td>
+                        <td class="five-percent top"></td>-->
+                    </tr>
+
+                    <!-- If Publishers is expanded -->
+                    <tr ng-show="!writer.publishersCollapsed" ng-repeat-start="publisher in writer.originalPublishers" ng-class="{'publisher-highlit':!publisher.hasCollectable}">
+                        <!-- If there's Publisher info -->
+                        <td class="publisher twenty-percent" colspan="2"><span ng-bind="publisher.name"></span><!-- Publisher Name --></td>
+                        <td class="fifteen-percent centered top"><span ng-bind="publisher.capacityCode"></span><!-- Publisher Capacity Code --></td>
+                        <td class="fifteen-percent top"><span ng-bind="publisher.mechanicalCollectablePercentage"></span><!-- Publisher Contribution --></td>
+                        <td class="fifteen-percent centered top"><span ng-bind="publisher.affiliationsString"></span><!-- Publisher Affiliation --></td>
+                        <td class="ten-percent top"><span ng-bind="publisher.caeNumber"></span><!-- Publisher CAE Code --></td>
+                        <td class="twenty-percent top"></td> <!--Spacer-->
+                    </tr>
+                    <tr ng-show="!writer.publishersCollapsed" ng-repeat="admin in publisher.administrators" ng-class="{'publisher-highlit':!publisher.hasCollectable}">
+                        <!-- If there's Sub-Publisher / Admin Company info -->
+                        <td class="admin-company twenty-percent" colspan="2"><span ng-bind="admin.name"></span><!-- Sub-Publisher Name --></td>
+                        <td class="fifteen-percent centered top"><span ng-bind="admin.capacityCode"></span><!-- Sub-Publisher Capacity Code --></td>
+                        <td class="fifteen-percent top"><span ng-bind="admin.mechanicalCollectablePercentage"></span><!-- Sub-Publisher Contribution --></td>
+                        <td class="fifteen-percent centered top"><span ng-bind="admin.affiliationsString"></span><!-- Sub-Publisher Affiliation --></td>
+                        <td class="ten-percent top"><span ng-bind="admin.caeNumber"></span><!-- Sub-Publisher CAE Code --></td>
+                        <td class="twenty-percent top"></td> <!--Spacer-->
+                    </tr>
+                    <tr ng-show="false" ng-repeat-end="">
+                        <!-- If there's Sub-Publisher / Admin Company info -->
+                        <td class="admin-company fortyfive-percent" colspan="2"><!-- Sub-Publisher Name --></td>
+                        <td class="ten-percent centered top"><!-- Sub-Publisher Capacity Code --></td>
+                        <td class="fifteen-percent top"><!-- Sub-Publisher Contribution --></td>
+                        <td class="fifteen-percent centered top"><!-- Sub-Publisher Affiliation --></td>
+                        <td class="ten-percent top"><!-- Sub-Publisher CAE Code --></td>
+                        <td class="twenty-percent top"></td> <!--Spacer-->
+                    </tr>
+                    <!-- END If Publishers is expanded -->
+
+
+
+                    <tr>
+                        <td colspan="12" class="nested light shadow">
+                            <table class="table nested light">
                                 <thead>
-                                    <tr>
-                                        <th class="ten-percent-percent">Writer</th>
-                                        <th class="ten-percent centered">Publisher</th>
-                                        <th class="fifteen-percent centered">Capacity</th>
-                                        <th class="ten-percent">Collectable %</th>
-                                        <th class="ten-percent centered">Affiliation</th>
-                                        <th class="ten-percent">CAE / IPI</th>
-                                        <th class="twenty-percent">Recent Writer Note</th>
-                                    </tr>
+                                <tr>
+                                    <th style="color: black" class="one-percent no-wrap">License</th>
+                                    <th style="color: black" class="fifteen-percent"> <span>Configuration (UPC)</span></th>
+                                    <th style="color: black" class="one-percent">Consent</th>
+                                    <th style="color: black" class="fifteen-percent no-wrap">Writer Status</th>
+                                    <th style="color: black" class="fifteen-percent">Rate Type</th>
+
+                                    <th style="color: black" class="five-percent">Pro-Rata Rate</th>
+                                    <th style="color: black" class="five-percent">Per Song Rate</th>
+                                    <!--<!==Not: NOI, Advice Letter or Gratis==>-->
+                                    <th style="color: black" class="five-percent no-wrap centered">License Date</th>
+                                    <!--<!==License NOI type==>-->
+                                    <th style="color: black" class="five-percent no-wrap centered">Paid Quarter</th>
+                                </tr>
                                 </thead>
-                                <tbody ng-repeat="writer in recording.writers | filter: writerFilter">
-                                    <tr class="details-writer-row" ng-style="{{writerBackground(writer.controlled)}}">
-                                        <td class="ten-percent top"><span ng-bind="writer.name"></span></td>
-                                        <td class="ten-percent centered top">
-                                            <button class="btn-default" ng-disabled="writer.originalPublishers.length == 0" ng-click="collapsePublishers(writer)"><span ng-bind="writer.originalPublishers.length"></span><span class="{{setCaret(writer.publishersCollapsed)}}"></span></button>
-                                        </td>
-                                        <td class="fifteen-percent centered top"><span ng-bind="writer.capacityCode"></span></td>
-                                        <!--<td class="fifteen-percent centered top"><span ng-bind="writer.contribution"></span>%</td> Collectable %-->
-                                        <td class="ten-percent">33.33%</td>
-                                        <td class="ten-percent centered top"><span ng-bind="writer.affiliationsString"></span></td>
-                                        <td class="ten-percent top"><span ng-bind="writer.caeNumber"></span></td>
-                                        <td class="twenty-percent">Sample Recent Writer Note</td>
-                                    </tr>
+                                <!--<tbody ng-repeat="rateConfiguration in writer.licenseProductRecordingWriter.ratesByConfiguration  track by $index">-->
+                                <tbody>
+                                <!--<tr ng-repeat="rate in rateConfiguration.rates">-->
+                                <tr>
+                                    <td class="one-percent no-wrap">
 
-                                    <!-- If Publishers is expanded -->
-                                    <tr ng-show="!writer.publishersCollapsed" ng-repeat-start="publisher in writer.originalPublishers" ng-class="{'publisher-highlit':!publisher.hasCollectable}">
-                                        <!-- If there's Publisher info -->
-                                        <td class="publisher twenty-percent" colspan="2"><span ng-bind="publisher.name"></span><!-- Publisher Name --></td>
-                                        <td class="fifteen-percent centered top"><span ng-bind="publisher.capacityCode"></span><!-- Publisher Capacity Code --></td>
-                                        <td class="fifteen-percent top"><span ng-bind="publisher.mechanicalCollectablePercentage"></span><!-- Publisher Contribution --></td>
-                                        <td class="fifteen-percent centered top"><span ng-bind="publisher.affiliationsString"></span><!-- Publisher Affiliation --></td>
-                                        <td class="ten-percent top"><span ng-bind="publisher.caeNumber"></span><!-- Publisher CAE Code --></td>
-                                        <td class="twenty-percent top"></td> <!--Spacer-->
-                                    </tr>
-                                    <tr ng-show="!writer.publishersCollapsed" ng-repeat="admin in publisher.administrators" ng-class="{'publisher-highlit':!publisher.hasCollectable}">
-                                        <!-- If there's Sub-Publisher / Admin Company info -->
-                                        <td class="admin-company twenty-percent" colspan="2"><span ng-bind="admin.name"></span><!-- Sub-Publisher Name --></td>
-                                        <td class="fifteen-percent centered top"><span ng-bind="admin.capacityCode"></span><!-- Sub-Publisher Capacity Code --></td>
-                                        <td class="fifteen-percent top"><span ng-bind="admin.mechanicalCollectablePercentage"></span><!-- Sub-Publisher Contribution --></td>
-                                        <td class="fifteen-percent centered top"><span ng-bind="admin.affiliationsString"></span><!-- Sub-Publisher Affiliation --></td>
-                                        <td class="ten-percent top"><span ng-bind="admin.caeNumber"></span><!-- Sub-Publisher CAE Code --></td>
-                                        <td class="twenty-percent top"></td> <!--Spacer-->
-                                    </tr>
-                                    <tr ng-show="false" ng-repeat-end="">
-                                        <!-- If there's Sub-Publisher / Admin Company info -->
-                                        <td class="admin-company fortyfive-percent" colspan="2"><!-- Sub-Publisher Name --></td>
-                                        <td class="ten-percent centered top"><!-- Sub-Publisher Capacity Code --></td>
-                                        <td class="fifteen-percent top"><!-- Sub-Publisher Contribution --></td>
-                                        <td class="fifteen-percent centered top"><!-- Sub-Publisher Affiliation --></td>
-                                        <td class="ten-percent top"><!-- Sub-Publisher CAE Code --></td>
-                                        <td class="twenty-percent top"></td> <!--Spacer-->
-                                    </tr>
-                                    <!-- END If Publishers is expanded -->
+                                        <span>License URL</span>
 
-
-
-                                    <tr>
-                                        <td colspan="12" class="nested light shadow">
-                                            <table class="table nested light">
-                                                <thead>
-                                                    <tr>
-                                                        <th style="color: black" class="one-percent no-wrap">License</th>
-                                                        <th style="color: black" class="fifteen-percent"> <span>Configuration (UPC)</span></th>
-                                                        <th style="color: black" class="one-percent">Consent</th>
-                                                        <th style="color: black" class="fifteen-percent no-wrap">Writer Status</th>
-                                                        <th style="color: black" class="fifteen-percent">Rate Type</th>
-
-                                                        <th style="color: black" class="five-percent">Pro-Rata Rate</th>
-                                                        <th style="color: black" class="five-percent">Per Song Rate</th>
-                                                        <!--<!==Not: NOI, Advice Letter or Gratis==>-->
-                                                        <th style="color: black" class="five-percent no-wrap centered">License Date</th>
-                                                        <!--<!==License NOI type==>-->
-                                                        <th style="color: black" class="five-percent no-wrap centered">Paid Quarter</th>
-                                                    </tr>
-                                                </thead>
-                                                <!--<tbody ng-repeat="rateConfiguration in writer.licenseProductRecordingWriter.ratesByConfiguration  track by $index">-->
-                                                <tbody>
-                                                    <!--<tr ng-repeat="rate in rateConfiguration.rates">-->
-                                                    <tr>
-                                                        <td class="one-percent no-wrap">
-
-                                                            <span>License URL</span>
-
-                                                        </td>
-                                                        <td class="fifteen-percent">
-                                                            <!--<span><span ng-class="rate.configuration_id | returnConfigurationIcon"></span><span ng-bind="rate.configuration_name"></span><span ng_if="rate.configuration_upc">(<span ng-bind="rate.configuration_upc"></span>)</span></span>-->
-                                                            <span><span ng-class="rate.configuration_id | returnConfigurationIcon"></span>Config Name<span>(UPC)</span></span>
-                                                        </td>
-                                                        <td>
-                                                            <span>
+                                    </td>
+                                    <td class="fifteen-percent">
+                                        <!--<span><span ng-class="rate.configuration_id | returnConfigurationIcon"></span><span ng-bind="rate.configuration_name"></span><span ng_if="rate.configuration_upc">(<span ng-bind="rate.configuration_upc"></span>)</span></span>-->
+                                        <span><span ng-class="rate.configuration_id | returnConfigurationIcon"></span>Config Name<span>(UPC)</span></span>
+                                    </td>
+                                    <td>
+                                        <span>
                                                                 <!--<button ng-disabled="!buttons.writerConsentBtn" securitydisable actions="LicenseDetailWriterConsent" class="btn btn-default btn-sm" data-toggle="modal" ui-sref="SearchMyView.DetailLicense.StepsModal.WritersConsent({config:rate,files:licenseAttachments,recording:recording,writer:writer,product:product,modalSize:'md' })">
                                                                     <span ng-bind="rate.writersConsentType.writersConsentType"></span>
                                                                 </button>-->
                                                                 Consent
                                                             </span>
-                                                        </td>
-                                                        <td class="fifteen-percent top">
-                                                            <!--<span ng-show="$index == 0">
+                                    </td>
+                                    <td class="fifteen-percent top">
+                                        <!--<span ng-show="$index == 0">
                                                                                     <span ng-repeat="status in rateConfiguration.specialStatusList" class="badge">
                                                                                         <span ng-if="status.lU_SpecialStatuses"><span ng-bind="status.lU_SpecialStatuses.specialStatus"></span></span>
                                                                                         <span ng-if="!status.lU_SpecialStatuses"><span ng-bind="status.specialStatus"></span></span>
                                                                                     </span>
                                                                                 </span>-->
-                                                            <span>Writer Status</span>
-                                                        </td>
-                                                        <td class="fifteen-percent"><span>Test</span></td>
-                                                        <!--<td class="fifteen-percent" ng-if="writer.controlled == false"><span ng-show="$index == 0">N/A</span></td>-->
-                                                        <!--<td class="five-percent" ng-if="writer.controlled == false">N/A</td>
-                                                        <td class="five-percent centered" ng-if="writer.controlled == true" ng-show="writer.statPrcentageVisible == true"><span ng-bind="rate.percentOfStat"></span></td>
-                                                        <td class="ten-percent" ng-if="writer.controlled == true" ng-show="writer.escalatedRateVisible == true"><span ng-bind="rate.escalatedRate"></span></td>
-                                                        <td class="five-percent" ng-if="writer.controlled == false">N/A</td>
-                                                        <td class="five-percent" ng-if="writer.controlled == true" ng-show="writer.escalatedRateVisible == true"><span ng-bind="rate.rate"></span></td>-->
-                                                        <td class="five-percent">ProRataRate</td>
-                                                        <!--<td class="five-percent">N/A</td>-->
-                                                        <td class="five-percent"><span>Per Song Rate</span></td>
-                                                        <!--<td class="ten-percent centered">N/A</td>-->
-                                                        <!--Display License Date, Signed Date or Effective Date-->
-                                                        <!--<td > <span ng-bind="rate.licenseDate | timezone | date:'MM/dd/yyyy'"></span></td>-->
-                                                        <td class="five-percent centered">LicenseDate</td>
-                                                        <td class="five-percent centered">
-                                                            <span>
-                                                                <button ng-disabled="paidQuarterDisabled" securitydisable actions="LicenseDetailsPaidQuarter" class="btn btn-default btn-sm" ui-sref="SearchMyView.DetailLicense.StepsModal.PaidQuarter({licenseId:licenseDetail.licenseId,config:rate,recording:recording,writer:writer,product:product, modalSize:'sm' })">
+                                        <span>Writer Status</span>
+                                    </td>
+                                    <td class="fifteen-percent"><span>Test</span></td>
+                                    <!--<td class="fifteen-percent" ng-if="writer.controlled == false"><span ng-show="$index == 0">N/A</span></td>-->
+                                    <!--<td class="five-percent" ng-if="writer.controlled == false">N/A</td>
+                                    <td class="five-percent centered" ng-if="writer.controlled == true" ng-show="writer.statPrcentageVisible == true"><span ng-bind="rate.percentOfStat"></span></td>
+                                    <td class="ten-percent" ng-if="writer.controlled == true" ng-show="writer.escalatedRateVisible == true"><span ng-bind="rate.escalatedRate"></span></td>
+                                    <td class="five-percent" ng-if="writer.controlled == false">N/A</td>
+                                    <td class="five-percent" ng-if="writer.controlled == true" ng-show="writer.escalatedRateVisible == true"><span ng-bind="rate.rate"></span></td>-->
+                                    <td class="five-percent">ProRataRate</td>
+                                    <!--<td class="five-percent">N/A</td>-->
+                                    <td class="five-percent"><span>Per Song Rate</span></td>
+                                    <!--<td class="ten-percent centered">N/A</td>-->
+                                    <!--Display License Date, Signed Date or Effective Date-->
+                                    <!--<td > <span ng-bind="rate.licenseDate | timezone | date:'MM/dd/yyyy'"></span></td>-->
+                                    <td class="five-percent centered">LicenseDate</td>
+                                    <td class="five-percent centered">
+                                        <span>
+                                                                <!--<button ng-disabled="paidQuarterDisabled" securitydisable actions="LicenseDetailsPaidQuarter" class="btn btn-default btn-sm" ui-sref="SearchMyView.DetailLicense.StepsModal.PaidQuarter({licenseId:licenseDetail.licenseId,config:rate,recording:recording,writer:writer,product:product, modalSize:'sm' })">-->
                                                                     <span>Paid Qtr</span>
-                                                                </button>
+                                                                <!--</button>-->
                                                             </span>
-                                                        </td>
-                                                    </tr>
-
-                                                </tbody>
-                                            </table>
-                                        </td>
-                                    </tr>
+                                    </td>
+                                </tr>
 
                                 </tbody>
-
-
-                            </table><!-- END Track Table-->
+                            </table>
                         </td>
                     </tr>
-                </tbody>
 
-            </table>
-        </tab>
-        <tab heading="Related Licenses" ng-click="loadLicenseInfo()">
+                    </tbody>
+
+
+                </table><!-- END Track Table-->
+            </td>
+        </tr>
+        </tbody>
+
+    </table>
+    </tab>
+
+
+
+
+    <tab heading="Related Licenses">
             <table class="table table-hover grid-license">
                 <thead>
                     <tr>
@@ -444,3 +472,16 @@
 
     </tabset>
 </section><!-- End Product Details -->
+
+
+
+
+
+
+
+
+
+
+
+
+

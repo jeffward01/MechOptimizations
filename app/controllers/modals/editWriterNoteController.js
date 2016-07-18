@@ -31,9 +31,6 @@ app.controller('editWriterNoteController', ['$scope', 'licensesService', 'notySe
         }
     };
 
-    $scope.clickMe = function() {
-        alert("LOADED!");
-    }
 
     $scope.ok = function () {
         $scope.modal_submit = true;
@@ -50,12 +47,11 @@ app.controller('editWriterNoteController', ['$scope', 'licensesService', 'notySe
         $scope.modifiedUI = true;
         if (currentWriterNoteId < 1) {
             licensesService.addPRWriterLicenseNote(writer.licenseProductRecordingWriter.licenseWriterId, noteValue, configuration_id).then(function (result) {
-                //                writer.licenseProductRecordingWriter.writerNotes.unshift(result.data);
-                writer.licenseProductRecordingWriter.writerNotes.push(result.data);
+                writer.licenseProductRecordingWriter.writerNotes.unshift(result.data);
+               // writer.licenseProductRecordingWriter.writerNotes.push(result.data);
                 writer.writerAddNotesCollapsed = false;
                 writer.licenseProductRecordingWriter.writerNoteCount = writer.licenseProductRecordingWriter.writerNotes.length;
                 writer.licenseProductRecordingWriter.mostRecentNote = result.data.note;
-                alert("Most Recent: " + writer.licenseProductRecordingWriter.mostRecentNote);
                 writer.newWriterNote = "";
                 notyService.success("Note added");
                 writer.addNewNoteVisible = !writer.addNewNoteVisible;
@@ -63,7 +59,6 @@ app.controller('editWriterNoteController', ['$scope', 'licensesService', 'notySe
                 notyService.error("Note add failed");
             });
         } else {
-            alert("nested!");
             licensesService.editPRWriterLicenseNote(writer.licenseProductRecordingWriter.licenseWriterId, noteValue, configuration_id, currentWriterNoteId).then(function (result) {
                 var writerNotes = writer.licenseProductRecordingWriter.writerNotes;
                 var index = -1;

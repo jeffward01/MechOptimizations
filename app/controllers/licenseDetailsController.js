@@ -201,7 +201,7 @@ app.controller('licenseDetailsController', ['$scope', '$filter', 'licensesServic
 
     $scope.$on("$stateChangeStart",
         function ($event, toState, toParams, fromState, fromParams) {
-
+            
             var statesArray = fromState.name.split(".");
             var stateName = statesArray[statesArray.length - 1];
             if (stateName == "EditWriterRate" ||
@@ -1012,7 +1012,23 @@ function () {
             return getFormattedDate(x);
         }
     }
-
+    
+    //This regulates the threshold, if 'Controlled Fixed' is selected, 
+    //but no threshold (escalatedRate) is set, hide threshold column.
+    function regulateThresholdWriter(writer) {
+        if (writer.escalatedRateVisible) {
+            angular.forEach(writer.licenseProductRecordingWriter.rateList,
+                function(rate) {
+                    if (rate.rateTypeId === 2 || rate.rateTypeId === 5) {
+                        if (rate.escalatedRate == null) {
+                            writer.escalatedRateVisible = false;
+                        } else {
+                            return;
+                        }
+                    }
+                });
+        }
+    }
 
     $scope.getRecordingWriters = function (recording, recordingIndex, productIndex) {
         recording.writerHtml = "";
@@ -1131,8 +1147,6 @@ function () {
         recording.licensePRWriterCount = 0;
         angular.forEach(recording.licensePRWriters,
             function (writer, i_writer) {
-
-
                 if ($scope.writerFilter(writer)) {
                     recording.licensePRWriterCount += 1;
                     if (writer.controlled) {
@@ -1433,6 +1447,8 @@ function () {
                     if (writer.statPrcentageVisible == true) {
                         w += "<th class='five-percentage nowrap top centered'>% of Stat</th>";
                     }
+                    //Regulates Writer Threshold
+                    regulateThresholdWriter(writer);
                     if (writer.escalatedRateVisible) {
                         w += "<th class='ten-percent'>Threshold</th>";
                         w += "<th class='five-percent'>Rate</th>";
@@ -1561,7 +1577,7 @@ function () {
                                             ifNullBlank(rate.percentOfStat) + "</span></td>";
                                     }
                                     if (writer.controlled == true && writer.escalatedRateVisible == true) {
-                                        w += "  <td class='ten-percent'><span>" +
+                                        w += "  <td class='ten-percent'><span>" +  
                                             ifNullBlank(rate.escalatedRate) +
                             "</span></td>"; //Threshold
                                     }
@@ -2428,6 +2444,7 @@ function () {
             var totalLicensedAmount = 0;
             var totalLicensedConfigs = 0;
             var totalAmount = 0;
+            var totalConfigs = 0;
 
             //This toggles the products open/closed
             angular.forEach($scope.products, function (product, iProduct) {
@@ -2458,6 +2475,7 @@ function () {
                 totalLicensedAmount = 0;
                 totalAmount = 0;
                 totalLicensedConfigs = 0;
+                totalConfigs = 0;
 
                 angular.forEach(product.productHeader.configurations, function (config) {
                     if (config.licenseProductConfiguration != null) {
@@ -2484,13 +2502,83 @@ function () {
                         totalLicensedAmount += config.licenseProductConfiguration.licensedAmount;
                         totalAmount += config.licenseProductConfiguration.totalAmount;
                     }
+                    totalConfigs += 1;
                 });
 
 
+                product.totalConfigs = totalConfigs;
+                product.totalLicensedConfigs = totalLicensedConfigs;
+
+
+                //USL-1221 product: replace percentages with literal values
+                var licensed_recording_count = 0;
+                var partial_licensed_recording_count = 0;
+                var unlicensed_recording_count = 0;
+
                 angular.forEach(product.recordings, function (recording, iRecording) {
+
+
+                    //if ($scope.licenseDetail.licenseStatusId == 5 || $scope.licenseDetail.licenseStatusId == 7 ) { //executed or accepted
+
+                        // USL-1221 recording: cheesy code to replace percentages with literal values
+                        var writer_count = 0;
+                        var licensed_writer_count = 0;
+                        var partial_licensed_writer_count = 0;
+                        var unlicensed_writer_count = 0;
+
+                        angular.forEach(recording.writers, function (writer) {
+                            if (writer.controlled) {
+                                writer_count += 1;
+                                var writer_rate_licensed = 0;
+                                if (writer.licenseProductRecordingWriter.rateList) {
+                                    angular.forEach(writer.licenseProductRecordingWriter.rateList, function (rate) {
+                                        if (rate.licenseDate != null) {
+                                            writer_rate_licensed += 1;
+                                        }
+                                    });
+                                }
+                                //if (writer_rate_licensed == product.totalConfigs) {
+                                if (writer_rate_licensed == product.totalLicensedConfigs) {
+                                    licensed_writer_count += 1;
+                                } else if (writer_rate_licensed > 0) {
+                                    partial_licensed_writer_count += 1;
+                                } else { // == 0
+                                    unlicensed_writer_count += 1;
+                                }
+                            }
+                        });
+
+                        if (licensed_writer_count == writer_count) {
+                            recording.licenseLiteral = "Licensed";
+                            licensed_recording_count += 1;
+                        }
+                        else if (unlicensed_writer_count == writer_count) {
+                            recording.licenseLiteral = "None";
+                            unlicensed_recording_count += 1;
+                        } else {
+                            recording.licenseLiteral = "Partial";
+                            partial_licensed_recording_count += 1;
+                        }
+             //       }
+             //       else {
+             //           recording.licenseLiteral = "None";
+             //           unlicensed_recording_count += 1;
+             //       }
+
                     $scope.getRecordingWriters(recording, iRecording, iProduct);
                 });
 
+                // USL-1221 product : literal values to replace percentages
+                if (partial_licensed_recording_count > 0 || (licensed_recording_count > 0 && unlicensed_recording_count > 0)) {
+                    product.totalLicenseLiteral = "Partial";
+                }
+                else if (licensed_recording_count > 0 && unlicensed_recording_count == 0) {
+                    product.totalLicenseLiteral = "Licensed";
+                }
+                else {
+                    product.totalLicenseLiteral = "None";
+                }
+                
                 //if (totalLicensedConfigs > 0) {
                 //    totalAmount = totalAmount / totalLicensedConfigs;
                 //    product.totalLicenseConfigAmount = (totalLicensedAmount / totalAmount) * 100; //  / totalLicensedConfigs;
@@ -3711,12 +3799,16 @@ function () {
     }
 
 
-
-
-
-
-
-
+    $scope.licensedLiteral = function(v, licensedValue) {
+        if (v >= licensedValue) {
+            return "Licensed";
+        }
+        else if (v == 0.00) {
+            return "None";
+        } else {
+            return "Partial";
+        }
+    }
 
     $scope.createCookie = function (name, value, days) {
         if (days) {

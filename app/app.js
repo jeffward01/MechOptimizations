@@ -338,7 +338,6 @@ app.directive('breadcrumbs', ['$log', '$parse', '$interpolate', function () {
         }
     };
 }]);
-
 app.directive('reportcrumbs', ['$log', '$parse', '$interpolate', function () {
     return {
         restrict: 'EA',
@@ -1086,7 +1085,6 @@ app.directive('emailAddress', function () {
     }
 });
 
-
 app.directive('underValue', function () {
     return {
         restrict: 'A',
@@ -1106,39 +1104,6 @@ app.directive('underValue', function () {
         }
     }
 });
-
-app.directive('checkList', function () {
-    return {
-        scope: {
-            list: '=checkList',
-            value: '@'
-        },
-        link: function (scope, elem, attrs) {
-            var handler = function (setup) {
-                var checked = elem.prop('checked');
-                var index = scope.list.indexOf(scope.value);
-
-                if (checked && index == -1) {
-                    if (setup) elem.prop('checked', false);
-                    else scope.list.push(scope.value);
-                } else if (!checked && index != -1) {
-                    if (setup) elem.prop('checked', true);
-                    else scope.list.splice(index, 1);
-                }
-            };
-
-            var setupHandler = handler.bind(null, true);
-            var changeHandler = handler.bind(null, false);
-
-            elem.on('change', function () {
-                scope.$apply(changeHandler);
-            });
-            scope.$watch('list', setupHandler, true);
-        }
-    };
-});
-
-
 
 
 //This turns off Angular debugging tools which makes angular faster for production

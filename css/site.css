@@ -568,6 +568,10 @@ span.priority.low {background-color:#336600;}
 .badge.sample, .badge.medley {background-color:#158BB4;}
 .badge.warning, .badge.medley {background-color:#FF9900;}/*tomh added because claim was used and commented for Recs/license descrepancy warning*/
 
+td.licensed .badge {height:auto; width:auto; color:#fff; font-weight:bold;}
+td.licensed .badge.success {background-color:#336600;}
+td.licensed .badge.warning {background-color:#FF9900;}
+td.licensed .badge.none {background-color:#990000;}
 
 /* Date Pickers */
 #datepicker button.btn.btn-default.btn-sm {background: #FF0000;}
@@ -723,4 +727,16 @@ span.priority.low {background-color:#336600;}
 }
 .inline-flex {
     display: inline-flex;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.removeBottomBorder {
+    border-bottom: none;
+}
+
+.bold-font {
+    font-weight: bold;
 }

@@ -54,6 +54,14 @@ app.factory('productsService', ['$http', 'ngAuthSettings', '$state', function ($
         });
     };
     
+    //var _getPreloadedJSON = function () {
+    //    var data;
+    //    return $http.get("po.json").success(function(result) {
+    //        data = result;
+    //        return data;
+    //    });
+    //}
+
 
     //New methods for recs and works data
     var _getProductDetailsHeader = function (productId) {
@@ -208,7 +216,7 @@ app.factory('productsService', ['$http', 'ngAuthSettings', '$state', function ($
     productsServiceFactory.getLicenses = _getLicenses;
     productsServiceFactory.getRecordings = _getRecordings;
     productsServiceFactory.getProductRecordings = _getProductRecordings;
-    
+ //   productsServiceFactory.getProloadedJson = _getPreloadedJSON;
     productsServiceFactory.getProductDetailsHeader = _getProductDetailsHeader;
     productsServiceFactory.getProductRecsRecordings = _getProductRecsRecordings;
     productsServiceFactory.getWorksWriters = _getWorksWriters;

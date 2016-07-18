@@ -164,13 +164,15 @@
                                 <span class="icon config-physical" ng-class="config.licenseProductConfiguration.configuration_id | returnConfigurationIcon"></span><span ng-bind="config.licenseProductConfiguration.configuration_name"></span><span ng-if="config.upc">(<span ng-bind="config.upc"></span>)</span>
                             </span>
                         </td>
-                        <td class="one-percent centered top no-wrap">
+                        <td class="one-percent centered top no-wrap licensed">
+                            <span ng-if="product.totalLicenseLiteral=='Licensed'" class="badge success">Licensed</span>
+                            <span ng-if="product.totalLicenseLiteral=='Partial'" class="badge warning">Partial</span>
+                            <span ng-if="product.totalLicenseLiteral=='None'" class="badge none">Unlicensed</span>
                             <!--
-                            {{ (product.licensedRollup / product.umpgRollup) * 100 | number:2}}%
-                            -->
-                            {{product.totalLicenseConfigAmount | number:2}}%<br />
-                            <!--
-                                <span ng-repeat="config in product.productHeader.configurations | filter:{licenseProductConfiguration: '!!'}">
+                            <br/> { {product.totalLicenseConfigAmount | number:2} }%
+                            { {product.totalLicenseConfigAmount | number:2} }%<br/>
+                            { { (product.licensedRollup / product.umpgRollup) * 100 | number:2} }%
+                            <span ng-repeat="config in product.productHeader.configurations | filter:{licenseProductConfiguration: '!!'}">
                                     <span ng-init="licAmt = config.licenseProductConfiguration.licensedAmount;itemTotal = config.licenseProductConfiguration.totalAmount; controller.Total = controller.Total + itemTotal">
                                         <span ng-if="licAmt==0">
                                             0%
@@ -178,7 +180,6 @@
                                         <span ng-if="licAmt > 0">
                                             {{(100*licAmt/itemTotal)| number:2}}%
                                         </span>
-
                                     </span>
                                 </span>
                             -->
@@ -208,7 +209,7 @@
                                     <tr>
                                         <td class="one-percent centered top"><span ng-bind="recording.cdNumber"></span>-<span ng-bind="recording.index"></span></td>
                                         <td class="twentyfive-percent top">
-                                            <span ng-bind="recording.track.title"></span>
+                                            <span class="bold-font" ng-bind="recording.track.title"></span>
                                             <!-- IF Contains Sample || I made up the names for sampled.recording.track.title and sampled.recording.track.artist.name below ||-->
                                             <br ng-if="recording.hasSample"><br />
                                             <span ng-if="recording.hasSample">
@@ -239,7 +240,15 @@
                                         <td class="five-percent centered top"><span ng-bind="recording.umpgPercentageRollup | percentage:2"></span></td>
                                         <td class="five-percent top"><span ng-bind="recording.licenseRecording.workCode"></span></td>
                                         <td class="ten-percent top"><span ng-bind="recording.track.isrc"></span></td>
-                                        <td class="one-percent centered no-wrap top"><span ng-bind="recording.licensedRollup/100 | number:4"></span>&nbsp;/&nbsp;<span ng-bind="recording.umpgPercentageRollup/100 | number:4"></span></td>
+                                        <td class="one-percent centered no-wrap top licensed">
+                                            <span ng-if="recording.licenseLiteral=='Licensed'" class="badge success">Licensed</span>
+                                            <span ng-if="recording.licenseLiteral=='Partial'" class="badge warning">Partial</span>
+                                            <span ng-if="recording.licenseLiteral=='None'" class="badge none">Unlicensed</span>
+                                            <!--
+                                            <br/>
+                                            <span ng-bind="recording.licensedRollup/100 | number:4"></span>&nbsp;/&nbsp;<span ng-bind="recording.umpgPercentageRollup/100 | number:4"></span>
+                                            -->
+                                        </td>
                                         <td class="one-percent centered no-wrap top"><span ng-bind="recording.licenseRecording.paidQuarter"></span></td>
                                     </tr>
                                     <tr>

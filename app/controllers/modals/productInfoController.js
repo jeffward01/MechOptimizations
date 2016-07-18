@@ -294,8 +294,10 @@ app.controller('productInfoController', ['$scope', '$state', '$stateParams', 'li
                     $scope.setParameter('selectedProductId', result.data.productHeader.id);
                     if (nextstep == 'addtracks') {
                         
+                        var newProductId = result.data.productHeader.id;
                         //      $scope.modalNextStep();  | Not working when navigating to addProductsTracts. Added manual method instead
-                        $scope.goToAddTracks($scope.myLicenseDetail, productId, $scope.products);
+                        //$scope.goToAddTracks($scope.myLicenseDetail, productId, $scope.products);
+                        $scope.goToAddTracks($scope.myLicenseDetail, newProductId, $scope.products);
                     }
                     else {
                         $state.reload().then(function () {

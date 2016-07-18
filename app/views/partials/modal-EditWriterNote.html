@@ -67,10 +67,9 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-default" ng-if="!newNoteClosed" ng-click="cancelNewNote(writer)">Cancel New Note</button>
-    <button ng-show="buttons.writerNoteBtn && writer.controlled" ng-if="newNoteClosed" class="btn btn-default" title="New Note" ng-disabled="editOpen" ng-click="collapseWriterAddNotes(writer, writernote)">New Note</button>
+    <button ng-show="buttons.writerNoteBtn && writer.controlled" ng-if="newNoteClosed" class="btn btn-default" title="New Note" ng-disabled="editOpen || modifiedUI" ng-click="collapseWriterAddNotes(writer, writernote)">New Note</button>
     <!--<button class="btn btn-default" ng-click="saveWriterNote(writer, 43, {}, writer.newWriterNote, -1)" ng-disabled="writer.newWriterNote | isEmpty">Save</button>-->
     <!--<button class="btn btn-default" ng-disabled="!modifiedUI" ng-click="cancel(true)">Ok</button>-->
     <button class="btn btn-default" ng-click="cancel()">Cancel</button>
-    <button class="btn btn-default" ng-click="clickMe()">Loaded</button>
 </div>
 

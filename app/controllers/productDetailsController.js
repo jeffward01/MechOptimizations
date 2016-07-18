@@ -1,8 +1,9 @@
 ﻿'use strict';
 app.controller('productDetailsController',
 [
-    '$scope', 'productsService', 'licensesService', '$modal', '$stateParams', 'localStorageService', 'licenseProductConfigurationService',
-    'contactDefaultsService',
+    '$scope', 'productsService', 'licensesService', '$modal', '$stateParams', 'localStorageService',
+    'licenseProductConfigurationService',
+    'contactDefaultsService', '$http',
     function ($scope,
         productsService,
         licensesService,
@@ -10,23 +11,82 @@ app.controller('productDetailsController',
         $stateParams,
         localStorageService,
         licenseProductConfigurationService,
-        contactDefaultsService) {
+        contactDefaultsService, $http) {
 
         //Start Contoller
 
+        function configExists(productOverview, id) {
+            if (productOverview.configurations == null) {
+                return false;
+            }
+            angular.forEach(productOverview.configurations,
+                function(config) {
+                    if (config.id === id) {
+                        return true;
+                    }
+                    return false;
+                });
+            return false;
+        }
+
+        function setConfigurations(productOverview) {
+            //var configurations = [];
+
+            angular.forEach(productOverview.recordings,
+                function(recording) {
+                    angular.forEach(recording.writers,
+                        function(writer) {
+                            angular.forEach(writer.licenseProductRecordingWriter.rateList,
+                                function(rate) {
+                                    //Check if configuration exists
+                                    //If config does NOT exist
+                                    if (!configExists(productOverview, rate.product_configuration_id)) {
+                                        //save config to array
+                                        var config = {};
+                                        config.id = rate.product_configuration_id;
+                                        config.name = rate.licenseTitle;
+                                        config.upc = rate.upc;
+                                        config.configuration.id = rate.configuration_id;
+                                        config.configuration.name = rate.configuration_name;
+                                        //Save to array
+                                        productOverview.configurations.push(config);
+                                    }
+
+
+
+                                });
+                        });
+                });
+            return productOverview;
+        }
+
+
+
+        $scope.productOverview = {};
+        $http.get("po.json")
+           .then(function (res) {
+               $scope.productOverview = res.data;
+           });
+
+        //Configure COnfiguration Filters
+        $scope.productOverview = setConfigurations($scope.productOverview);
 
 
         $scope.productDetail = {};
         $scope.productDetail.recordings = [];
         $scope.isCollapsed = true;
         var productId = $stateParams.productId;
+
+        //Build productDetail
         productsService.getProductDetailsHeader(productId)
             .then(function (result) {
                 $scope.productDetail = result.data;
+                console.log("productDetail " + JSON.stringify($scope.productDetail));
+
                 getRecordings();
                 angular.forEach($scope.productDetail.recordings,
                 function (recording) {
-                    alert(JSON.stringify($scope.selectedWriterFilter));
+                    //alert(JSON.stringify($scope.selectedWriterFilter));
                     recording.filteredWriterCount = $scope.getFilteredWriterCount(recording);
                 });
             },
@@ -36,9 +96,18 @@ app.controller('productDetailsController',
 
 
 
+        //Load Related licenses up front
+        function loadRelatedLicenses() {
+            licensesService.getLicensesForProduct(productId)
+                .then(function (result) {
+                    $scope.licenses = result.data;
+                });
+        }
+
+
 
         $scope.productsForCreateLicense = [];
-        $scope.licenses = [];
+        $scope.licenses = loadRelatedLicenses();
 
         $scope.configurationFilters = [];
         $scope.writerFilters = [];
@@ -78,11 +147,10 @@ app.controller('productDetailsController',
 
 
 
-
+        //Filter control for WriterFilters
         $scope.writerFilter = function (writer) {
             if ($scope.selectedWriterFilter.Name == "Controlled Writers") {
                 if (writer.controlled == true) {
-
                     return true;
                 } else {
                     return false;
@@ -127,6 +195,7 @@ app.controller('productDetailsController',
             }
         }
 
+        //Handler for select Writer Filter
         $scope.selectWriterFilter = function (f) {
             $scope.selectedWriterFilter = f;
             switch (f.Id) {
@@ -185,18 +254,12 @@ app.controller('productDetailsController',
             Id: 5,
             Name: 'Unlicensed Writers'
         });
-
         if ($scope.firstWriterFilter === true) {
             $scope.selectedWriterFilter = $scope.writerFilters[1];
         }
 
 
         //Writer and Config button
-        //$scope.dropdownHandler = function() {
-        //    if (!isSelectConfigCollapsed || !isSelectWritersCollapsed) {
-        //        $()
-        //    }
-        //}
         $(document)
             .ready(function () {
                 $(document).click(function () {
@@ -209,6 +272,7 @@ app.controller('productDetailsController',
 
 
         function getRecordings() {
+            //Get Recordings
             productsService.getProductRecsRecordings(productId).then(function (result) {
                 angular.forEach(result.data, function (value) {
                     value.writersCollapsed = true;
@@ -238,6 +302,7 @@ app.controller('productDetailsController',
                     }
 
                 });
+
                 $scope.productDetail.recordings = result.data;
 
                 angular.forEach($scope.productDetail.recordings,
@@ -286,12 +351,26 @@ app.controller('productDetailsController',
                 //    Name: "No Configurations"
                 //});
 
+                //This is right!
+                console.log("PROD DETAIL!: " + JSON.stringify($scope.productDetail));
+                //angular.forEach($scope.productDetail.configurations,
+                //    function (config) {
+                //        //Select All Config Filters on load
+                //        $scope.allSelected = true;
+                //        config.checked = true;
+                //        $scope.configurationFilters.push(config);
+                //        console.log("configurationFilters!: " + JSON.stringify(config));
+                //    });
+
+                //Correct aboce^^ test below__
                 angular.forEach($scope.productDetail.configurations,
-                    function (config) {
+                    function(config) {
                         //Select All Config Filters on load
-                        $scope.allSelected = true;
-                        config.checked = true;
-                        $scope.configurationFilters.push(config);
+                        
+                               $scope.allSelected = true;
+                               config.checked = true;
+                               $scope.configurationFilters.push(config);
+                               console.log("configurationFilters!: " + JSON.stringify(config));
                     });
 
 
@@ -307,6 +386,8 @@ app.controller('productDetailsController',
             });
         }
 
+
+        //Writer Open close toggle
         $scope.writersClosed = true;
         $scope.toggleCollapseAllWriters = function () {
             //If publishers open
@@ -430,13 +511,14 @@ app.controller('productDetailsController',
             writer.publishersCollapsed = !writer.publishersCollapsed;
         }
 
+        //TODO:Delete, no longer used. We load upfront now.  Delete after SP3.
         $scope.loadLicenseInfo = function () {
             licensesService.getLicensesForProduct(productId).then(function (result) {
                 $scope.licenses = result.data;
             });
         };
 
-
+    
 
         $scope.updateProductPriority = function (productId, mechsProductPriority) {
             mechsProductPriority = !mechsProductPriority;
@@ -558,3 +640,7 @@ app.controller('productDetailsController',
  
     }]);
 
+
+
+
+//ToDo: make checkbox on configFilters clickable by selecting the text ||  add $event.stopPropgation() to a span that encapsulates it.

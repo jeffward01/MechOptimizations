@@ -70,7 +70,6 @@ app.factory('licensesService', ['$http', 'ngAuthSettings','$state', function ($h
         var url = serviceBase + 'api/licenseCTRL/licenses/GetProductLicenses/' + productId;
         return $http.get(url)
         .then(function (response) {
-                console.log("LOG MW!" + JSON.stringify(response));
             return response;
         });
     };

@@ -232,6 +232,7 @@
     <Content Include="doc_templates\Physical and Digital only_files\themedata.thmx" />
     <Content Include="doc_templates\Physical and Digital with Escalated_files\themedata.thmx" />
     <Content Include="doc_templates\Physical Rates only_files\themedata.thmx" />
+    <Content Include="po.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
