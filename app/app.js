@@ -94,6 +94,16 @@ app.filter('unique', function () {
     };
 });
 
+app.directive('productSummary',
+    function() {
+        return{
+            templateUrl: "app/views/partials/license-configurations-PO.html",
+            restrict: 'E',
+            scope: {obj: '=' }
+        };
+    });
+
+
 app.directive('compileTemplate', function ($compile, $parse) {
     return {
         link: function (scope, element, attr) {

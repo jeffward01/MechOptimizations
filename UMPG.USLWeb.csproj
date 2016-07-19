@@ -99,6 +99,7 @@
     <Content Include="app\controllers\productsController.js" />
     <Content Include="app\controllers\viewSongsController.js" />
     <Content Include="app\custom\common.js" />
+    <Content Include="app\views\partials\license-configurations-PO.html" />
     <Content Include="app\views\partials\licenseDetail-Writers.html" />
     <Content Include="app\services\filesService.js" />
     <Content Include="app\services\licenseWritersConsentTypesService.js" />

@@ -15,70 +15,25 @@ app.controller('productDetailsController',
 
         //Start Contoller
 
-        function configExists(id) {
-            //if (productOverview.configurations == null) {
-            //    return false;
-            //}
-            angular.forEach($scope.productOverview.configurations,
-                function(config) {
-                    if (config.id === id) {
-                        return true;
-                    }
-                    return false;
-                });
-            return false;
-        }
-
-        function setConfigurations(productOverview) {
-            //var configurations = [];
-            alert("FIRE FIRE FIRE");
-            angular.forEach(productOverview.recordings,
-                function(recording) {
-                    angular.forEach(recording.writers,
-                        function(writer) {
-                            angular.forEach(writer.licenseProductRecordingWriter.rateList,
-                                function(rate) {
-                                    //Check if configuration exists
-                                    //If config does NOT exist
-                                    if (!configExists(rate.product_configuration_id)) {
-                                        alert("DOES NOT EXIST!");
-                                        //save config to array
-                                        var config = {};
-                                        config.id = rate.product_configuration_id;
-                                        config.name = rate.licenseTitle;
-                                        config.upc = rate.upc;
-                                        config.configuration.id = rate.configuration_id;
-                                        config.configuration.name = rate.configuration_name;
-                                        //Save to array
-                                        productOverview.configurations.push(config);
-                                    }
-                                    alert("CONFIG EXISTS");
-
-
-                                });
-                        });
-                });
-            console.log(JSON.stringify("LOOK!!!!!!" + JSON.stringify($scope.productOverview.configurations)));
-
-            return productOverview;
-        }
-
-
-
         $scope.productOverview = {};
         $http.get("po.json")
            .then(function (res) {
                $scope.productOverview = res.data;
                $scope.configurationFilters = $scope.productOverview.productHeader.configurations;
-                angular.forEach($scope.configurationFilters,
-                    function(config) {
-                        config.checked = true;
-                    });
-            });
+               angular.forEach($scope.configurationFilters,
+                   function (config) {
+                       config.checked = true;
+                   });
+
+           });
         $scope.allSelected = true;
         //Configure COnfiguration Filters
-     //   $scope.productOverview = setConfigurations($scope.productOverview);
-     //   console.log(JSON.stringify("LOOK!!!!!!"     +$scope.configurationFilters));
+        //   $scope.productOverview = setConfigurations($scope.productOverview);
+        //   console.log(JSON.stringify("LOOK!!!!!!"     +$scope.configurationFilters));
+
+        $scope.productSummary = {};
+        $scope.productSummary = getProductSummary($scope.productOverview);
+
         $scope.productDetail = {};
         $scope.productDetail.recordings = [];
         $scope.isCollapsed = true;
@@ -88,7 +43,7 @@ app.controller('productDetailsController',
         productsService.getProductDetailsHeader(productId)
             .then(function (result) {
                 $scope.productDetail = result.data;
-                console.log("productDetail " + JSON.stringify($scope.productDetail));
+                //  console.log("productDetail " + JSON.stringify($scope.productDetail));
 
                 getRecordings();
                 angular.forEach($scope.productDetail.recordings,
@@ -118,8 +73,9 @@ app.controller('productDetailsController',
         $scope.selectedConfigFilter = [];
         $scope.configurationFilters = [];
         $scope.writerFilters = [];
-        $scope.firstConfigFilter = true;
+        //      $scope.firstConfigFilter = true;  <- Not needed?
         $scope.firstWriterFilter = true;
+
         //Filter Btn Control
         $scope.isSelectConfigCollapsed = true;
         $scope.isSelectWritersCollapsed = true;
@@ -147,9 +103,6 @@ app.controller('productDetailsController',
                 });
             return count;
         }
-
-
-
 
 
 
@@ -189,18 +142,7 @@ app.controller('productDetailsController',
             return true;
         }
 
-        //TODO wire up config filter
-        $scope.configFilter = function (rate) {
-            angular.forEach($scope.selectedConfigFilter,
-                function(config) {
-                    if (rate.product_configuration_id == config) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                });
-        }
-       
+
         //The code from the licenseDetail page includes on the writer property 'writer.licenseProductRecordingWriter.isLicensed.'.  ProductDetails does not have that property.
         //This catches the error and prints out to console.
         function errorCatchWriter(writer) {
@@ -278,7 +220,7 @@ app.controller('productDetailsController',
         }
 
 
-        //Writer and Config button
+        //Writer and Config button configurations
         $(document)
             .ready(function () {
                 $(document).click(function () {
@@ -290,17 +232,18 @@ app.controller('productDetailsController',
             });
 
 
+        //Initialze Recordings and other values
         function getRecordings() {
             //Get Recordings
-            productsService.getProductRecsRecordings(productId).then(function(result) {
+            productsService.getProductRecsRecordings(productId).then(function (result) {
                 angular.forEach(result.data,
-                    function(value) {
+                    function (value) {
                         value.writersCollapsed = true;
                         value.writers = [];
                         if (value.track != null && value.track.copyrights != null) {
                             if (value.track.copyrights.length != 0) {
                                 angular.forEach(value.track.copyrights,
-                                    function(copyright) {
+                                    function (copyright) {
                                         if (copyright.sampledWorks && copyright.sampledWorks.length > 0) {
                                             value.hasSample = true;
                                         } else {
@@ -324,27 +267,23 @@ app.controller('productDetailsController',
 
                     });
 
-                //set recordings to collapse (productOverview)
-                //angular.forEach($scope.productOverview.recordings,
-                //    function(recording) {
-                //        recording.writersCollapsed = true;
-                //    });
+
 
                 $scope.productDetail.recordings = result.data;
 
                 angular.forEach($scope.productDetail.recordings,
-                    function(recording) {
+                    function (recording) {
                         productsService.getWorksWriters(recording.track.copyrights[0].workCode)
-                            .then(function(result) {
+                            .then(function (result) {
                                 angular.forEach(result.data,
-                                    function(value) {
+                                    function (value) {
                                         value.publishersCollapsed = true;
                                         angular.forEach(value.originalPublishers,
-                                            function(publisher) {
+                                            function (publisher) {
                                                 var adminContribution = 0;
                                                 publisher.hasCollectable = false;
                                                 angular.forEach(publisher.administrators,
-                                                    function(admin) {
+                                                    function (admin) {
                                                         adminContribution =
                                                             adminContribution + admin.mechanicalCollectablePercentage;
                                                     });
@@ -365,7 +304,7 @@ app.controller('productDetailsController',
                     function (recording) {
                         recording.writersCollapsed = true;
                         angular.forEach(recording.writers,
-                            function(writer) {
+                            function (writer) {
                                 writer.publishersCollapsed = true;
                             });
                     });
@@ -373,7 +312,7 @@ app.controller('productDetailsController',
 
                 //get writerCount for overview
                 angular.forEach($scope.productOverview.recordings,
-                    function(recording) {
+                    function (recording) {
                         recording.filteredWriterCount = $scope.getFilteredWriterCount(recording);
                     });
 
@@ -383,7 +322,7 @@ app.controller('productDetailsController',
                         config.licenseProductConfiguration = licenseProductConfigurationService
                             .getProductConfigurations(config.id);
                     });
-                
+
 
                 //Configuration Filter Build
                 //$scope.configurationFilters.push({
@@ -395,8 +334,8 @@ app.controller('productDetailsController',
                 //    Name: "No Configurations"
                 //});
 
-                //This is right!
-                console.log("PROD DETAIL!: " + JSON.stringify($scope.productDetail));
+                //TODO: Erase | This is handled above
+                //  console.log("PROD DETAIL!: " + JSON.stringify($scope.productDetail));
                 //angular.forEach($scope.productDetail.configurations,
                 //    function (config) {
                 //        //Select All Config Filters on load
@@ -407,11 +346,11 @@ app.controller('productDetailsController',
                 //    });
 
                 //Correct aboce^^ test below__
-        
+
                 //angular.forEach($scope.productDetail.configurations,
                 //    function(config) {
                 //        //Select All Config Filters on load
-                        
+
                 //               $scope.allSelected = true;
                 //               config.checked = true;
                 //               $scope.configurationFilters.push(config);
@@ -419,39 +358,15 @@ app.controller('productDetailsController',
                 //    });
 
 
-                if ($scope.firstConfigFilter === true) {
-                    //     $scope.selectedConfigFilter = $scope.configurationFilters[0];
-                    getSelectedonfigFilters();
-                //    alert("BOOM"+JSON.stringify($scope.selectedConfigFilter));
-
-                }
-
                 $scope.isSelectConfigCollapsed = true;
-    
+
                 $scope.productsForCreateLicense.push({ licenseId: null, product_id: $scope.productDetail.id, title: $scope.productDetail.title, recsArtist: $scope.productDetail.artist, recsLabel: $scope.productDetail.recordLabel, licensesNo: $scope.productDetail.relatedLicensesNo, recordingsNo: $scope.productDetail.recordings.length })
             }, function (error) {
                 alert(error.data.message);
             });
         }
 
-        function getSelectedonfigFilters() {
-            angular.forEach($scope.configurationFilters,
-                function(config) {
-                    if (config.checked) {
-                        //Check if in array
-                        if (!in_array(config.id, $scope.selectedConfigFilter)) {
-                            $scope.selectedConfigFilter.push(config.id);
-                        }
-                    } else if (!config.checked) {
-                        if (in_array(config.id, $scope.selectedConfigFilter)) {
-                            var index = $scope.selectedConfigFilter.indexOf(config.id);
-                            if (index > -1) {
-                                array.splice(index, 1);
-                            }
-                        }
-                    }
-                });
-        }
+
 
         function in_array(needle, haystack) {
             for (var key in haystack) {
@@ -465,57 +380,30 @@ app.controller('productDetailsController',
 
         $scope.ToggleWritersBootstrap = function () {
             angular.forEach($scope.productOverview.recordings,
-                function(recording) {
+                function (recording) {
+                    //If publishers are open, close them
+                    if (!$scope.publishersClosed) {
+                        closeAllPublisers();
+                        $scope.publishersClosed = true;
+                    }
+
+                    //Either open or close all writers
                     var elementId = recording.id;
                     var myElement = document.getElementById(elementId);
-                    //    if ($(myElement).hasClass('collapsing')) {
-                    //        $(myElement).removeClass('collapsing');
-                    //        $(myElement).addClass('collapse');
-
-                    //    }      
                     if ($scope.writersClosed) {
                         $(myElement).collapse("show");
                     } else {
                         $(myElement).collapse("hide");
                     }
                 });
+            //toggle writer control
             $scope.writersClosed = !$scope.writersClosed;
         }
 
 
         //Writer Open close toggle
         $scope.writersClosed = true;
-        $scope.toggleCollapseAllWriters = function () {
-            alert("CICKED!");
-            //If publishers open
-            if (!$scope.publishersClosed) {
-                closeAllPublisers();
-                $scope.publishersClosed = true;
-            }
-            angular.forEach($scope.productOverview.recordings,
-                function (recording) {
-                    if ($scope.writersClosed) {
-                            expandAllWriters();
 
-                    //    expandAllWritersBootstrap();
-                    } else {
-                            collapseAllWriters();
-                       // collapseAllWritersBootstrap();
-                    }
-                });
-            
-            //if writers are open, collase em all.
-       
-            if (!$scope.writersClosed) {
-    angular.forEach($scope.productOverview.recordings,
-        function(recording) {
-            var myElement = $(recording.id);
-            $(myElement).collapse("hide");
-        });
-}
-
-            $scope.writersClosed = !$scope.writersClosed;
-        }
 
         $scope.publishersClosed = true;
         $scope.toggleCollapseAllPublishers = function () {
@@ -541,6 +429,7 @@ app.controller('productDetailsController',
                 });
         });
         }
+
 
         function expandAllPublishers(writer) {
             writer.publishersCollapsed = false;
@@ -590,66 +479,17 @@ app.controller('productDetailsController',
             }
         }
 
-        //open and close to have all start closed
-
 
         $scope.collapseWriters = function (recording) {
-            if (recording.writersCollapsed) {
-                //productsService.getWorksWriters(recording.track.copyrights[0].workCode).then(function (result) {
-                //    angular.forEach(result.data, function (value) {
-                //        value.publishersCollapsed = true;
-                //        angular.forEach(value.originalPublishers, function (publisher) {
-                //            var adminContribution = 0;
-                //            publisher.hasCollectable = false;
-                //            angular.forEach(publisher.administrators, function (admin) {
-                //                adminContribution = adminContribution + admin.mechanicalCollectablePercentage;
-                //            });
-                //            if (adminContribution != 0) {
-                //                publisher.hasCollectable = true;
-                //            }
-                //        });
-                //    });
-
-                //    var response = result.data;
-                //    recording.writers = result.data;
-                //});
-            }
-            //if (!recording.writersCollapsed) {
-               var elementId = recording.id;
-               var myElement = document.getElementById(elementId);
-            //    if ($(myElement).hasClass('collapsing')) {
-            //        $(myElement).removeClass('collapsing');
-            //        $(myElement).addClass('collapse');
-                  
-            //    }                
-               $(myElement).collapse("toggle");
-            //$(myElement).has('collapsing').addClass('collapse');
-            //  }
-            //    recording.writersCollapsed = !recording.writersCollapsed;
-
-            /*
-            if (recording.writersCollapsed) {
-                productsService.getWorksWriters(recording.track.copyrights[0].workCode).then(function (result) {
-                    var response = result.data;
-                    recording.writers = result.data;
-                });
-            }
-            recording.writersCollapsed = !recording.writersCollapsed;
-            */
+            var elementId = recording.id;
+            var myElement = document.getElementById(elementId);
+            $(myElement).collapse("toggle");
         }
 
         $scope.collapsePublishers = function (writer) {
             writer.publishersCollapsed = !writer.publishersCollapsed;
         }
 
-        //TODO:Delete, no longer used. We load upfront now.  Delete after SP3.
-        $scope.loadLicenseInfo = function () {
-            licensesService.getLicensesForProduct(productId).then(function (result) {
-                $scope.licenses = result.data;
-            });
-        };
-
-    
 
         $scope.updateProductPriority = function (productId, mechsProductPriority) {
             mechsProductPriority = !mechsProductPriority;
@@ -664,7 +504,161 @@ app.controller('productDetailsController',
         $scope.format = "MM/dd/yyyy";
 
 
+
+        $scope.cbChecked = function () {
+            $scope.allSelected = true;
+            angular.forEach($scope.configurationFilters, function (v, k) {
+                if (!v.checked) {
+                    $scope.allSelected = false;
+                }
+            });
+
+        }
+
+        //Configuration Filter, 'All Selected' Checkbox
+        //__ BELOW ||Used for 'Select All' || BELOW __
+        $scope.toggleAll = function () {
+            var toggleAllSelected = !$scope.allSelected;
+            var bool = true;
+            if ($scope.allSelected) {
+                bool = false;
+            }
+            angular.forEach($scope.configurationFilters, function (v, k) {
+                v.checked = bool;
+                $scope.allSelected = toggleAllSelected;
+            });
+        }
+
+        $scope.monitorAllSelected = function () {
+            $scope.allSelected = true;
+            angular.forEach($scope.configurationFilters, function (v, k) {
+                if(!v.checked) {
+                    $scope.allSelected = false;
+                }
+            });
+        }
+        //__^^ Used for 'Select All' ^^
+
+
+
+
+
+
+
+        //___Not used Code below___
+
+
+
+        //not needed.  Need to make new API call. 
         /*
+        function getProductSummary(productOverview) {
+            var productSummary = {};
+            angular.forEach(productOverview.relatedLicensesNo,
+                function(license) {
+                    var licenseId = license.liceneId;
+                    angular.forEach(productOverview.relatedLicenseProducts, function(product) {
+                        if (product.licenseId == licenseId) {
+                            var prodConfigId = product.licenseProductConfigurations.product_configuration_id;
+
+                        }
+                    })
+                })
+        }
+        */
+
+        //Currently not used.  I just grab all configurations from productOverview.ProductHeader instead of cycling through the writers.
+        function configExists(id) {
+            //if (productOverview.configurations == null) {
+            //    return false;
+            //}
+            angular.forEach($scope.productOverview.configurations,
+                function (config) {
+                    if(config.id === id) {
+                        return true;
+                    }
+                    return false;
+                });
+            return false;
+        }
+
+        //Currently not used.  I just grab all configurations from productOverview.ProductHeader instead of cycling through the writers.
+        function setConfigurations(productOverview) {
+            //var configurations = [];
+            //alert("FIRE FIRE FIRE");
+            angular.forEach(productOverview.recordings,
+                function (recording) {
+                    angular.forEach(recording.writers,
+                        function (writer) {
+                            angular.forEach(writer.licenseProductRecordingWriter.rateList,
+                                function (rate) {
+                                    //Check if configuration exists
+                                    //If config does NOT exist
+                                    if(productOverview.configurations == undefined) {
+                                        productOverview.configurations = [];
+                                    }
+                                    if (!configExists(rate.product_configuration_id)) {
+                                        // alert("DOES NOT EXIST!");
+                                        //save config to array
+                                        var config = { };
+                                        var configuration = {
+                                            id: null,
+                                            name: null
+                                        };
+                                        config.configuraiton = configuration;
+
+                                        config.id = rate.product_configuration_id;
+                                        config.name = rate.licenseTitle;
+                                        config.upc = rate.upc;
+                                        var myId = rate.configuration_id;
+                                        var myName = rate.configuration_name;
+                                        config.configuraiton.id = myId;
+                                        config.configuraiton.name = myName;
+                                        //Save to array
+                                        productOverview.configurations.push(config);
+                                    }
+                                    //     alert("CONFIG EXISTS");
+
+
+                                });
+                        });
+                });
+            console.log(JSON.stringify("LOOK!!!!!!" + JSON.stringify($scope.productOverview.configurations)));
+
+            return productOverview;
+        }
+
+
+
+
+        //set recordings to collapse (productOverview)
+        //angular.forEach($scope.productOverview.recordings,
+        //    function(recording) {
+        //        recording.writersCollapsed = true;
+        //    });
+
+
+        //$scope.cbChecked = function () {
+        //    $scope.allSelected = true;
+        //    angular.forEach($scope.configurationFilters, function (v, k) {
+        //        if (!v.checked) {
+        //            $scope.allSelected = false;
+        //        }
+        //    });
+        //}
+        //Check all configurations
+        //$scope.toggleAll = function () {
+        //    var bool = true;
+        //    if ($scope.allSelected) {
+        //        bool = false;
+        //    }
+        //    angular.forEach($scope.configurationFilters, function (v, k) {
+        //        v.checked = !bool;
+        //        $scope.allSelected = !bool;
+        //    });
+        //}
+
+
+        /*  Legacy code, already commented out
         $scope.openProductInfo = function (size) {
             var rootScope = $scope;
             var modalInstance = $modal.open({
@@ -707,69 +701,104 @@ app.controller('productDetailsController',
             });
     
         };
-        */
-
-        //Configuration Filter, 'All Selected' Checkbox
 
 
-        $scope.toggleAll = function () {
-            var toggleAllSelected = !$scope.allSelected;
-            var bool = true;
-            if ($scope.allSelected) {
-                bool = false;
+
+        //TODO:Delete, no longer used. We load upfront now.  Delete after SP3.
+        //$scope.loadLicenseInfo = function () {
+        //    licensesService.getLicensesForProduct(productId).then(function (result) {
+        //        $scope.licenses = result.data;
+        //    });
+        //};
+
+
+        /* Erase
+                $scope.toggleCollapseAllWriters = function () {
+                    alert("CICKED!");
+                    //If publishers open
+                    if (!$scope.publishersClosed) {
+                        closeAllPublisers();
+                        $scope.publishersClosed = true;
+                    }
+                    angular.forEach($scope.productOverview.recordings,
+                        function (recording) {
+                            if ($scope.writersClosed) {
+                                expandAllWriters();
+        
+                                //    expandAllWritersBootstrap();
+                            } else {
+                                collapseAllWriters();
+                                // collapseAllWritersBootstrap();
+                            }
+                        });
+        
+                    //if writers are open, collase em all.
+        
+                    if (!$scope.writersClosed) {
+                        angular.forEach($scope.productOverview.recordings,
+                            function (recording) {
+                                var myElement = $(recording.id);
+                                $(myElement).collapse("hide");
+                            });
+                    }
+        
+                    $scope.writersClosed = !$scope.writersClosed;
+                }
+        
+
+
+        $scope.collapseWriters = function (recording) {
+            if (recording.writersCollapsed) {
+                //productsService.getWorksWriters(recording.track.copyrights[0].workCode).then(function (result) {
+                //    angular.forEach(result.data, function (value) {
+                //        value.publishersCollapsed = true;
+                //        angular.forEach(value.originalPublishers, function (publisher) {
+                //            var adminContribution = 0;
+                //            publisher.hasCollectable = false;
+                //            angular.forEach(publisher.administrators, function (admin) {
+                //                adminContribution = adminContribution + admin.mechanicalCollectablePercentage;
+                //            });
+                //            if (adminContribution != 0) {
+                //                publisher.hasCollectable = true;
+                //            }
+                //        });
+                //    });
+
+                //    var response = result.data;
+                //    recording.writers = result.data;
+                //});
             }
-            angular.forEach($scope.configurationFilters, function (v, k) {
-                v.checked = bool;
-                $scope.allSelected = toggleAllSelected;
-            });
-        }
+            //if (!recording.writersCollapsed) {
+            var elementId = recording.id;
+            var myElement = document.getElementById(elementId);
+            //    if ($(myElement).hasClass('collapsing')) {
+            //        $(myElement).removeClass('collapsing');
+            //        $(myElement).addClass('collapse');
 
-        $scope.cbChecked = function () {
-            $scope.allSelected = true;
-            angular.forEach($scope.configurationFilters, function (v, k) {
-                if (!v.checked) {
-                    $scope.allSelected = false;
-                }
-            });
-       
-          //  $scope.allSelected = false;
-            //alert($scope.allSelected);
-        }
+            //    }                
+            $(myElement).collapse("toggle");
+            //$(myElement).has('collapsing').addClass('collapse');
+            //  }
+            //    recording.writersCollapsed = !recording.writersCollapsed;
 
-        $scope.monitorAllSelected = function () {
-            $scope.allSelected = true;
-            angular.forEach($scope.configurationFilters, function (v, k) {
-                if (!v.checked) {
-                    $scope.allSelected = false;
-                }
-            });
-        }
-
-
-
-
-        //$scope.cbChecked = function () {
-        //    $scope.allSelected = true;
-        //    angular.forEach($scope.configurationFilters, function (v, k) {
-        //        if (!v.checked) {
-        //            $scope.allSelected = false;
-        //        }
-        //    });
+            /*
+            if (recording.writersCollapsed) {
+                productsService.getWorksWriters(recording.track.copyrights[0].workCode).then(function (result) {
+                    var response = result.data;
+                    recording.writers = result.data;
+                });
+            }
+            recording.writersCollapsed = !recording.writersCollapsed;
+            */
         //}
 
-        //$scope.toggleAll = function () {
-        //    var bool = true;
-        //    if ($scope.allSelected) {
-        //        bool = false;
-        //    }
-        //    angular.forEach($scope.configurationFilters, function (v, k) {
-        //        v.checked = !bool;
-        //        $scope.allSelected = !bool;
-        //    });
-        //}
-        $scope.init = function() {
-            $scope.toggleCollapseAllWriters();
-            $scope.toggleCollapseAllWriters();
-        }
- 
+
+
+
+
+
     }]);
+
+
+
+//http://spa.local/#/search-MyView/detail-Product/17775

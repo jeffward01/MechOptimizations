@@ -1,4 +1,4 @@
-﻿<section class="details pull-left clearfix" >
+﻿<section class="details pull-left clearfix"  >
     <section class="license-overview shadow">
         <section class="license-header">
             <span class="priority-report">
@@ -55,6 +55,9 @@
 
         <section class="license-configurations shadow">
             <!-- Put this table in a directive -->
+
+        <div product-Summary obj="productOverview.relatedLicenseProducts"></div>
+
             <table class="table fixed_headers" sticky-headers="productDetail.configurations">
                 <thead>
                 <tr style="width: 100%">
@@ -106,11 +109,10 @@
                 <button class="btn btn-default pull-right collapseAllWriterProductBtn" ng-show="!publishersClosed" ng-click="toggleCollapseAllPublishers()"><span class="icon remove"></span>Collapse All Publishers</button>
 
                 <div class="productBtn">
-                    <button class="btn btn-default pull-right collapseAllWriterProductBtn writerExpandBtn" ng-show="writersClosed" ng-click="toggleCollapseAllWriters()"><span class="icon add"></span>Expand All Writers</button>
-                    <button class="btn btn-default pull-right collapseAllWriterProductBtn writerExpandBtn" ng-show="!writersClosed" ng-click="toggleCollapseAllWriters()"><span class="icon remove"></span>Collapse All Writers</button>
+                    <button class="btn btn-default pull-right collapseAllWriterProductBtn writerExpandBtn" ng-show="writersClosed" ng-click="ToggleWritersBootstrap()"><span class="icon add"></span>Expand All Writers</button>
+                    <button class="btn btn-default pull-right collapseAllWriterProductBtn writerExpandBtn" ng-show="!writersClosed" ng-click="ToggleWritersBootstrap()"><span class="icon remove"></span>Collapse All Writers</button>
                 </div>
-                <button class="btn btn-default pull-right collapseAllWriterProductBtn writerExpandBtn"  ng-show="writersClosed"  ng-click="ToggleWritersBootstrap()"><span class="icon add"></span>TEST Expand All Writers</button>
-                <button class="btn btn-default pull-right collapseAllWriterProductBtn writerExpandBtn" ng-show="!writersClosed" ng-click="ToggleWritersBootstrap()"><span class="icon remove"></span>TEST Collapse All Writers</button>
+               
 
 
 
@@ -160,7 +162,7 @@
 
                 <div class="inline-flex clearfix">
                     <div ng-repeat="config in configurationFilters | filter:{checked: true}">
-                        <button style="margin-right: 10px">
+                        <button style="margin-right: 10px" >
                             <span ng-if="config.configuration.name != null" class="icon config-physical" ng-class="config.configuration.id | returnConfigurationIcon"></span>&nbsp;<span ng-bind="config.configuration.name"></span><span ng-if="config.upc != null">&nbsp;({{config.upc}})&nbsp;</span><span ng-click="config.checked = false;cbChecked();" class="icon icon-sm remove removeConfigBtn"></span>
                         </button>
                     </div>
@@ -215,7 +217,7 @@
             </table>
 
 
-            <table class="table" ng-show="!trackCollapsed">
+            <table class="table" ng-show="!trackCollapsed"  elem-Ready="init()">
                 <thead>
                     <tr>
                         <th class="one-percent centered">Vol. / Track</th>
@@ -263,7 +265,7 @@
                     </tr>
                 <tr ng-repeat-end>
                     
-                        <td class="table-cell-light collapse" id="{{recording.id}}" colspan="12" collapse="recording.writersCollapsed">
+                        <td class="table-cell-light collapse" id="{{recording.id}}" colspan="12" >
 
                             <table class="table nested">
                                 <thead>
@@ -331,7 +333,7 @@
                                     <td colspan="12" class="nested light shadow">
 
 
-                                        <table class="table nested light" data-ng-init="init()">
+                                        <table class="table nested light">
                                             <thead>
                                             <tr>
                                                 <th style="color: black" class="one-percent no-wrap">License</th>
