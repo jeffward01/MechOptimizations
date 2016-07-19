@@ -31,6 +31,25 @@ app.filter('timezone', function () {
 
 });
 
+app.filter('checkedOnly',
+    function() {
+        return function(items, array) {
+            var filtered = [];
+            angular.forEach(array,
+                function(config) {
+                    angular.forEach(items,
+                        function(item) {
+                            if (config.checked) {
+                                if (item.product_configuration_id === config.id) {
+                                    filtered.push(item);
+                                }
+                            }
+                        });
+                });
+            return filtered;
+        }
+    });
+
 //Jeff Added this filter 3/14/16 for use in detail-Product.html
 app.filter('joinBy', function () {
     return function (input, delimiter) {
