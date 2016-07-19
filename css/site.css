@@ -661,82 +661,37 @@ td.licensed .badge.none {background-color:#990000;}
 .user-signup > ul > li > label > b {color:#990000;}
 .user-signup .form-buttons {margin:40px auto auto 240px;}
 
-.field-error {
-    border: 1px solid red !important;
-}
+.field-error { border: 1px solid red !important; }
 
-.highlight {
-    background-color:#FFFF73
-}
-.highlight-live {
-    background-color:#B2FF7F
-}
+.highlight { background-color:#FFFF73 }
+.highlight-live { background-color:#B2FF7F }
 
-.collapse.in {
-    display: table-cell;
-}
+.collapse.in { display: table-cell; }
 
-.publisher-highlit {
-    color: gray;
-}
-.float-left-subpub {
-    float: left;
-    margin-right: 5px;
-}
+.publisher-highlit { color: gray; }
+
+.float-left-subpub { float: left;margin-right: 5px; }
 
 /* This turns off transition on collapse*/
-.no-transition {
-  -webkit-transition: height 0.01s;
-  -moz-transition: height 0.01s;
-  -ms-transition: height 0.01s;
-  -o-transition: height 0.01s;
-  transition: height 0.01s;
-}
+.no-transition { -webkit-transition: height 0.01s; -moz-transition: height 0.01s; -ms-transition: height 0.01s; -o-transition: height 0.01s; transition: height 0.01s;}
 
 /*Validation for text areas*/
-    textarea.ng-invalid {
-            background: #F84072;
-            border: 2px solid red;
-        }
+    textarea.ng-invalid { background: #F84072; border: 2px solid red; }
 
-.emph {
-        color: #696969;
-        font-style: italic;
-
-    }
+.emph { color: #696969; font-style: italic; }
 
     /*For collapse/expand writers on productDetail*/
-.collapseAllWriterProductBtn {
-    margin-bottom: 10px;
-}
+.collapseAllWriterProductBtn { margin-bottom: 10px; }
 
-.writerExpandBtn {
-    margin-right: 10px;
-}
+.writerExpandBtn { margin-right: 10px;}
 
-.configFilterBtn {
-    min-width: 130px;
-    text-align: center;
-}
+.configFilterBtn { min-width: 130px; text-align: center; }
 
-.margin-right-10 {
-    margin-right: 10px;
-}
-.removeConfigBtn {
-    margin-left: 5px;
-}
-.inline-flex {
-    display: inline-flex;
-}
-
-.center-text {
-    text-align: center;
-}
-
-.removeBottomBorder {
-    border-bottom: none;
-}
-
-.bold-font {
-    font-weight: bold;
-}
+.margin-right-10 { margin-right: 10px; }
+.removeConfigBtn {margin-left: 5px;}
+.inline-flex { display: inline-flex; }
+.center-text { text-align: center; }
+.removeBottomBorder { border-bottom: none; }
+.bold-font { font-weight: bold; }
+.hideMe { visibility: hidden; }
+.collapsing { -webkit-transition: none; transition: none; }

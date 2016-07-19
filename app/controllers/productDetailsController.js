@@ -463,10 +463,30 @@ app.controller('productDetailsController',
             return false;
         }
 
+        $scope.ToggleWritersBootstrap = function () {
+            angular.forEach($scope.productOverview.recordings,
+                function(recording) {
+                    var elementId = recording.id;
+                    var myElement = document.getElementById(elementId);
+                    //    if ($(myElement).hasClass('collapsing')) {
+                    //        $(myElement).removeClass('collapsing');
+                    //        $(myElement).addClass('collapse');
+
+                    //    }      
+                    if ($scope.writersClosed) {
+                        $(myElement).collapse("show");
+                    } else {
+                        $(myElement).collapse("hide");
+                    }
+                });
+            $scope.writersClosed = !$scope.writersClosed;
+        }
+
 
         //Writer Open close toggle
         $scope.writersClosed = true;
         $scope.toggleCollapseAllWriters = function () {
+            alert("CICKED!");
             //If publishers open
             if (!$scope.publishersClosed) {
                 closeAllPublisers();
@@ -475,11 +495,25 @@ app.controller('productDetailsController',
             angular.forEach($scope.productOverview.recordings,
                 function (recording) {
                     if ($scope.writersClosed) {
-                        expandAllWriters();
+                            expandAllWriters();
+
+                    //    expandAllWritersBootstrap();
                     } else {
-                        collapseAllWriters();
+                            collapseAllWriters();
+                       // collapseAllWritersBootstrap();
                     }
                 });
+            
+            //if writers are open, collase em all.
+       
+            if (!$scope.writersClosed) {
+    angular.forEach($scope.productOverview.recordings,
+        function(recording) {
+            var myElement = $(recording.id);
+            $(myElement).collapse("hide");
+        });
+}
+
             $scope.writersClosed = !$scope.writersClosed;
         }
 
@@ -487,7 +521,8 @@ app.controller('productDetailsController',
         $scope.toggleCollapseAllPublishers = function () {
             //If writers are not expanded
             if ($scope.writersClosed) {
-                expandAllWriters();
+                //  expandAllWriters();
+                expandAllWritersBootstrap();
                 $scope.writersClosed = false;
             }
             closeAllPublisers();
@@ -522,13 +557,20 @@ app.controller('productDetailsController',
                 });
         }
 
+        function expandAllWritersBootstrap() {
+            $('.collapse').collapse("show");
+        }
+
         function collapseAllWriters() {
             angular.forEach($scope.productOverview.recordings,
                 function (recording) {
                     recording.writersCollapsed = true;
                 });
         }
+        function collapseAllWritersBootstrap() {
+            $('.collapse').collapse("hide");
 
+        }
 
         $scope.setCaret = function (collapsed) {
             if (collapsed == true) {
@@ -572,7 +614,18 @@ app.controller('productDetailsController',
                 //    recording.writers = result.data;
                 //});
             }
-            recording.writersCollapsed = !recording.writersCollapsed;
+            //if (!recording.writersCollapsed) {
+               var elementId = recording.id;
+               var myElement = document.getElementById(elementId);
+            //    if ($(myElement).hasClass('collapsing')) {
+            //        $(myElement).removeClass('collapsing');
+            //        $(myElement).addClass('collapse');
+                  
+            //    }                
+               $(myElement).collapse("toggle");
+            //$(myElement).has('collapsing').addClass('collapse');
+            //  }
+            //    recording.writersCollapsed = !recording.writersCollapsed;
 
             /*
             if (recording.writersCollapsed) {
@@ -720,8 +773,3 @@ app.controller('productDetailsController',
         }
  
     }]);
-
-
-
-
-//ToDo: make checkbox on configFilters clickable by selecting the text ||  add $event.stopPropgation() to a span that encapsulates it.
