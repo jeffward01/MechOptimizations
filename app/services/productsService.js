@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.factory('productsService', ['$http', 'ngAuthSettings', '$state', function ($http, ngAuthSettings,$state) {
+app.factory('productsService', ['$http', 'ngAuthSettings', '$state', function ($http, ngAuthSettings, $state) {
 
     var serviceBase = ngAuthSettings.apiServiceBaseUri;
 
@@ -8,7 +8,7 @@ app.factory('productsService', ['$http', 'ngAuthSettings', '$state', function ($
     var _getProducts = function (searchParams) {
 
         return $http.get(serviceBase + 'api/RECsCTRL/products').then(function (results) {
-                  return results;
+            return results;
         });
     };
 
@@ -22,7 +22,7 @@ app.factory('productsService', ['$http', 'ngAuthSettings', '$state', function ($
             return response;
         });
     };
-    
+
     var _searchProducts = function (request) {
         var url = serviceBase + 'api/RECsCTRL/Products/PagedSearch';
         return $http.post(url, request)
@@ -32,13 +32,13 @@ app.factory('productsService', ['$http', 'ngAuthSettings', '$state', function ($
     };
 
     var _getLicenses = function (productId) {
-        var url = serviceBase + 'api/RECsCTRL/products/GetLicenses/'+productId;
+        var url = serviceBase + 'api/RECsCTRL/products/GetLicenses/' + productId;
         return $http.get(url)
         .then(function (response) {
             return response;
         });
     };
-    
+
     var _getRecordings = function (productId) {
         var url = serviceBase + 'api/RECsCTRL/products/GetRecordings/' + productId;
         return $http.get(url)
@@ -53,7 +53,27 @@ app.factory('productsService', ['$http', 'ngAuthSettings', '$state', function ($
             return response;
         });
     };
-    
+
+    var _getProductOverview = function (productId, trackId, caecode) {
+        if (trackId == null) {
+            trackId = 1;
+        }
+        if (caecode == null) {
+            caecode = 1;
+        }
+
+        var url = serviceBase + "api/licenseProductCTRL/licenseproducts/BuildLicenseProductOverview_tom_Original/" +
+                productId +
+                "/" +
+                trackId +
+                "/" +
+                caecode;
+        return $http.get(url)
+       .then(function (response) {
+           return response;
+       });
+    }
+
     //var _getPreloadedJSON = function () {
     //    var data;
     //    return $http.get("po.json").success(function(result) {
@@ -80,7 +100,7 @@ app.factory('productsService', ['$http', 'ngAuthSettings', '$state', function ($
             return response;
         });
     };
-    
+
     var _getWorksWriters = function (worksCode) {
         var url = serviceBase + 'api/RECsCTRL/products/GetWorksWriters';
         return $http.post(url, '"' + worksCode + '"')
@@ -105,7 +125,7 @@ app.factory('productsService', ['$http', 'ngAuthSettings', '$state', function ($
             return response;
         });
     };
-    
+
     var _productAutosuggest = function (request) {
         var url = serviceBase + 'api/RECsCTRL/Autosuggests/Product';
         return $http.post(url, request)
@@ -216,16 +236,16 @@ app.factory('productsService', ['$http', 'ngAuthSettings', '$state', function ($
     productsServiceFactory.getLicenses = _getLicenses;
     productsServiceFactory.getRecordings = _getRecordings;
     productsServiceFactory.getProductRecordings = _getProductRecordings;
- //   productsServiceFactory.getProloadedJson = _getPreloadedJSON;
+    productsServiceFactory.getProductOverview = _getProductOverview;
     productsServiceFactory.getProductDetailsHeader = _getProductDetailsHeader;
     productsServiceFactory.getProductRecsRecordings = _getProductRecsRecordings;
     productsServiceFactory.getWorksWriters = _getWorksWriters;
-    productsServiceFactory.addNewProduct= _addNewProduct;
+    productsServiceFactory.addNewProduct = _addNewProduct;
     productsServiceFactory.artistAutosuggest = _artistAutosuggest;
     productsServiceFactory.productAutosuggest = _productAutosuggest;
     productsServiceFactory.trackAutosuggest = _trackAutosuggest;
     productsServiceFactory.worksSearch = _worksSearch;
-    productsServiceFactory.getProductTracks= _getProductTracks;
+    productsServiceFactory.getProductTracks = _getProductTracks;
     productsServiceFactory.getLabels = _getLabels;
     productsServiceFactory.saveProduct = _saveProduct;
     productsServiceFactory.saveProductLink = _saveProductLink;

@@ -677,17 +677,22 @@ td.licensed .badge.none {background-color:#990000;}
 
 /*Validation for text areas*/
     textarea.ng-invalid { background: #F84072; border: 2px solid red; }
-
+/*For italics on WriterAddNote and WriterEditNote*/
 .emph { color: #696969; font-style: italic; }
+
+
+
 
     /*For collapse/expand writers on productDetail*/
 .collapseAllWriterProductBtn { margin-bottom: 10px; }
 
+
+/*Below classes are for ProductOverview*/
 .writerExpandBtn { margin-right: 10px;}
-
 .configFilterBtn { min-width: 130px; text-align: center; }
-
+.margin-left-minus-5{margin-right: -5px}
 .margin-right-10 { margin-right: 10px; }
+.margin-left-10 { margin-left: 10px; }
 .removeConfigBtn {margin-left: 5px;}
 .inline-flex { display: inline-flex; }
 .center-text { text-align: center; }
@@ -695,3 +700,9 @@ td.licensed .badge.none {background-color:#990000;}
 .bold-font { font-weight: bold; }
 .hideMe { visibility: hidden; }
 .collapsing { -webkit-transition: none; transition: none; }
+.applied-filters-config {width:100%; margin:10px 0 0 0; padding:0px 10px; list-style:none; color:#FFFFFF;}
+.filter-wrapper { white-space:nowrap;}
+.filter-item {margin: 0px 2px 6px 4px; padding:2px 1px 2px 6px; white-space:nowrap; color:#333333; background-color:#efefef; border:solid 1px #ccc; border-radius:3px; display: inline-block;margin-right: 10px; margin-left: -15px}
+.configBadge { float: right;margin-top: -10px;margin-right: -10px;}
+.filterConfigBtn { display: inline-block; margin-bottom: -10px; margin-right: -10px}
+/*^^ JEFF TODO: ^^ Make CSS classes above unique*/

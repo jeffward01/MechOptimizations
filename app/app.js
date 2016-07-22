@@ -50,6 +50,33 @@ app.filter('checkedOnly',
         }
     });
 
+app.filter('caeCodefilter',
+    function() {
+        return function (items, key) {
+            var filtered = [];
+            //for (var i = 0; i < items.length; i++) {
+            //    var item = items[i];
+            //    if (item.caeCode === key.caeNumber) {
+            //        console.log("LOOK" + JSON.stringify(item));
+            //        filtered.push(item);
+            //    } else {
+            //        return false;
+            //    }
+            //}
+            angular.forEach(items,
+                function(item,index) {
+                    if (item.caeCode === key.caeNumber) {
+                        console.log(index);
+                        filtered.push(item);
+                        
+                    } else {
+                        
+                    }
+                });
+            return filtered;
+        };
+    });
+
 //Jeff Added this filter 3/14/16 for use in detail-Product.html
 app.filter('joinBy', function () {
     return function (input, delimiter) {
