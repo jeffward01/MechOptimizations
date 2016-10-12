@@ -43,10 +43,17 @@
         </ul>
     </section>
 
-
     <label>Upload a file to add to the license document</label><br />
     <section class="file-upload">
         <input type="file" class="filestyle" id="fileToUpload" customfileupload />
+        <div class="dropdown" dropdown style="display: -webkit-inline-box">
+            <button ng-class="{'field-error': errorPresent == true}" type="button" name="attachmentTypeBtn" class="btn btn-default dropdown-toggle" id="attachmentType" data-toggle="dropdown">
+                <span ng-bind="chosenAttachment.attachmentType"></span>&nbsp;<span class="{{setCaret(isCollapsed)}}"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="attachmentType">
+                <li ng-repeat="attachmentType in AttachmentTypes"><a ng-click="selectAttachmentType(attachmentType);$event.preventDefault()">{{attachmentType.attachmentType}}</a></li>
+            </ul>
+        </div>
         <button class="btn btn-default" ng-click="upload()"><span class="icon upload-doc"></span>Upload</button>
         <br />
         <!-- We only show this progress bar as items are uploaded -->
@@ -60,7 +67,8 @@
             <thead>
                 <tr>
                     <th class="one-percent centered"></th>
-                    <th class="fifty-percent">File Name</th>
+                    <th class="twentyfive-percent">File Name</th>
+                    <th class="twentyfive-percent">Attachment Type</th>
                     <th class="fifteen-percent">Date Uploaded</th>
                     <th class="fifteen-percent">Uploaded By</th>
                     <th class="fifteen-percent centered">Remove</th>
@@ -68,13 +76,14 @@
             </thead>
             <tbody>
                 <tr ng-show="licenseAttachments.length==0">
-                    <td class="eigthyfive-percent centered">
+                    <td class="centered" colspan="6">
                         There are no attachments on this License.
                     </td>
                 </tr>
                 <tr ng-repeat="attachment in licenseAttachments">
                     <td class="centered"><input type="checkbox" /></td>
                     <td><label><span ng-bind="attachment.fileName"></span></label></td>
+                    <td><span ng-bind="attachment.attachmentType.attachmentType"></span></td>
                     <td><span ng-bind="attachment.uploaddedDate | timezone | date:'MM/dd/yyyy'"></span></td>
                     <td><span ng-bind="attachment.contact.fullName"></span></td>
                     <td class="centered"><button class="btn btn-default narrow" ng-click="removeFile(attachment)"><span class="icon remove"></span></button></td>
@@ -82,10 +91,6 @@
             </tbody>
         </table>
     </section>
-
-
-
-
 </div>
 <div class="modal-footer">
     <button class="btn btn-default" ng-click="ok()">Execute License</button>

@@ -44,7 +44,9 @@ app.factory('safeService', ['$http', '$q', 'localStorageService', 'ngAuthSetting
                _safeauthentication.contactActions = response.data.contactContext.role.actions;
                _safeauthentication.roleId = response.data.contactContext.role.roleId;
                _safeauthentication.userApps = response.data.userApps;
+               _safeauthentication.password = response.data.contactContext.contact.password;
                localStorageService.clearAll();
+               localStorageService.set('authToken', response.data.generatedToken);
                //$urlRouterProvider.otherwise("/search-MyView/Tabs/MyViewTab");
 
                //_safeauthentication.roleId = ??
@@ -58,6 +60,7 @@ app.factory('safeService', ['$http', '$q', 'localStorageService', 'ngAuthSetting
                _safeauthentication.roleId = "";
                _safeauthentication.contactActions = [];
                _safeauthentication.userApps = [];
+               _safeauthentication.password = "";
                //localStorageService.remove('authenticationData');
                $state.go("LoginModal.Login");
 
@@ -93,6 +96,7 @@ app.factory('safeService', ['$http', '$q', 'localStorageService', 'ngAuthSetting
         _safeauthentication.roleId = "";
         _safeauthentication.contactActions = [];
         _safeauthentication.userApps = [];
+        _safeauthentication.password = "";
     };
 
 
@@ -111,7 +115,8 @@ app.factory('safeService', ['$http', '$q', 'localStorageService', 'ngAuthSetting
             var safeId = authData.safeId;
             var roleId = authData.roleId;
             var request = {
-                safeId: safeId
+                safeId: safeId,
+                password: authData.password ? authData.password : ''
             };
             return $http.post(url, request)
             .then(function (response) {
@@ -124,6 +129,8 @@ app.factory('safeService', ['$http', '$q', 'localStorageService', 'ngAuthSetting
                     _safeauthentication.roleId = response.data.contactContext.contact.roleId;
                     _safeauthentication.contactActions = response.data.contactContext.role.actions;
                     _safeauthentication.userApps = response.data.userApps;
+                    _safeauthentication.password = response.data.contactContext.contact.password;
+                    localStorageService.set('authToken', response.data.generatedToken);
                     if ($state.current.name == "") {
                         $state.go("SearchMyView.Tabs.MyViewTab");
                     } else {
@@ -140,6 +147,7 @@ app.factory('safeService', ['$http', '$q', 'localStorageService', 'ngAuthSetting
                     _safeauthentication.roleId = "";
                     _safeauthentication.contactActions = [];
                     _safeauthentication.userApps = [];
+                    _safeauthentication.password = "";
                     //localStorageService.remove('authenticationData');
                     $state.go("LoginModal.Login");
 

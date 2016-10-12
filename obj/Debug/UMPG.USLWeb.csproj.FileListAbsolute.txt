@@ -1,0 +1,6 @@
+C:\Dev\projects\USL\svn\trunks\Source\Web\UMPG.USL.Web\UMPG.USLWeb\bin\UMPG.USLWeb.dll.config
+C:\Dev\projects\USL\svn\trunks\Source\Web\UMPG.USL.Web\UMPG.USLWeb\bin\UMPG.USLWeb.dll
+C:\Dev\projects\USL\svn\trunks\Source\Web\UMPG.USL.Web\UMPG.USLWeb\bin\UMPG.USLWeb.pdb
+C:\Dev\projects\USL\svn\trunks\Source\Web\UMPG.USL.Web\UMPG.USLWeb\obj\Debug\UMPG.USLWeb.csprojResolveAssemblyReference.cache
+C:\Dev\projects\USL\svn\trunks\Source\Web\UMPG.USL.Web\UMPG.USLWeb\obj\Debug\UMPG.USLWeb.dll
+C:\Dev\projects\USL\svn\trunks\Source\Web\UMPG.USL.Web\UMPG.USLWeb\obj\Debug\UMPG.USLWeb.pdb

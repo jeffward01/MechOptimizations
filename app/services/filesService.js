@@ -3,7 +3,12 @@ app.factory('filesService', ['$http', 'ngAuthSettings', '$state', 'localStorageS
     var serviceBase = ngAuthSettings.apiServiceBaseUri;
     var filesServiceFactory = {};
 
-    var _upload = function (licenseId, fileElementId, progressBarId) {
+    var _getTokenId = function () {
+        var authToken = localStorageService.get('authToken');
+        if (authToken) return authToken;
+        return "";
+    }
+    var _upload = function (licenseId, fileElementId, progressBarId, attachmentTypeId) {
         var deferred = $q.defer();
         var xhr = new XMLHttpRequest();
         var file = document.getElementById(fileElementId);
@@ -25,15 +30,16 @@ app.factory('filesService', ['$http', 'ngAuthSettings', '$state', 'localStorageS
             deferred.reject({ success: false, error: 'abort' });
         }, false);
         var fd = new FormData();
-        var url = serviceBase + 'api/licenseCTRL/licenseAttachments/UploadAttachmentsByLicenseId/' + licenseId;
+        var url = serviceBase + 'api/licenseCTRL/licenseAttachments/UploadAttachmentsByLicenseId/' + licenseId + "/" + attachmentTypeId;
         xhr.open("POST", url, true);
+        xhr.setRequestHeader("Token", _getTokenId());
         fd.append("upload_file0", file.files[0]);
         var safeauthentication = safeService.getAuthentication();
         fd.append("CreatedBy", safeauthentication.contactId);
         xhr.send(fd);
         return deferred.promise;
     }
-
+  
     var _remove = function (attachment) {
         var url = serviceBase + 'api/licenseCTRL/licenseAttachments/RemoveAttachment';
         return $http.post(url, attachment);
@@ -42,6 +48,12 @@ app.factory('filesService', ['$http', 'ngAuthSettings', '$state', 'localStorageS
     var _removeMultiple = function (attachments) {
         var url = serviceBase + 'api/licenseCTRL/licenseAttachments/RemoveAttachments';
         return $http.post(url, attachments);
+    }
+
+
+    var _getAllAttachmentTypes = function() {
+        var url = serviceBase + 'api/attachmentTypeCTRL/attachmentTypes';
+        return $http.get(url);
     }
 
     var _validSize = function (fileElementId) {
@@ -85,8 +97,17 @@ app.factory('filesService', ['$http', 'ngAuthSettings', '$state', 'localStorageS
             return response;
         });
     }
+
+    var _updateAttachment = function(licenseAttachment) {
+        var url = serviceBase + 'api/licenseCTRL/licenseAttachments/UpdateLicenseAttachment';
+        console.log(JSON.stringify(licenseAttachment));
+        return $http.post(url, licenseAttachment);
+    }
+
+    filesServiceFactory.updateLicenseAttachment = _updateAttachment;
     filesServiceFactory.upload = _upload;
     filesServiceFactory.remove = _remove;
+    filesServiceFactory.getAllAttachmentTypes = _getAllAttachmentTypes;
     filesServiceFactory.removeMultiple = _removeMultiple;
     filesServiceFactory.validSize = _validSize;
     filesServiceFactory.isFileSelected = _isFileSelected;

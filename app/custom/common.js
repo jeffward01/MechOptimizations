@@ -171,8 +171,9 @@ USL.Common.isValidField = function (value) {
     return true;
 }
 
-USL.Common.isValidEmail = function (value) {
-    if (angular.isUndefined(value) || value == '' || !/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/.test(value)) {
+USL.Common.isValidEmail = function (value) { // USL-1213
+    //Old regex = // !/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/.test(value)) {
+    if (angular.isUndefined(value) || value == '' || !/^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i.test(value)) { //new Regex tests positive for tsnell@dc.rr.com
         return false;
     };
     return true;

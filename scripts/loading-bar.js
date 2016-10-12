@@ -78,7 +78,7 @@ angular.module('cfp.loadingBarInterceptor', ['cfp.loadingBar'])
 
         // Choose the proper cache source. Borrowed from angular: $http service
         if ((config.cache || defaults.cache) && config.cache !== false &&
-          (config.method === 'GET' || config.method === 'JSONP')) {
+          (config.method === 'GET' || config.method === 'POST' || config.method === 'JSONP')) {
             cache = angular.isObject(config.cache) ? config.cache
               : angular.isObject(defaults.cache) ? defaults.cache
               : defaultCache;

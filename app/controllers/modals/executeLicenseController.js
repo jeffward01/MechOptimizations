@@ -2,6 +2,12 @@
 app.controller('executeLicenseController', ['$scope', '$stateParams', 'ngAuthSettings', 'licensesService', 'filesService', 'notyService', '$timeout', function ($scope, $stateParams, ngAuthSettings, licensesService, filesService, notyService, $timeout) {
     var serviceBase = ngAuthSettings.apiServiceBaseUri;
     $scope.licenseDetail = $stateParams.licenseData;
+    $scope.errorPresent = false;
+    $scope.chosenAttachment = {
+        attachmentType: "Select Attachment Type",
+        attachmentTypeId: 0
+    };
+    $scope.isCollapsed = false;
     var d = new Date();
     var year = d.getFullYear();
     var month = d.getMonth() + 1;
@@ -12,13 +18,13 @@ app.controller('executeLicenseController', ['$scope', '$stateParams', 'ngAuthSet
     if (day < 10) {
         day = "0" + day;
     };
+
     var date;
     var lday;
     var lyear;
     var lmonth;
     if ($scope.licenseDetail.effectiveDate) {
         $scope.dt = moment.utc($scope.licenseDetail.effectiveDate).format("YYYY-MM-DD");
-
     } else {
         $scope.dt = moment().format();
     }
@@ -33,15 +39,15 @@ app.controller('executeLicenseController', ['$scope', '$stateParams', 'ngAuthSet
         $scope.dtSigned = moment().format();
     }
 
+    $scope.selectAttachmentType = function (attachmentType) {
+        $scope.chosenAttachment = attachmentType;
+        attachmentValidation();
+    }
 
-
-    var dateErrorMessage = function(evt) {
+    var dateErrorMessage = function (evt) {
         var message = "Invalid Date, use mm/dd/yyyy format (click to close)";
         notyService.error(message);
     }
-
-    
-
 
     $scope.ok = function () {
         var form1 = $scope.someForm11;
@@ -56,7 +62,6 @@ app.controller('executeLicenseController', ['$scope', '$stateParams', 'ngAuthSet
             dateErrorMessage();
             return;
         }
-
 
         if ($scope.licenseDetail.licenseStatusId == 6) {
             var data = {
@@ -95,47 +100,68 @@ app.controller('executeLicenseController', ['$scope', '$stateParams', 'ngAuthSet
     }
 
     $scope.upload = function () {
-        var fileId = 'fileToUpload';
-        var progressId = 'progressbar';
-        var licenseId = $stateParams.licenseId;
-        var validSize = filesService.validSize(fileId);
-        var fileExists = filesService.isNewFile(fileId, $scope.licenseAttachments);
-        var fileSelected = filesService.isFileSelected(fileId);
+        if (attachmentValidation()) {
+            var fileId = 'fileToUpload';
+            var progressId = 'progressbar';
+            var licenseId = $stateParams.licenseId;
+            var validSize = filesService.validSize(fileId);
+            var fileExists = filesService.isNewFile(fileId, $scope.licenseAttachments);
+            var fileSelected = filesService.isFileSelected(fileId);
+            var attachmentTypeId = $scope.chosenAttachment.attachmentTypeId;
 
-        if (validSize && fileExists == null && fileSelected) {
-            uploadFiles(licenseId, fileId, progressId);
+            if (validSize && fileExists == null && fileSelected) {
+                uploadFiles(licenseId, fileId, progressId, attachmentTypeId);
+            }
+
+            if (!validSize) {
+                var message = "The file which were you trying to upload exceeds the maximum admited size.";
+                notyService.error(message);
+            }
+
+            if (fileExists) {
+                var text = 'We have found an existing file with the same name: "' +
+                    fileExists +
+                    '". Would you like to overwrite it?';
+                notyService.modalConfirm(text)
+                    .then(function () {
+                        uploadFiles(licenseId, fileId, progressId, attachmentTypeId);
+                    });
+            }
+
+            if (!fileSelected) {
+                var message = "No file has been selected for upload. Please select a file.";
+                notyService.error(message);
+            }
         }
-
-        if (!validSize) {
-            var message = "The file which were you trying to upload exceeds the maximum admited size.";
-            notyService.error(message);
-        }
-
-        if (fileExists) {
-            var text = 'We have found an existing file with the same name: "' + fileExists + '". Would you like to overwrite it?';
-            notyService.modalConfirm(text).then(function () {
-                uploadFiles(licenseId, fileId, progressId);
-            });
-
-        }
-
-        if (!fileSelected) {
-            var message = "No file has been selected for upload. Please select a file.";
-            notyService.error(message);
-        }
-
+        return;
     };
 
-    var uploadFiles = function (licenseId, fileId, progressId) {
+
+    var uploadFiles = function (licenseId, fileId, progressId, attachmentTypeId) {
         $scope.progressVisible = true;
-        filesService.upload(licenseId, fileId, progressId).then(uploadComplete, uploadError).finally(function () {
+        filesService.upload(licenseId, fileId, progressId, attachmentTypeId).then(uploadComplete, uploadError).finally(function () {
             $timeout(function () {
                 $scope.progressVisible = false;
             }, 1000);
         });
     }
-
-
+    function attachmentValidation() {
+        if (!validateAttachmentType()) {
+            var attachmentTypeErrorMessage = "Please select an Attachment Type";
+            $scope.errorPresent = true;
+            notyService.error(attachmentTypeErrorMessage);
+            return false;
+        } else {
+            $scope.errorPresent = false;
+            return true;
+        }
+    }
+    function validateAttachmentType() {
+        if ($scope.chosenAttachment.attachmentTypeId == 0) {
+            return false;
+        }
+        return true;
+    };
 
     var uploadComplete = function (evt) {
         /* This event is raised when the server send back a response */
@@ -146,12 +172,22 @@ app.controller('executeLicenseController', ['$scope', '$stateParams', 'ngAuthSet
         $stateParams.stateCallbackArguments = {
             method: 'uploadAttachment'
         }
+    }
 
+    getAllAttchmentTypes();
 
+    function getAllAttchmentTypes() {
+        filesService.getAllAttachmentTypes()
+            .then(function (res) {
+                console.log(JSON.stringify(res.data));
+                $scope.AttachmentTypes = res.data;
+            },
+                function (err) {
+                    console.log("An error occurred retrieving licenseAttachmentTypes. Error: " + err.toString());
+                });
     }
 
     var uploadFailed = function (evt) {
-
         var message = "There was an error attempting to upload the file.";
         notyService.error(message);
     }
@@ -162,12 +198,10 @@ app.controller('executeLicenseController', ['$scope', '$stateParams', 'ngAuthSet
         else if (evt.error == "abort") {
             uploadCanceled();
         }
-
     }
     var uploadCanceled = function (evt) {
         var message = "The upload has been canceled by the user or the browser dropped the connection.";
         notyService.error(message);
-
     }
 
     $scope.populatelicenseAttachments = function (licenseId) {
@@ -176,12 +210,11 @@ app.controller('executeLicenseController', ['$scope', '$stateParams', 'ngAuthSet
         });
     }
     $scope.open = function ($event) {
-        
-            $event.preventDefault();
-            $event.stopPropagation();
-            $scope.opened = true;
-            $scope.openedSigned = false;
-            $scope.openedReceived = false;
+        $event.preventDefault();
+        $event.stopPropagation();
+        $scope.opened = true;
+        $scope.openedSigned = false;
+        $scope.openedReceived = false;
     };
 
     $scope.openSigned = function ($event) {
@@ -208,7 +241,13 @@ app.controller('executeLicenseController', ['$scope', '$stateParams', 'ngAuthSet
         }
         $scope.goToParent(null, false);
     }
-    $scope.format = 'MM/dd/yyyy';
 
-    
+    $scope.setCaret = function (collapsed) {
+        if (!collapsed) {
+            return "caret";
+        } else {
+            return "caret caret-up";
+        }
+    }
+    $scope.format = 'MM/dd/yyyy';
 }]);

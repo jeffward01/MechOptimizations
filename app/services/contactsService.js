@@ -125,6 +125,14 @@ app.factory('contactsService', ['$http', 'ngAuthSettings', function ($http, ngAu
         });
     };
 
+    var _deleteContactFromLabelGroup = function(request) {
+        var url = serviceBase + 'api/ContactCTRL/Contacts/DeleteContactFromLabelGroup';
+        return $http.post(url, request)
+        .then(function (response) {
+            return response;
+        });
+    }
+
     contactsServiceFactory.getContacts = _getContacts;
     contactsServiceFactory.emailExists = _emailExists;
     contactsServiceFactory.getAssignees = _getAssignees;
@@ -142,6 +150,7 @@ app.factory('contactsService', ['$http', 'ngAuthSettings', function ($http, ngAu
     contactsServiceFactory.addLicenseeContactAndLink = _addLicenseeContactAndLink;
     contactsServiceFactory.deleteContactAndLink = _deleteContactAndLink;
     contactsServiceFactory.deleteLicenseeContactAndLink = _deleteLicenseeContactAndLink;
+    contactsServiceFactory.deleteContactFromLabelGroup = _deleteContactFromLabelGroup;
     return contactsServiceFactory;
 
 }]);

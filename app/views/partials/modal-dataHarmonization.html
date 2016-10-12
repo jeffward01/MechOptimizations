@@ -1,0 +1,32 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Data Harmonization</h3>
+    <button class="btn btn-default narrow close-modal" ng-click="cancel()"><span class="icon cancel"></span></button>
+</div>
+<div class="modal-body add-note">
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="twentyfive-percent centered top">Property Changed</th>
+                <th class="fifteen-percent centered top">Original Value</th>
+                <th class="fifteen-percent centered top">Changed Value</th>
+                <th class="fortyfive-percent-percent centered top">Message</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="data in dataChanges">
+                <td class="twentyfive-percent centered top">{{data.propertyChanged}}</td>
+                <td class="fifteen-percent centered top">{{data.originalValue}}</td>
+                <td class="fifteen-percent centered top">{{data.changedValue}}</td>
+                <td class="fortyfive-percent-percent centered top">{{data.changeMessage}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default"  ng-click="cancel()"><i class="fa fa-check" aria-hidden="true"></i>&nbsp;Ok</button>
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>
+
+

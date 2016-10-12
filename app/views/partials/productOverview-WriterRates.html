@@ -1,0 +1,99 @@
+﻿<table class="table nested light">
+    <thead>
+        <tr>
+            <th style="color: black" class="one-percent no-wrap">License</th>
+            <th style="color: black" class="fifteen-percent"> <span>Configuration (UPC)</span></th>
+            <th style="color: black" class="one-percent">Consent</th>
+            <th style="color: black" class="fifteen-percent no-wrap">Writer Status</th>
+            <th style="color: black" class="five-percent">License Status</th>
+            <th style="color: black" class="fifteen-percent">Rate Type</th>
+
+            <th style="color: black" class="five-percent">Pro-Rata Rate</th>
+            <th style="color: black" class="five-percent">Per Song Rate</th>
+            <!--<!==Not: NOI, Advice Letter or Gratis==>-->
+            <th style="color: black" class="five-percent no-wrap centered">License Date</th>
+            <!--<!==License NOI type==>-->
+            <th style="color: black" class="five-percent no-wrap centered">Paid Quarter</th>
+        </tr>
+    </thead>
+    <!--<tbody ng-repeat="rateConfiguration in writer.licenseProductRecordingWriter.ratesByConfiguration  track by $index">-->
+    <!--<tbody ng-repeat="rate in ExtractedWriterList | caeCodefilter:writer | checkedOnly:configurationFilters | onlyThese:configurationFilters track by $index">-->
+    <!--<tbody ng-repeat="rate in ExtractedWriterList | caeCodefilter:writer | checkedOnly:configurationFilters track by $index">-->
+    <tbody>
+        <!--<tr ng-repeat="rate in rateConfiguration.rates">-->
+        <!--<tr ng-repeat="rate in writer.licenseProductRecordingWriter.rateList  | filter: configFilter">-->
+        <!--<tr ng-repeat="rate in writer.licenseProductRecordingWriter.rateList  | checkedOnly:configurationFilters | orderBy: 'upc' ">-->
+        <!--<tr ng-repeat="list in ExtractedWriterList_forWriter | caeCodefilter:writer track by $index">-->
+        <!--| unique: 'licenseWriterRateId'-->
+    <!--<tr ng-repeat="list in ExtractedWriterList_forWriter | caeCodefilter:writer | executedFilter:allStatuses | zeroFilter:showZeros | checkedOnly:configurationFilters | trackIdFilter:recording.track.id| orderBy:[ 'licenseStatus.createdDate','licenseStatus.licenseStatus','rateTypeId']:true track by $index">-->
+    <tr>
+            <!--<tr ng-repeat="list in ExtractedWriterList_forWriter | caeCodefilter:writer track by $index">-->
+            <td class="one-percent no-wrap">
+                <!--<pre>{{list | json}}</pre>-->
+                <span ui-sref="SearchMyView.DetailLicense({licenseId: rate.rateList.licenseId})"><a>{{list.licenseTitle}}</a></span>
+                <!--<span>LicenseID:&nbsp;{{list.licenseId}}</span>-->
+                <span>licenseWriterRateId:&nbsp;{{list.licenseWriterRateId}}</span>
+                <span>licenseWriterId:&nbsp;{{list.licenseWriterId}}</span>
+                <span>trackId:&nbsp;{{organizedRatesByConfiguration | json}}</span>
+            </td>
+            <td class="fifteen-percent">
+                <!--<span><span ng-class="rate.configuration_id | returnConfigurationIcon"></span><span ng-bind="rate.configuration_name"></span><span ng_if="rate.configuration_upc">(<span ng-bind="rate.configuration_upc"></span>)</span></span>-->
+                <span><span ng-class="list.configuration_id | returnConfigurationIcon"></span>{{list.configuration_name}}<span><span ng-if="list.upc != null">({{list.upc}})</span></span></span>
+            </td>
+            <td>
+                <span>
+                    <!--<button ng-disabled="!buttons.writerConsentBtn" securitydisable actions="LicenseDetailWriterConsent" class="btn btn-default btn-sm" data-toggle="modal" ui-sref="SearchMyView.DetailLicense.StepsModal.WritersConsent({config:rate,files:licenseAttachments,recording:recording,writer:writer,product:product,modalSize:'md' })">
+                        <span ng-bind="rate.writersConsentType.writersConsentType"></span>
+                    </button>-->
+                    {{returnWriterConsentType(list.writersConsentTypeId)}}
+                </span>
+            </td>
+            <td class="fifteen-percent top">
+                <!--<span ng-show="$index == 0">
+                    <span ng-repeat="status in rateConfiguration.specialStatusList" class="badge">
+                        <span ng-if="status.lU_SpecialStatuses"><span ng-bind="status.lU_SpecialStatuses.specialStatus"></span></span>
+                        <span ng-if="!status.lU_SpecialStatuses"><span ng-bind="status.specialStatus"></span></span>
+                    </span>
+                </span>-->
+                <span>(not wired)</span>
+            </td>
+            <td class="fifteen-percent">
+                <span>
+                    {{list.licenseStatus.licenseStatus}}
+                    <!--{{list.licenseStatus.createdDate | date:'MM/dd/yyyy'}}-->
+                </span>
+            </td>
+            <td class="fifteen-percent">
+                {{returnRateType(list.rateTypeId)}}
+            </td>
+            <!--<td class="fifteen-percent" ng-if="writer.controlled == false"><span ng-show="$index == 0">N/A</span></td>-->
+            <!--<td class="five-percent" ng-if="writer.controlled == false">N/A</td>
+            <td class="five-percent centered" ng-if="writer.controlled == true" ng-show="writer.statPrcentageVisible == true"><span ng-bind="rate.percentOfStat"></span></td>
+            <td class="ten-percent" ng-if="writer.controlled == true" ng-show="writer.escalatedRateVisible == true"><span ng-bind="rate.escalatedRate"></span></td>
+            <td class="five-percent" ng-if="writer.controlled == false">N/A</td>
+            <td class="five-percent" ng-if="writer.controlled == true" ng-show="writer.escalatedRateVisible == true"><span ng-bind="rate.rate"></span></td>-->
+            <td class="five-percent">
+                {{list.proRataRate}}
+            </td>
+            <!--<td class="five-percent">N/A</td>-->
+            <td class="five-percent">
+                <span>{{list.perSongRate}}</span>
+            </td>
+            <!--<td class="ten-percent centered">N/A</td>-->
+            <!--Display License Date, Signed Date or Effective Date-->
+            <!--<td > <span ng-bind="rate.licenseDate | timezone | date:'MM/dd/yyyy'"></span></td>-->
+            <td class="five-percent centered">
+                {{list.licenseDate | date:"MM/dd/yyyy"}}
+            </td>
+            <td class="five-percent centered">
+                <span>
+
+                    <!--<button ng-disabled="paidQuarterDisabled" securitydisable actions="LicenseDetailsPaidQuarter" class="btn btn-default btn-sm" ui-sref="SearchMyView.DetailLicense.StepsModal.PaidQuarter({licenseId:licenseDetail.licenseId,config:rate,recording:recording,writer:writer,product:product, modalSize:'sm' })">-->
+                    <span>{{list.paidQuarter}}</span>
+
+                    <!--</button>-->
+                </span>
+            </td>
+        </tr>
+    </tbody>
+</table>

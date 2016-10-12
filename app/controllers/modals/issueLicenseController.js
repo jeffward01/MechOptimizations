@@ -47,14 +47,19 @@ app.controller('issueLicenseController', ['$scope', 'licensesService', 'licenseP
                             angular.forEach(writer.originalPublishers, function (publisher) {
                                 publisher.SeExists = false;
                                 publisher.zeroValue = false;
+                                var boolSet = false;
                                 angular.forEach(publisher.administrators, function (subpub) {
                                     if (subpub.capacityCode == "SE") {
                                         publisher.SeExists = true;
                                     }
                                     if (subpub.mechanicalCollectablePercentage == 0) {
-                                        publisher.zeroValue = true;
+                                        if (!boolSet) {
+                                            publisher.zeroValue = true;
+                                        }
+                                        boolSet = true;
                                     } else {
                                         publisher.zeroValue = false;
+                                        boolSet = true;
                                     }
                                     if (subpub.name == publisher.name) {
                                         publisher.sameName = true;

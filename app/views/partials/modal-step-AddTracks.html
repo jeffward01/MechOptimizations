@@ -15,16 +15,18 @@
                     <!--<th class="ten-percent">Version</th>-->
                     <th class="fifteen-percent">ISRC</th>
                     <th class="five-percent">Duration</th>
-                    <th class="five-percent">Actions</th>
+                    <th class="five-percent centered">Actions</th>
                 </tr>
             </thead>
             <tbody>
 
                 <tr>
                     <td class="five-percent centered">
-                        <input type="text" ng-model="newproductLink.cdNumber" class="sm centered" id="newproductLink-cdNumber" ng-class="{'field-error' : !newproductLink.cdNumber && modal_add_submit }" /></td>
+                        <input type="text" ng-model="newproductLink.cdNumber" class="sm centered" id="newproductLink-cdNumber" ng-class="{'field-error' : !newproductLink.cdNumber && modal_add_submit }" />
+                    </td>
                     <td class="five-percent centered">
-                        <input type="text" ng-model="newproductLink.index" class="sm centered" id="newproductLink-index" ng-class="{'field-error' : !newproductLink.index && modal_add_submit }" /></td>
+                        <input type="text" ng-model="newproductLink.index" class="sm centered" id="newproductLink-index" ng-class="{'field-error' : !newproductLink.index && modal_add_submit }" />
+                    </td>
                     <td class="twenty-percent">
                         <div class="dropdown">
                             <input class="dropdown-toggle" data-toggle="dropdown" type="text" ng-model="newproductLink.track.artist.name" ng-change="artistAutosuggest(newproductLink);" id="newproductLink-artist" ng-class="{'field-error' : !newproductLink.track.artist.name && modal_add_submit }" />
@@ -60,8 +62,11 @@
                     </td>
                     <td class="fifteen-percent">
                         <div ng-show="newproductLink.track.title.length > 0">
-                            select work
-                         <span ng-bind="newproductLink.track.id"></span>
+                            <div ng-repeat="workCode in newproductLink.track.copyrights">
+                                select work
+                                <!--<span ng-bind="newproductLink.track.copyrights[0].workCode"></span>-->
+                                {{workCode.workCode}}{{$last ? "" : ", "}}
+                            </div>
                         </div>
                         <!-- Copyright Info if a Work is selected to attach to track from previously auto-suggest dropdown -->
                     </td>
@@ -79,7 +84,7 @@
                         <input ng-model="newproductLink.track.isrc" id="newproductLink-isrc" type="text" /></td>
                     <td class="five-percent">
                         <input ng-model="newproductLink.track.duration" id="newproductLink-duration" type="text" class="sm" /></td>
-                    <td class="five-percent">
+                    <td class="five-percent centered">
                         <button class="btn btn-default narrow" ng-click="saveProductLink(newproductLink);" xng-click="addTempProductLink();"><span class="icon add"></span></button>
                     </td>
                 </tr>
@@ -87,7 +92,7 @@
         </table>
     </section>
     <section class="track-listing">
-        <table class="table fixed_headers">
+        <table class="table">
             <thead>
                 <tr>
                     <th class="five-percent centered">  CD #</th>
@@ -98,7 +103,7 @@
                     <th class="ten-percent">  Pips #</th>
                     <th class="twenty-percent">  ISRC</th>
                     <th class="five-percent">  Duration</th>
-                    <th class="ten-percent">  Actions</th>
+                    <th class="ten-percent centered">  Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -111,7 +116,7 @@
                     <td class="ten-percent">  <span ng-bind="productLink.track.copyrights[0].workCode"></span></td>
                     <td class="twenty-percent">  <span ng-bind="productLink.track.isrc"></span></td>
                     <td class="five-percent">  <span ng-bind="productLink.track.duration"></span></td>
-                    <td class="fifteen-percent">  
+                    <td class="fifteen-percent centered">  
                         <div style="display: inline-block">
                             <button class="btn btn-default narrow" ng-click="editProductLink(productLink)"><span class="icon edit"></span></button>
                             <button class="btn btn-default narrow" ng-click="deleteProductLink(productLink)"><span class="icon remove"></span></button>
@@ -157,7 +162,7 @@
                     <td class="five-percent">
                         <input type="text" ng-model="productLink.track.duration" class="sm productLink-track-duration" ng-change="isDirty=true" ng-class="{'field-error' : !isValidField(productLink.track.duration) && modal_submit }" /></td>
                     <td class="ten-percent"></td>
-                    <td></td>
+
                 </tr>
                 <tr class="editing" ng-show="productLink == selectedProductLink">
 
@@ -188,7 +193,7 @@
                     <td class="fifteen-percent">
                         <button class="btn btn-default narrow" ng-click="addWork(productLinkObject)" ng-hide="productLink.track.controlled != 'YES'"><span class="icon add"></span></button>
                     </td>
-                    <td class="thirtyfive-percent" colspan="3">
+                    <td class="thirtyfive-percent" colspan="4">
                       
                         
 
@@ -210,7 +215,7 @@
                             </ul>
                         </span>
                     </td>
-                    <td class="ten-percent right-aligned" colspan="2"></td>
+                    <td class="ten-percent right-aligned" colspan="3"></td>
                 </tr>
 
 
@@ -272,9 +277,10 @@
                             </ul>
                         </span>
                     </td>-->
-                    <td class="ten-percent right-aligned" colspan="8">
-                        <button class="btn btn-default" ng-click="cancelEdit(productLink);">Cancel</button>
+                    <td class="ten-percent right-aligned" colspan="9">
                         <button class="btn btn-default" ng-click="saveProductLink(productLink)">Save</button>
+                        <button class="btn btn-default" ng-click="cancelEdit(productLink);">Cancel</button>
+
                     </td>
                 </tr>
 

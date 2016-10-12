@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.factory('licenseProductsService', ['$http', 'ngAuthSettings', '$state', function ($http, ngAuthSettings, $state) {
+app.factory('licenseProductsService', ['$http', 'ngAuthSettings', '$state',  function ($http, ngAuthSettings, $state) {
 
     var serviceBase = ngAuthSettings.apiServiceBaseUri;
 
@@ -12,6 +12,27 @@ app.factory('licenseProductsService', ['$http', 'ngAuthSettings', '$state', func
             return response;
         });
     };
+
+    var _getRecsDataChangesFast = function (products) {
+        var url = serviceBase + 'api/RECsCTRL/Products/FindOutOfSyncRecItems';
+        return $http.post(url,products,
+            {
+                ignoreLoadingBar: true
+            })
+        .then(function (response) {
+            return response.data;
+        });
+    };
+
+
+
+    var _getCatalogNumber = function(productConfigId) {
+        var url = serviceBase + 'api/licenseProductCTRL/licenseproducts/GetCatalogNumber/' + productConfigId;
+        return $http.get(url)
+            .then(function(response) {
+                return response;
+            });
+    }
 
     //products in the license and products not in the license
     var _deleteLicenseProduct = function (licenseId, productId) {
@@ -201,7 +222,18 @@ app.factory('licenseProductsService', ['$http', 'ngAuthSettings', '$state', func
         });
     };
 
+    var _getWriterNotes = function(licenseWriterId) {
+        var url = serviceBase + 'api/licenseProductCTRL/licenseproducts/GetWriterNotes/' + licenseWriterId;
+        return $http.get(url)
+            .then(function(response) {
+                return response;
+            });
+    }
+    
+    licenseProductsServiceFactory.getRecsDataChangesFast = _getRecsDataChangesFast;
+    licenseProductsServiceFactory.getCatalogNumber = _getCatalogNumber;
     licenseProductsServiceFactory.getLicenseProducts = _getProducts;
+    licenseProductsServiceFactory.getWriterNotes = _getWriterNotes;
     //licenseProductsServiceFactory.getLicenseProductsDropdown = _getLicenseProducts;
 
     //licenseProductsServiceFactory.getLicenseProductRecordings = _getRecordings;

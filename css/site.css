@@ -706,3 +706,34 @@ td.licensed .badge.none {background-color:#990000;}
 .configBadge { float: right;margin-top: -10px;margin-right: -10px;}
 .filterConfigBtn { display: inline-block; margin-bottom: -10px; margin-right: -10px}
 /*^^ JEFF TODO: ^^ Make CSS classes above unique*/
+
+.noBorder { border-top-style: hidden;}
+
+.no-wrapAll {
+    white-space: nowrap;
+}
+
+
+.glowingBorder { border-color: #f9ef1a; box-shadow:0 0 10px #f9ef1a; animation: pulse 5s infinite }
+
+@keyframes pulse {
+    0% {
+    border: solid 1px  #AEAEAE; box-shadow:0 0 1px transparent;
+  }
+        25% {
+     box-shadow:0 0 10px #f9ef1a;
+  }
+     50% {
+     box-shadow:0 0 10px #f9ef1a;
+  }
+       75% {
+     box-shadow:0 0 10px #f9ef1a;
+  }
+  100% {
+    border: solid 1px  #AEAEAE; box-shadow:0 0 1px transparent;
+  }
+}
+
+.fa-check {
+  color: green;
+}

@@ -74,9 +74,11 @@ app.controller('editWriterRates', ['$scope', 'licensesService', 'licenseProducts
         if ($stateParams.licenseTypeId == 3 || $stateParams.licenseTypeId == 4) {
             textMessageLicenseType = "Signed Date";
         }
-        var textMessage = "You're about to change the configuration for this product from the license. <br /><br />If you proceed the " + textMessageLicenseType + " will be set to null <br /><br />Do you still want to apply the changes?";
+        //USL-1307 Original
+        //var textMessage = "You're about to change the configuration for this product from the license. <br /><br />If you proceed the " + textMessageLicenseType + " will be set to null <br /><br />Do you still want to apply the changes?";
+        //USL-1307 new
+        var textMessage = "You are about to change the information on this license, are you sure you want to proceed?";
         if (licenseDateExist) {
-
             noty({
                 text: textMessage,
                 type: 'confirm',
@@ -128,7 +130,7 @@ app.controller('editWriterRates', ['$scope', 'licensesService', 'licenseProducts
         var rates = document.getElementsByClassName('rateValue');
         for (var i = 0; i < rates.length; i++) {
             if (rates[i].offsetParent !== null) { // rate textbox is visible
-                if (!(rates[i].value > 0) || rates[i].value > 10) {
+                if (!(rates[i].value >= 0) || rates[i].value >= 10) {
                     rates[i].classList.add('field-error');
                     rateError = true;
                 }
@@ -199,6 +201,10 @@ app.controller('editWriterRates', ['$scope', 'licensesService', 'licenseProducts
         }, function (error) {
         });
 
+    }
+
+    $scope.toPercent = function (x) {
+          return ((x / 100) * 100).toFixed(2) + '%';
     }
 
     $scope.getQuarters = function () {

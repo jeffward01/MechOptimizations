@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.controller('productsController', ['$scope', 'productsService', 'contactsService', '$modal', '$stateParams', 'localStorageService', 'licenseesService', 'labelsService', 'prioritiesService', 'contactDefaultsService', 'licensesService','$state','licenseProductsService','$filter', function ($scope, productsService, contactsService, $modal, $stateParams, localStorageService, licenseesService, labelsService, prioritiesService, contactDefaultsService,licensesService, $state, licenseProductsService, $filter) {
+app.controller('productsController', ['$scope', 'productsService', 'contactsService', '$modal', '$stateParams', 'localStorageService', 'licenseesService', 'labelsService', 'prioritiesService', 'contactDefaultsService', 'licensesService', '$state', 'licenseProductsService', '$filter', function ($scope, productsService, contactsService, $modal, $stateParams, localStorageService, licenseesService, labelsService, prioritiesService, contactDefaultsService, licensesService, $state, licenseProductsService, $filter) {
     var localStorageOptions = "PRODUCTS_SEARCH_OPTIONS";
     var defaultsKeyName = "SEARCH_PAGE";
     $scope.$on("modalAddProductsEvent", function ($event, args) {
@@ -29,10 +29,10 @@ app.controller('productsController', ['$scope', 'productsService', 'contactsServ
         numPerPage: 10,
         maxSize: 5,
         pageSizeList: [10, 20, 50, 100],
-        isCollapsed:true
+        isCollapsed: true
     }
-    if(!$scope.insideModal)
-    $scope.loadPagination($scope.currentPage(), $scope.pagination);
+    if (!$scope.insideModal)
+        $scope.loadPagination($scope.currentPage(), $scope.pagination);
     $scope.sortBy = "";
     $scope.sortOrder = "";
     $scope.sortArrow = "caret caret-up";
@@ -43,7 +43,7 @@ app.controller('productsController', ['$scope', 'productsService', 'contactsServ
     //$scope.currentSearch = new advancedSearchObject();
     $scope.isMyView = false;
 
-  
+
     $scope.searchParameters = function () {
         var advancedOpt = $scope.currentSearch;
         var sliderRangeDefault = function () {
@@ -116,8 +116,8 @@ app.controller('productsController', ['$scope', 'productsService', 'contactsServ
         if ($scope.canChangePage) {
             $scope.searchProducts();
         } else {
-            if(!$scope.insideModal)
-            $scope.loadPagination($scope.currentPage(), $scope.pagination);
+            if (!$scope.insideModal)
+                $scope.loadPagination($scope.currentPage(), $scope.pagination);
         }
     };
     $scope.search = function () {
@@ -129,16 +129,19 @@ app.controller('productsController', ['$scope', 'productsService', 'contactsServ
     $scope.searchProducts = function (checkSelected) {
         productsService.searchProducts($scope.searchParameters()).then(function (result) {
             var response = result.data;
-            angular.forEach(response.results, function(product) {
+            angular.forEach(response.results, function (product) {
                 product.selected = false;
-                if(!product.recordings)
-                product.recordings = [];
+                if (!product.recordings)
+                    product.recordings = [];
                 product.tracksLoaded = false;
                 product.tracksCollapsed = false;
 
             });
             $scope.products = response.results;
-
+            
+            //Clean configurations
+            $scope.products = cleanEmptyConfigurations($scope.products);
+            addCatalogNumbersToProducts($scope.products);
             //This loads all of the recordings upfront || as of now not needed.  Possibly in the future, load licenses w/ 7 or less recordings, 
             // and then on the row click, load licenses with more than 7 recordings
             //$scope.products.forEach(function (product) {
@@ -154,8 +157,8 @@ app.controller('productsController', ['$scope', 'productsService', 'contactsServ
             $scope.pagination.totalItems = response.total;
             $scope.pagination.numPages = Math.ceil($scope.products.length / $scope.pagination.numPerPage);
             if (!$scope.insideModal) $scope.savePagination($scope.currentPage(), $scope.pagination);
-                $scope.canChangePage = true;
-            },
+            $scope.canChangePage = true;
+        },
          function (response) {
              var errors = [];
              for (var key in response.data.modelState) {
@@ -166,8 +169,28 @@ app.controller('productsController', ['$scope', 'productsService', 'contactsServ
          });
 
     };
-    $scope.checkSelected = function() {
-        angular.forEach($scope.products, function(item) {
+    function addCatalogNumbersToProducts(products) {
+        angular.forEach(products, function(product) {
+            angular.forEach(product.productHeader.configurations, function(config) {
+                var product_configuration_id = config.id;
+                if (product_configuration_id != null) {
+                    licenseProductsService.getCatalogNumber(product_configuration_id).then(function (result) {
+                        var CataLogNumber = result.data;
+                        if (CataLogNumber != null) {
+                            config.catalogNumber = CataLogNumber;
+                        } else {
+                            config.catalogNumber = null;
+                        }
+                    });
+                   
+                }
+
+            });
+        });
+    }
+
+    $scope.checkSelected = function () {
+        angular.forEach($scope.products, function (item) {
             var exists = USL.Common.FirstInArray($scope.selectedProducts, 'product_id', item.product_id);
             if (exists) item.selected = true;
         });
@@ -198,21 +221,22 @@ app.controller('productsController', ['$scope', 'productsService', 'contactsServ
             });
         }
     };
-    $scope.openAsignees = function() {
+
+    $scope.openAsignees = function () {
         if ($scope.advancedSearch.Asignees.length == 0) {
             contactsService.getAssignees().then(function (results) {
-                angular.forEach(results.data, function(value, key) {
+                angular.forEach(results.data, function (value, key) {
                     value.selected = false;
                 });
                 $scope.advancedSearch.Asignees = results.data;
-                
+
             }, function (error) {
                 //alert(error.data.message);
             });
         }
     }
 
-    $scope.openLabels = function() {
+    $scope.openLabels = function () {
         if ($scope.advancedSearch.Labels.length == 0) {
             labelsService.getLabels().then(function (results) {
                 angular.forEach(results.data, function (value, key) {
@@ -243,8 +267,8 @@ app.controller('productsController', ['$scope', 'productsService', 'contactsServ
                 $scope.caller = caller;
                 $scope.selectedAssignee = { fullName: "Select Assignee" };
                 $scope.selectedPriority = {
-                    priority: 'Select priority', priorityId:-1
-            };
+                    priority: 'Select priority', priorityId: -1
+                };
                 $scope.contacts = [];
                 $scope.priorities = [];
                 $scope.testGetContacts = function () {
@@ -256,14 +280,14 @@ app.controller('productsController', ['$scope', 'productsService', 'contactsServ
                         });
                     }
                 };
-                $scope.getPriorities = function() {
+                $scope.getPriorities = function () {
                     if ($scope.priorities.length == 0) {
-                        prioritiesService.getPriorities().then(function(results) {
+                        prioritiesService.getPriorities().then(function (results) {
                             $scope.priorities = results.data;
-                        }, function(error) {});
+                        }, function (error) { });
                     }
                 }
-                $scope.selectPriority = function(p) {
+                $scope.selectPriority = function (p) {
                     $scope.selectedPriority = p;
                 }
                 $scope.selectAsignee = function (contact) {
@@ -272,9 +296,9 @@ app.controller('productsController', ['$scope', 'productsService', 'contactsServ
                 $scope.ok = function () {
                     if ($scope.selectedAssignee.contactId && $scope.selectedPriority.priorityId) {
                         var selectedLicensesIds = USL.Common.SingleFieldArray(rootScope.licenses, 'licenseId', true);
-                        licensesService.updateLicensesAsignee($scope.selectedAssignee.contactId, $scope.selectedPriority.priorityId, selectedLicensesIds).then(function(result) {
+                        licensesService.updateLicensesAsignee($scope.selectedAssignee.contactId, $scope.selectedPriority.priorityId, selectedLicensesIds).then(function (result) {
                             rootScope.searchLicenses();
-                        }, function(error) {});
+                        }, function (error) { });
                         $modalInstance.close();
                     }
                 };
@@ -309,7 +333,7 @@ app.controller('productsController', ['$scope', 'productsService', 'contactsServ
                 product.tracksLoaded = true;
             });
         }
-    } 
+    }
 
     // contact defaults stuff
     $scope.userSetting = {
@@ -329,9 +353,9 @@ app.controller('productsController', ['$scope', 'productsService', 'contactsServ
         $scope.modalNextStep();
     };
 
-    $scope.addProductsEvent = function(args) {
+    $scope.addProductsEvent = function (args) {
         var selectedProductsList = [];
-        angular.forEach($scope.selectedProducts, function(item) {
+        angular.forEach($scope.selectedProducts, function (item) {
             var newItem = {};
             newItem.key = item.product_id;
             if (item.recordings) {
@@ -352,10 +376,10 @@ app.controller('productsController', ['$scope', 'productsService', 'contactsServ
 
     };
     $scope.selectProduct = function (product) {
-            product.selected = true;
-            var exists = USL.Common.FirstInArray($scope.selectedProducts, 'product_id', product.product_id);
-            if (!exists) $scope.selectedProducts.push(JSON.parse(JSON.stringify(product)));
-        
+        product.selected = true;
+        var exists = USL.Common.FirstInArray($scope.selectedProducts, 'product_id', product.product_id);
+        if (!exists) $scope.selectedProducts.push(JSON.parse(JSON.stringify(product)));
+
     }
     $scope.selectProductFromGrid = function (product) {
         var exists = USL.Common.FirstInArray($scope.selectedProductssFromGrid, 'product_id', product.product_id);
@@ -366,7 +390,7 @@ app.controller('productsController', ['$scope', 'productsService', 'contactsServ
         ;
 
     }
-    $scope.removeSelected = function(product) {
+    $scope.removeSelected = function (product) {
         var exists = USL.Common.FirstInArray($scope.products, 'product_id', product.product_id);
         if (exists) exists.selected = false;
         USL.Common.FindAndRemove($scope.selectedProducts, 'product_id', product.product_id);
@@ -374,7 +398,7 @@ app.controller('productsController', ['$scope', 'productsService', 'contactsServ
 
             licenseProductsService.deleteLicenseProduct(product.licenseId, product.product_id).then(function (result) {
 
-      //          $state.reload();
+                //          $state.reload();
 
                 noty({
                     text: 'product deleted',
@@ -397,7 +421,7 @@ app.controller('productsController', ['$scope', 'productsService', 'contactsServ
         }
     };
     function loadDefaultColumns() {
-        contactDefaultsService.getContactDefaults($scope.getSafeContactId()).then(function(result) {
+        contactDefaultsService.getContactDefaults($scope.getSafeContactId()).then(function (result) {
             var response = result.data;
             var settings = null;
             if (response && response.userSetting) {
@@ -428,8 +452,7 @@ app.controller('productsController', ['$scope', 'productsService', 'contactsServ
     function init() {
         if ($state.current.name.indexOf("StepsModal.AddProducts") != -1) {
             $scope.$emit('addproductsModalLoaded', $scope);
-        }else
-        {
+        } else {
             $scope.$emit('productsControllerLoaded', $scope);
             loadDefaultColumns();
 
@@ -443,16 +466,31 @@ app.controller('productsController', ['$scope', 'productsService', 'contactsServ
         } else {
             USL.Common.FindAndRemove($scope.hiddenColumns, 'key', col.key);
         }
-        
+
     }
-    $scope.editColumnsDropdown = function(open) {
-      if (!open) {
-          saveEditColumnsSettings();
-      }
+    $scope.editColumnsDropdown = function (open) {
+        if (!open) {
+            saveEditColumnsSettings();
+        }
     }
     $scope.isEditColumnsCollapsed = true;
 
     init();
+
+
+    function cleanEmptyConfigurations(products) {
+        angular.forEach(products,
+            function (product) {
+                angular.forEach(product.productHeader.configurations,
+                    function (config) {
+                        var input = config.upc;
+                        if (config.upc === '') {
+                            config.upc = null;
+                        }
+                    });
+            });
+        return products;
+    };
 
 }]);
 

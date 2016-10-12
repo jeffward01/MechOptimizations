@@ -12,7 +12,7 @@
                 <label>License Type</label><span ng-bind="selectedLicense.licenseType.licenseType"></span>
             </li>
             <li>
-            	<label>Licensee</label><span ng-bind="selectedLicense.licensee.name"></span>
+                <label>Licensee</label><span ng-bind="selectedLicense.licensee.name"></span>
             </li>
             <li class="select-template">
                 <label>Select a Template</label>
@@ -25,19 +25,17 @@
                     </ul>
                 </div>
             </li>
-             <li class="select-template">
+            <li class="select-template">
                 <label>Term Option</label>
                 <div class="dropdown" dropdown is-open="status.isopen">
                     <button type="button" class="btn btn-default dropdown-toggle" id="assign" data-toggle="dropdown">
                         <span ng-bind="selectedTermOption.Name"></span><span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="assign">
-                        <li ng-repeat="termOption in termOptions"><a ng-click="selectTermOption(termOption)">{{termOption.Name}}</a></li>           
+                        <li ng-repeat="termOption in termOptions"><a ng-click="selectTermOption(termOption)">{{termOption.Name}}</a></li>
                     </ul>
                 </div>
             </li>
-        </ul>
-        <ul class="recipients">
             <li>
                 <label>From</label>
                 <div class="dropdown" dropdown is-open="status.isopen">
@@ -52,6 +50,9 @@
                     </ul>
                 </div>
             </li>
+        </ul>
+        <ul class="recipients">
+
             <li>
                 <label>Select Recipient</label>
                 <div class="dropdown" dropdown is-open="status.isopen">
@@ -59,9 +60,9 @@
                         <span ng-bind="selectedRecipients[selectedRecipients.length-1].contactName"></span>
                         <span class="caret"></span>
                     </button>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="assign" >
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="assign">
                         <li ng-repeat="contact in licenseeContacts" ng-click="addSelectedRecipient(contact)">
-                           <!-- <input type="checkbox" ng-model="contact.selected" />-->
+                            <!-- <input type="checkbox" ng-model="contact.selected" />-->
                             <a ng-click="$event.preventDefault();"><span ng-bind="contact.contactName"></span></a>
                         </li>
                     </ul>
@@ -92,10 +93,20 @@
                     <progress id="progressbar" class="progress-striped" value="0" max="100" ng-show="progressVisible">0%</progress>
                 </section>
             </li>
+            <li>
+                <section class="dropdown" dropdown>
+                    <label class="attach">Select Attachment Type</label>
+
+                    <button ng-class="{'field-error': errorPresent == true}" type="button" name="attachmentTypeBtn" class="btn btn-default dropdown-toggle" id="attachmentType" data-toggle="dropdown" style="margin-left: 50px">
+                        <span ng-bind="chosenAttachment.attachmentType"></span>&nbsp;<span class="{{setCaret(isCollapsed)}}"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="attachmentType" style="margin-left: 180px;margin-top: 6px">
+                        <li ng-repeat="attachmentType in AttachmentTypes"><a ng-click="selectAttachmentType(attachmentType);$event.preventDefault()">{{attachmentType.attachmentType}}</a></li>
+                    </ul>
+                </section>
+            </li>
         </ul>
     </section>
-    
-   
 
     <!-- We only show this section if there are documents already attached -->
     <label>License Attachments</label><br />
@@ -104,7 +115,8 @@
             <thead>
                 <tr>
                     <th class="one-percent centered no-wrap">Attach</th>
-                    <th class="fifty-percent">File Name</th>
+                    <th class="twentyfive-percent">File Name</th>
+                    <th class="twentyfive-percent">Attachment Type</th>
                     <th class="twentyfive-percent">Date Uploaded</th>
                     <th class="twentyfive-percent">Uploaded By</th>
                     <th class="one-percent centered">Remove</th>
@@ -112,18 +124,18 @@
             </thead>
             <tbody>
                 <tr ng-show="licenseAttachments.length==0">
-                    <td class="eigthyfive-percent centered">
+                    <td class="centered" colspan="6">
                         There are no attachments on this License.
                     </td>
                 </tr>
                 <tr ng-repeat="attachment in licenseAttachments">
-                    <td><input type="checkbox" /></td>
+                    <td><input ng-model="attachment.includeInLicense" ng-bind="attachment.includeInLicense" type="checkbox" /></td>
                     <td><label><span ng-bind="attachment.fileName"></span></label></td>
+                    <td><span ng-bind="attachment.attachmentType.attachmentType"></span></td>
                     <td><span ng-bind="attachment.uploaddedDate | timezone | date:'MM/dd/yyyy'"></span></td>
                     <td><span ng-bind="attachment.contact.fullName"></span></td>
                     <td class="centered"><button class="btn btn-default narrow" ng-click="removeFile(attachment)"><span class="icon remove"></span></button></td>
                 </tr>
-            
             </tbody>
         </table>
     </section>

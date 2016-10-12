@@ -310,7 +310,7 @@ app.controller('productInfoController', ['$scope', '$state', '$stateParams', 'li
                     notymessage = "error adding product ";
                     notytype = "error";
                     for (var i = 0; i < result.data.errorList.length; i++) {
-                        notymessage += result.data.errorList[i].message + "\n"
+                        notymessage += result.data.errorList[i].message + "\n";
                     }
                     noty({
                         text: notymessage,
@@ -550,11 +550,11 @@ app.controller('productInfoController', ['$scope', '$state', '$stateParams', 'li
     $scope.ok = function () {
         alert('productinfo');
     };
-
+    */
     $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
-    };
-    */
+   }
+    
 
 
 

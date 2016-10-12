@@ -2,12 +2,21 @@
     <h3 class="modal-title">Upload Document</h3>
     <button class="btn btn-default narrow close-modal" ng-click="$parent.cancel()"><span class="icon cancel"></span></button>
 </div>
-<div class="modal-body upload-document">
+<div class="modal-body upload-document clearfix">
 
     <input type="file" class="filestyle" id="fileToUpload" customfileupload onchange="angular.element(this).scope().checkIfValidFile()" />
     <progress id="progressbar" class="progress-striped" value="0" max="100" ng-show="progressVisible">0%</progress>
+
+    <div class="dropdown" dropdown style="margin-top: 15px; position: absolute">  
+        <button ng-class="{'field-error': errorPresent == true}" type="button" name="attachmentTypeBtn" ng-click="isCollapsed = !isCollapsed" class="btn btn-default dropdown-toggle" id="attachmentType" data-toggle="dropdown">
+            <span ng-bind="chosenAttachment.attachmentType"></span>&nbsp;<span class="{{setCaret(isCollapsed)}}"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="attachmentType">
+            <li ng-repeat="attachmentType in AttachmentTypes"><a ng-click="selectAttachmentType(attachmentType);$event.preventDefault()">{{attachmentType.attachmentType}}</a></li>
+        </ul>
+    </div>
 </div>
-<div class="modal-footer">
+<div class="modal-footer" style="margin-top:40px">
     <button class="btn btn-default" ng-click="upload()">Upload</button>
     <button class="btn btn-default" ng-click="cancel()">Cancel</button>
 </div>

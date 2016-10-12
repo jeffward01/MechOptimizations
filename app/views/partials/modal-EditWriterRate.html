@@ -44,7 +44,7 @@
                     </span>
                 </td>
                 <td>
-                    <label><span ng-bind="writer.contribution"></span></label><!-- Preset calculated value // unable to change without following override column -->
+                    <label><span ng-bind="toPercent(writer.contribution)"></span></label><!-- Preset calculated value // unable to change without following override column -->
                 </td>
                 <td ng-show="isClaimException">
                     <input type="text" ng-model="writer.licenseProductRecordingWriter.claimExceptionOverride" />

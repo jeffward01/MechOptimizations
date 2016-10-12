@@ -3,7 +3,7 @@ app.controller('generateDocController', ['$scope', '$stateParams', 'ngAuthSettin
     var serviceBase = ngAuthSettings.apiServiceBaseUri;
     var selectedLicense = $scope.selectedLicense;
     var authenticationData = localStorageService.get('authenticationData');
-    
+
     $scope.licenseSentId = null;
     $scope.licenseSentContactId = null;
     $scope.progressVisible = false;
@@ -11,31 +11,35 @@ app.controller('generateDocController', ['$scope', '$stateParams', 'ngAuthSettin
     $scope.fromContacts = [];
     //$scope.additionalEmails = [];li
 
-
     //$scope.selectedRecipients = [];
     $scope.newEmail = "";
 
     populateSubjectLineAndFileName();
 
-        $scope.templates = [
-    {
-        Name: 'US License Template',
-        //Url: 'app/views/license-templates/template-1.html',
-        Url: 'app/views/partials/license-template.html'
-    },
-     {
-         Name: 'US DVD License Template',
-         //Url: 'app/views/license-templates/template-2.html'
-         Url: 'app/views/partials/license-template.html'
-     },
-      {
-          Name: 'Canadian License Template',
-          //Url: 'app/views/license-templates/template-3.html'
-          Url: 'app/views/partials/license-template.html'
-      }
+    $scope.templates = [
+{
+    Name: 'US License Template',
+    //Url: 'app/views/license-templates/template-1.html',
+    Url: 'app/views/partials/license-template.html'
+},
+ {
+     Name: 'US DVD License Template',
+     //Url: 'app/views/license-templates/template-2.html'
+     Url: 'app/views/partials/license-template.html'
+ },
+  {
+      Name: 'Canadian License Template',
+      //Url: 'app/views/license-templates/template-3.html'
+      Url: 'app/views/partials/license-template.html'
+  }
     ];
+    $scope.errorPresent = false;
 
-    $scope.selectTemplate = function(t) {
+    $scope.chosenAttachment = {
+        attachmentType: "Select Attachment Type",
+        attachmentTypeId: 0
+    };
+    $scope.selectTemplate = function (t) {
         $scope.selectedTemplate = t;
         $scope.setParameter('templatePreviewData', t);
         $scope.setParameter('selectedTemplate', t);
@@ -43,8 +47,11 @@ app.controller('generateDocController', ['$scope', '$stateParams', 'ngAuthSettin
         if ($scope.templatePreviewData.Name == 'US License Template') {
             $scope.termOptions = [{ Name: 'Quarterly' }, { Name: 'Semi-annually' }, { Name: 'Semi-annually (90 days)' }];
         }
+    }
 
-
+    $scope.selectAttachmentType = function (attachmentType) {
+        $scope.chosenAttachment = attachmentType;
+        attachmentValidation();
     }
 
     if (!$scope.selectedTemplate) {
@@ -57,8 +64,7 @@ app.controller('generateDocController', ['$scope', '$stateParams', 'ngAuthSettin
     if ($scope.templatePreviewData.Name == 'US License Template') {
         $scope.termOptions = [{ Name: 'Quarterly' }, { Name: 'Semi-annually' }, { Name: 'Semi-annually (90 days)' }];
     }
-    
-    
+
     if (!$scope.selectedTermOption) {
         $scope.selectedTermOption = $scope.termOptions[0];
         $scope.setParameter('selectedTermOption', $scope.selectedTermOption);
@@ -69,25 +75,23 @@ app.controller('generateDocController', ['$scope', '$stateParams', 'ngAuthSettin
         $scope.setParameter('selectedTermOption', t);
     }
 
-   $scope.selectFrom = function (t) {
+    $scope.selectFrom = function (t) {
         $scope.selectedFrom = t;
         $scope.setParameter('selectedFrom', t);
     }
 
-    $scope.addSelectedRecipient = function(r) {
+    $scope.addSelectedRecipient = function (r) {
         var old = $scope.selectedRecipients[0];
         if (!old) {
             old = r;
         }
         $scope.selectedRecipients = [];
-        
+
         r.action = 'UPDATE';
         r.selected = true;
         r.licenseSentContactId = old.licenseSentContactId;
         r.licenseSentId = old.licenseSentId;
         $scope.selectedRecipients.push(r);
-
-
     };
 
     /*
@@ -115,8 +119,9 @@ app.controller('generateDocController', ['$scope', '$stateParams', 'ngAuthSettin
             r.action = 'DELETE';
         }
     };
-    
+
 */
+    $scope.isCollapsed = false;
     $scope.deleteSelectedRecipient = function (r) {
         var idx = $scope.selectedRecipients.indexOf(r);
         if (idx >= 0) {
@@ -162,7 +167,18 @@ app.controller('generateDocController', ['$scope', '$stateParams', 'ngAuthSettin
             }
         }
     };
+    getAllAttchmentTypes();
 
+    function getAllAttchmentTypes() {
+        filesService.getAllAttachmentTypes()
+            .then(function (res) {
+                console.log(JSON.stringify(res.data));
+                $scope.AttachmentTypes = res.data;
+            },
+                function (err) {
+                    console.log("An error occurred retrieving licenseAttachmentTypes. Error: " + err.toString());
+                });
+    }
     $scope.deleteAdditionalEmail = function (contact) {
         var idx = $scope.additionalEmails.indexOf(contact);
 
@@ -176,7 +192,13 @@ app.controller('generateDocController', ['$scope', '$stateParams', 'ngAuthSettin
             }
         }
     };
-
+    $scope.setCaret = function (collapsed) {
+        if (!collapsed) {
+            return "caret";
+        } else {
+            return "caret caret-up";
+        }
+    }
     function validEmail(email) {
         if (email.length > 5) {
             if (email.indexOf("@") > 0) {
@@ -203,10 +225,9 @@ app.controller('generateDocController', ['$scope', '$stateParams', 'ngAuthSettin
                 $scope.licenseeContacts.push(contactType);
             }
             // get any saved contacts/emails associated to the license
-            $scope.getSendLicenseInfo($scope.selectedLicense.licenseId)
+            $scope.getSendLicenseInfo($scope.selectedLicense.licenseId);
         });
     };
-
 
     //  get Licensee Contacts
     $scope.getContactsForLicensee = function (licenseeId) {
@@ -215,8 +236,8 @@ app.controller('generateDocController', ['$scope', '$stateParams', 'ngAuthSettin
             $scope.selectedRecipients.length = 0;
             $scope.additionalEmails.length = 0;
             var licensees = result.data;
-            for (var i=0; i<licensees.length; i++) {
-                var contactType = {licenseSentId: null, licenseSentContactId: null, contactId: licensees[i].contactId, contactName: licensees[i].fullName, emailAddress:'', selected: false, action:''};
+            for (var i = 0; i < licensees.length; i++) {
+                var contactType = { licenseSentId: null, licenseSentContactId: null, contactId: licensees[i].contactId, contactName: licensees[i].fullName, emailAddress: '', selected: false, action: '' };
                 $scope.licenseeContacts.push(contactType);
             }
             // get any saved contacts/emails associated to the license
@@ -227,7 +248,7 @@ app.controller('generateDocController', ['$scope', '$stateParams', 'ngAuthSettin
     // get any saved contacts/emails for this license
     $scope.getSendLicenseInfo = function (licenseId) {
         licensesService.getSendLicenseInfo(licenseId).then(function (result) {
-            if (result.data != "null") {
+            if (result.data != null) {
                 $scope.oldLicenseSentContacts = result.data.sendLicenseContactList;
                 $scope.licenseSentId = result.data.licenseSentId;
                 var contacts = result.data.sendLicenseContactList;
@@ -242,9 +263,9 @@ app.controller('generateDocController', ['$scope', '$stateParams', 'ngAuthSettin
                                 $scope.selectedRecipients.push($scope.licenseeContacts[j]);
                                 //$scope.addSelectedRecipient($scope.licenseeContacts[j]);
                                 break;
-                            } 
+                            }
                         }
-                    } 
+                    }
                     else {
                         var contactType = { licenseSentId: contacts[i].licenseSentId, licenseSentContactId: contacts[i].licenseSentContactId, contactId: null, contactName: '', emailAddress: contacts[i].emailAddress, selected: true, action: 'UPDATE' };
                         $scope.addAdditionalEmail(contactType);
@@ -255,7 +276,6 @@ app.controller('generateDocController', ['$scope', '$stateParams', 'ngAuthSettin
             }
 
             if ($scope.selectedRecipients.length == 0) {
-
                 angular.forEach($scope.licenseeContacts, function (contact) {
                     if (contact.contactId == $scope.selectedLicense.contactId) {
                         contact.selected = true;
@@ -270,13 +290,12 @@ app.controller('generateDocController', ['$scope', '$stateParams', 'ngAuthSettin
                 timeout: 2500,
                 layout: "top"
             });
-
         });
     };
 
     $scope.validateAndDataProcess = function () {
         var validFields = true;
-        
+
         if ($scope.newEmail) {
             validFields = false;
             document.getElementById('newEmail').classList.add('field-error');
@@ -286,6 +305,7 @@ app.controller('generateDocController', ['$scope', '$stateParams', 'ngAuthSettin
         }
 
         if (validFields) {
+            $scope.saveLicenseAttachements();
             $scope.saveSendLicenseInfo();
         }
     }
@@ -294,11 +314,14 @@ app.controller('generateDocController', ['$scope', '$stateParams', 'ngAuthSettin
         return contact.action == 'UPDATE' || contact.action == 'ADD';
     };
 
-   
+    //This saves licenses as 'included' if they are checked.
+    $scope.saveLicenseAttachements = function () {
+        angular.forEach($scope.licenseAttachments, function (licenseAttachment) {
+            filesService.updateLicenseAttachment(licenseAttachment);
+        });
+    }
+
     // save contact / email info
-
-
-
     $scope.saveSendLicenseInfo = function () {
         var sendToContacts = [];
         for (var i = 0; i < $scope.selectedRecipients.length; i++) {
@@ -311,105 +334,119 @@ app.controller('generateDocController', ['$scope', '$stateParams', 'ngAuthSettin
         }
 
         var differentContacts = [];
-        angular.forEach($scope.oldLicenseSentContacts, function(oldContact) {
-            angular.forEach(sendToContacts, function(newContact) {
+        angular.forEach($scope.oldLicenseSentContacts, function (oldContact) {
+            angular.forEach(sendToContacts, function (newContact) {
                 if (oldContact.emailAddress == '' && newContact.emailAddress == '' && oldContact.contactId != newContact.contactId && oldContact.licenseSentContactId != newContact.licenseSentContactId) {
                     oldContact.action = "DELETE";
                     differentContacts.push(oldContact);
                 }
             });
-
         });
 
         if (differentContacts.length > 0) {
             sendToContacts = sendToContacts.concat(differentContacts);
         }
-            
 
+        var sendToLicense = { licenseSentId: $scope.licenseSentId, licenseId: $scope.selectedLicense.licenseId, licenseeId: $scope.selectedLicense.licenseeId, licenseTemplateId: 1, sendLicenseContactList: sendToContacts }
 
+        var notymessage = 'Recipients Updated';
+        var notytype = 'success';
+        licensesService.saveSendLicenseInfo(sendToLicense)
+            .then(function (result) {
+                var contacts = result.data;
 
+                if (contacts) {
+                    noty({
+                        text: notymessage,
+                        type: notytype,
+                        timeout: 2500,
+                        layout: "top"
+                    });
+                }
+                else {
+                    noty({
+                        text: 'Error updating recipients',
+                        type: 'error',
+                        timeout: 2500,
+                        layout: "top"
+                    });
+                }
+            }, function (error) {
+                noty({
+                    text: 'Error updating recipients ' + result.data.error,
+                    type: 'error',
+                    timeout: 2500,
+                    layout: "top"
+                });
+            });
 
-
-                        var sendToLicense = { licenseSentId: $scope.licenseSentId, licenseId: $scope.selectedLicense.licenseId, licenseeId: $scope.selectedLicense.licenseeId, licenseTemplateId: 1, sendLicenseContactList: sendToContacts }
-
-                        var notymessage = 'Recipients Updated';
-                        var notytype = 'success';
-                        licensesService.saveSendLicenseInfo(sendToLicense)
-                            .then(function (result) {
-                                var contacts = result.data;
-
-                                if (contacts) {
-                                    noty({
-                                        text: notymessage,
-                                        type: notytype,
-                                        timeout: 2500,
-                                        layout: "top"
-                                    });
-
-                                }
-                                else {
-                                    noty({
-                                        text: 'Error updating recipients',
-                                        type: 'error',
-                                        timeout: 2500,
-                                        layout: "top"
-                                    });
-                                }
-                            }, function(error) {
-                                noty({
-                                    text: 'Error updating recipients ' + result.data.error,
-                                    type: 'error',
-                                    timeout: 2500,
-                                    layout: "top"
-                                });
-
-                            });
-
-                        $scope.modalNextStep();
-
+        $scope.modalNextStep();
     }
 
     // load the licensee and any previously saved contact info
     $scope.getContactsForLicensee($scope.selectedLicense.licenseeId);
 
-
     //upload File section
 
-
     $scope.upload = function () {
-        var fileId = 'fileToUpload';
-        var progressId = 'progressbar';
-        var licenseId = $stateParams.licenseId;
-        var validSize = filesService.validSize(fileId);
-        var fileExists = filesService.isNewFile(fileId, $scope.licenseAttachments);
-        var fileSelected = filesService.isFileSelected(fileId);
-      
-        if (validSize && !fileExists && fileSelected) {
-            uploadFiles(licenseId, fileId, progressId);
-        }
+        if (attachmentValidation()) {
+            var fileId = 'fileToUpload';
+            var progressId = 'progressbar';
+            var licenseId = $stateParams.licenseId;
+            var validSize = filesService.validSize(fileId);
+            var fileExists = filesService.isNewFile(fileId, $scope.licenseAttachments);
+            var fileSelected = filesService.isFileSelected(fileId);
+            var attachmentTypeId = $scope.chosenAttachment.attachmentTypeId;
 
-        if (!validSize) {
-            var message = "The file which were you trying to upload exceeds the maximum admited size.";
-            notyService.error(message);
-        }
+            if (validSize && !fileExists && fileSelected) {
+                uploadFiles(licenseId, fileId, progressId, attachmentTypeId);
+            }
 
-        if (fileExists) {
-            var text = 'We have found an existing file with the same name: "' + fileExists + '". Would you like to overwrite it?';
-            notyService.modalConfirm(text).then(function () {
-                uploadFiles(licenseId, fileId, progressId);
-            });
-        }
+            if (!validSize) {
+                var message = "The file which were you trying to upload exceeds the maximum admited size.";
+                notyService.error(message);
+            }
 
-        if (!fileSelected) {
-            var message = "No file has been selected for upload. Please select a file.";
-            notyService.error(message);
-        }
+            if (fileExists) {
+                var text = 'We have found an existing file with the same name: "' +
+                    fileExists +
+                    '". Would you like to overwrite it?';
+                notyService.modalConfirm(text)
+                    .then(function () {
+                        uploadFiles(licenseId, fileId, progressId, attachmentTypeId);
+                    });
+            }
 
+            if (!fileSelected) {
+                var message = "No file has been selected for upload. Please select a file.";
+                notyService.error(message);
+            }
+        }
+        return;
     };
 
-    var uploadFiles = function (licenseId, fileId, progressId) {
+    function attachmentValidation() {
+        if (!validateAttachmentType()) {
+            var attachmentTypeErrorMessage = "Please select an Attachment Type";
+            $scope.errorPresent = true;
+            notyService.error(attachmentTypeErrorMessage);
+            return false;
+        } else {
+            $scope.errorPresent = false;
+            return true;
+        }
+    }
+
+    function validateAttachmentType() {
+        if ($scope.chosenAttachment.attachmentTypeId == 0) {
+            return false;
+        }
+        return true;
+    };
+
+    var uploadFiles = function (licenseId, fileId, progressId, attachmentTypeId) {
         $scope.progressVisible = true;
-        filesService.upload(licenseId, fileId, progressId).then(uploadComplete, uploadError).finally(function() {
+        filesService.upload(licenseId, fileId, progressId, attachmentTypeId).then(uploadComplete, uploadError).finally(function () {
             $timeout(function () {
                 $scope.progressVisible = false;
             }, 1000);
@@ -431,14 +468,13 @@ app.controller('generateDocController', ['$scope', '$stateParams', 'ngAuthSettin
         });
     }
 
-    var uploadError = function(evt) {
+    var uploadError = function (evt) {
         if (evt.error == "fail") {
             uploadFailed();
         }
         else if (evt.error == "abort") {
             uploadCanceled();
         }
-      
     }
     var uploadComplete = function (evt) {
         /* This event is raised when the server send back a response */
@@ -448,7 +484,6 @@ app.controller('generateDocController', ['$scope', '$stateParams', 'ngAuthSettin
         $stateParams.stateCallbackArguments = {
             method: 'uploadAttachment'
         }
-
     }
 
     var uploadFailed = function (evt) {
@@ -459,7 +494,6 @@ app.controller('generateDocController', ['$scope', '$stateParams', 'ngAuthSettin
     var uploadCanceled = function (evt) {
         var message = "The upload has been canceled by the user or the browser dropped the connection.";
         notyService.error(message);
-
     }
 
     $scope.populatelicenseAttachments = function (licenseId) {
@@ -467,7 +501,6 @@ app.controller('generateDocController', ['$scope', '$stateParams', 'ngAuthSettin
             $scope.setParameter('licenseAttachments', result.data);
         });
     }
-    
 
     $scope.cancel = function () {
         $stateParams.stateCallbackArguments = {
@@ -477,7 +510,6 @@ app.controller('generateDocController', ['$scope', '$stateParams', 'ngAuthSettin
     }
 
     function populateSubjectLineAndFileName() {
-
         if ($scope.adobeSubjectLine == null) {
             var firstProduct = $stateParams.products[0];
             var scheduleId = firstProduct.scheduleId;
@@ -514,7 +546,6 @@ app.controller('generateDocController', ['$scope', '$stateParams', 'ngAuthSettin
             $scope.setParameter('adobeSubjectLine', subjectLine);
             $scope.setParameter('adobeContent', $scope.adobeContent);
             $scope.setParameter('fileName', removeRestrictedCharacters(filename));
-    
         }
     }
 
@@ -530,21 +561,17 @@ app.controller('generateDocController', ['$scope', '$stateParams', 'ngAuthSettin
 
     $scope.getfromContacts = function () {
         contactsService.getContactsWithRoleId(3).then(function (result) {
-                $scope.fromContacts = [];                
-                var fromContactsList = result.data;
+            $scope.fromContacts = [];
+            var fromContactsList = result.data;
 
-                for (var i = 0; i < fromContactsList.length; i++) {
-                    $scope.fromContacts.push(fromContactsList[i]);
-                    if ($scope.selectedFrom == null && fromContactsList[i].contactId === authenticationData.contactId) {
-                        $scope.setParameter('selectedFrom', fromContactsList[i]);
-                    }
-                    
+            for (var i = 0; i < fromContactsList.length; i++) {
+                $scope.fromContacts.push(fromContactsList[i]);
+                if ($scope.selectedFrom == null && fromContactsList[i].contactId === authenticationData.contactId) {
+                    $scope.setParameter('selectedFrom', fromContactsList[i]);
                 }
-                
-            });
-
+            }
+        });
     }
 
     $scope.getfromContacts();
-
 }]);

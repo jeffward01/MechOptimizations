@@ -34,7 +34,8 @@ app.controller('licensesController', ['$scope', 'licensesService','licenseProduc
     $scope.columns = [];
     $scope.searchParameters = function () {
         var sliderRangeDefault = function() {
-            return $scope.sliderRangeMin == $scope.currentSearch.RateRange[0] && $scope.sliderRangeMax == $scope.currentSearch.RateRange[1]
+            return $scope.sliderRangeMin == $scope.currentSearch.RateRange[0] &&
+                $scope.sliderRangeMax == $scope.currentSearch.RateRange[1];
         }
         var advancedOpt = $scope.currentSearch;
         return {

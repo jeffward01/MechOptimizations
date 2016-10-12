@@ -224,7 +224,7 @@ app.controller('editRatesController', ['$scope', 'licensesService', 'licenseProd
                 var rates = document.getElementsByClassName('rateValue');
                 for (var i = 0; i < rates.length; i++) {
                     if (rates[i].offsetParent !== null) { // rate textbox is visible
-                        if (!(rates[i].value > 0) || rates[i].value > 10) {
+                        if (!(rates[i].value >= 0) || rates[i].value > 10) {
                             rates[i].classList.add('field-error');
                             rateError = true;
                         }

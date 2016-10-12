@@ -1,6 +1,4 @@
-﻿
-var app = angular.module('AngularAuthApp', ['ui.router', 'LocalStorageModule', 'angular-loading-bar', 'ui.bootstrap', 'ui.bootstrap-slider', 'smoothScroll']);
-
+﻿var app = angular.module('AngularAuthApp', ['ui.router', 'LocalStorageModule', 'angular-loading-bar', 'ui.bootstrap', 'ui.bootstrap-slider', 'smoothScroll']);
 
 //custom directives
 app.directive('showTab',
@@ -15,7 +13,6 @@ function () {
     };
 });
 app.filter('timezone', function () {
-
     return function (val) {
         if (val == null) {
             return;
@@ -28,54 +25,111 @@ app.filter('timezone', function () {
                         date.getUTCMinutes(),
                         date.getUTCSeconds());
     };
-
 });
 
-app.filter('checkedOnly',
+app.filter('emptyOrNull',
     function() {
-        return function(items, array) {
+        return function (items) {
             var filtered = [];
-            angular.forEach(array,
-                function(config) {
-                    angular.forEach(items,
-                        function(item) {
-                            if (config.checked) {
-                                if (item.product_configuration_id === config.id) {
-                                    filtered.push(item);
-                                }
-                            }
-                        });
+            angular.forEach(items,
+                function(item) {
+                    if (item.upc != null) {
+                        filtered.push(item);
+                    }
                 });
             return filtered;
         }
     });
 
+//Filters only checked configurations (ProductOverview),if none are checked, show all
+app.filter('checkedOnly',
+    function () { //items = ng-repeat |||| array = configurationFilters
+        return function (items, array) {
+            var filteredWiters = [];
+            var configCount = 0;
+            //Get count in order to see if none are checked.
+            angular.forEach(array,
+                function (config) {
+                    if (!config.checked) {
+                        configCount++;
+                    }
+                });
+            angular.forEach(array,
+                function (config) {
+                    angular.forEach(items,
+                        function (item) {
+                            if (config.checked) {
+                                if (item.product_configuration_id === config.product_configuration_id) {
+                                    filteredWiters.push(item);
+                                }
+                            }
+                        });
+                });
+            //If none checked, return all
+            if (configCount === array.length) {
+                return items;
+            } else {
+                //if some configs are checked, return filtered
+                return filteredWiters;
+            }
+        }
+    });
+
+app.filter('licenseProductConfigs',
+    function () {
+        return function (items, array) {
+            var filteredConfigs = [];
+            angular.forEach(items,
+                function (item) {
+                    angular.forEach(array,
+                        function (configItem) {
+                            if (item.id === configItem.product_configuration_id) {
+                                filteredConfigs.push((item));
+                            };
+                        });
+                });
+            return filteredConfigs;
+        }
+    });
+
 app.filter('caeCodefilter',
-    function() {
+    function () {
         return function (items, key) {
             var filtered = [];
-            //for (var i = 0; i < items.length; i++) {
-            //    var item = items[i];
-            //    if (item.caeCode === key.caeNumber) {
-            //        console.log("LOOK" + JSON.stringify(item));
-            //        filtered.push(item);
-            //    } else {
-            //        return false;
-            //    }
-            //}
+            var productConfigIds = [];
             angular.forEach(items,
-                function(item,index) {
+                function (item, index) {
                     if (item.caeCode === key.caeNumber) {
-                        console.log(index);
                         filtered.push(item);
-                        
-                    } else {
-                        
                     }
                 });
             return filtered;
         };
     });
+
+app.filter('trackIdFilter',
+    function () {
+        return function (items, key) {
+            var filtered = [];
+            angular.forEach(items,
+                function (item) {
+                    if (key == item.trackId) {
+                        filtered.push(item);
+                    }
+                });
+            return filtered;
+        }
+    });
+
+function in_array(needle, haystack) {
+    for (var key in haystack) {
+        if (needle === haystack[key]) {
+            return true;
+        }
+    }
+
+    return false;
+}
 
 //Jeff Added this filter 3/14/16 for use in detail-Product.html
 app.filter('joinBy', function () {
@@ -84,6 +138,45 @@ app.filter('joinBy', function () {
     };
 });
 
+app.filter('executedFilter',
+    function () {
+        return function (items, status) {
+            var filtered = [];
+            //If Status = false, only show executed
+            if (status === false) {
+                angular.forEach(items,
+                    function (item) {
+                        console.log(JSON.stringify(item));
+                        if ((item.licenseStatus.licenseStatus === "Executed" || item.licenseStatus.licenseStatus === "Accepted") && item.licenseDate !== null && item.writerRateInclude === true) {
+                            filtered.push(item);
+                        }
+                    });
+                return filtered;
+            } else {
+                return items;
+            }
+        };
+    });
+
+app.filter('zeroFilter',
+    function () {
+        return function (items, status) {
+            var filtered = [];
+
+            if (status === false) {
+                angular.forEach(items,
+                    function (item) {
+                        if (item.proRataRate != 0 && item.perSongRate != 0) {
+                            filtered.push(item);
+                        }
+                    });
+                return filtered;
+            } else {
+                return items;
+            }
+        };
+    });
+
 app.filter('displayStat', function () {
     return function (item) {
         item = "Stat";
@@ -91,6 +184,29 @@ app.filter('displayStat', function () {
     }
 });
 
+//ProductOverview || Only allows each config to be shown once.  Not in use
+app.filter("onlyThese",
+    function () {
+        return function (items, array) {
+            var filtered = [];
+            var filteredIds = [];
+            angular.forEach(items,
+                function (item) {
+                    angular.forEach(item.rateList, function (rate) {
+                        angular.forEach(array,
+                            function (config) {
+                                if (rate.product_configuration_id === config.id) {
+                                    if (!in_array(rate.product_configuration_id, filteredIds)) {
+                                        filteredIds.push(rate.product_configuration_id);
+                                        filtered.push(rate);
+                                    }
+                                }
+                            });
+                    });
+                });
+            return filtered;
+        }
+    });
 
 app.filter('setDecimal', function ($filter) {
     return function (input, places) {
@@ -121,15 +237,22 @@ app.filter('unique', function () {
     };
 });
 
-app.directive('productSummary',
-    function() {
-        return{
-            templateUrl: "app/views/partials/license-configurations-PO.html",
-            restrict: 'E',
-            scope: {obj: '=' }
+
+app.directive('productDetail',
+    function () {
+        return {
+            templateUrl: "app/views/partials/productOverview-WriterRates.html",
+            restrict: 'EA',
+
+            link: function (scope, element, attrs) {
+                scope.$watch('organizedRatesByConfiguration', function (organizedRatesByConfiguration) {
+                    angular.forEach(organizedRatesByConfiguration, function (rate, key) {
+                        //do something
+                    });
+                });
+            }
         };
     });
-
 
 app.directive('compileTemplate', function ($compile, $parse) {
     return {
@@ -165,7 +288,6 @@ app.directive('ngEnter', function () {
     };
 });
 
-
 app.directive('awDatepickerPattern', function () {
     return {
         restrict: 'A',
@@ -179,24 +301,19 @@ app.directive('awDatepickerPattern', function () {
                     return value;
                 }
                 if (typeof value === 'string' && value.length > 1) {
-
-
                     var isValid = dRegex.test(value);
                     ngModelCtrl.$setValidity('date', isValid);
 
                     if (!isValid) {
                         return undefined;
                     }
-
                 }
 
                 return value;
             });
-
         }
     };
 });
-
 
 app.directive('externalLink',
 function () {
@@ -210,10 +327,6 @@ function () {
     };
 });
 
-
-
-
-
 app.directive('customfileupload',
 function () {
     return {
@@ -222,19 +335,18 @@ function () {
                 {
                     buttonText: 'Select',
                     iconName: 'icon folder'
-
                 });
         }
     };
 });
 
 app.directive('elemReady',
-    function($parse) {
+    function ($parse) {
         return {
             restrict: 'A',
-            link: function($scope, elem, attrs) {
-                elem.ready(function() {
-                    $scope.$apply(function() {
+            link: function ($scope, elem, attrs) {
+                elem.ready(function () {
+                    $scope.$apply(function () {
                         var func = $parse(attrs.elemReady);
                         func($scope);
                     });
@@ -268,7 +380,6 @@ app.directive('security', ['$compile', 'localStorageService', '$timeout', functi
     }
 }]);
 
-
 app.directive('securitydisable', ['$compile', 'localStorageService', '$timeout', function ($compile, localStorageService, $timeout) {
     return {
         link: function (scope, element, attrs) {
@@ -296,19 +407,16 @@ app.directive('securitydisable', ['$compile', 'localStorageService', '$timeout',
     }
 }]);
 
-
 app.directive('securityhide', ['$compile', 'localStorageService', '$timeout', function ($compile, localStorageService, $timeout) {
     return {
         link: function (scope, element, attrs) {
             var userInfo = localStorageService.get('authenticationData');
             if (userInfo == null) {
-
                 $(element).remove();
             }
         }
     }
 }]);
-
 
 app.directive('securityreadonlyhide', ['$compile', 'localStorageService', '$timeout', function ($compile, localStorageService, $timeout) {
     return {
@@ -318,14 +426,12 @@ app.directive('securityreadonlyhide', ['$compile', 'localStorageService', '$time
                 if (userInfo.roleId < 3) {
                     $(element).remove();
                 }
-
             } else {
                 $(element).remove();
             }
         }
     }
 }]);
-
 
 app.directive('breadcrumbs', ['$log', '$parse', '$interpolate', function () {
     return {
@@ -336,9 +442,7 @@ app.directive('breadcrumbs', ['$log', '$parse', '$interpolate', function () {
         },
         templateUrl: 'app/views/directives/breadcrumbs.html',
         controller: ['$scope', '$state', '$stateParams', function ($scope, $state, $stateParams) {
-
             var defaultResolver = function (state) {
-
                 var displayName = state.data.displayName;
 
                 return displayName;
@@ -353,7 +457,6 @@ app.directive('breadcrumbs', ['$log', '$parse', '$interpolate', function () {
                     currentState: $state.$current,
                     params: $stateParams,
                     getDisplayName: function (state) {
-
                         if ($scope.hasCustomResolver) {
                             return $scope.itemDisplayNameResolver({
                                 defaultResolver: defaultResolver,
@@ -366,14 +469,12 @@ app.directive('breadcrumbs', ['$log', '$parse', '$interpolate', function () {
                         }
                     },
                     isCurrent: function (state) {
-
                         return isCurrent(state);
                     },
                     isException: function () {
                         if ($scope.stateExceptions.indexOf(this.currentState.name) > -1) return true;
                         return false;
                     },
-
                 }
                 $scope.emptyName = function () {
                     return function (item) {
@@ -407,14 +508,12 @@ app.directive('reportcrumbs', ['$log', '$parse', '$interpolate', function () {
                 $scope.$navigationState = {
                     currentState: $state.$current,
                     params: $stateParams,
-
                 }
                 $scope.emptyName = function () {
                     return function (item) {
                         return item.data.displayName != "";
                     };
                 }
-
             };
 
             $scope.$on('$stateChangeSuccess', function () {
@@ -485,7 +584,6 @@ angular.module('ui.bootstrap-slider', [])
                             } else {
                                 ngModelCtrl.$setViewValue(value);
                             }
-
                         }
 
                         setOption('id', $scope.sliderid);
@@ -651,13 +749,11 @@ app.directive('multiselectDropdown', function () {
             $(element).click(function (e) {
                 e.stopPropagation();
             });
-
         }
     };
 });
 //JEff cecheck this later
 app.directive('advancedDropdown', function () {
-
     return {
         scope: {
             dropdownAfterShow: '=dropdownAfterShow'
@@ -787,7 +883,6 @@ app.directive('stickyHeaders', ['$timeout', function ($timeout) {
                     angular.forEach(columns, function (column, index) {
                         $(column).css('width', sizeArray[index] + remainingLengthPerField + 'px');
                     });
-
                 });
             }
             $(window).resize(function () {
@@ -829,22 +924,7 @@ app.filter('countSelected', function () {
         return selectedNo.length;
     };
 });
-app.filter('unique', function () {
-    return function (collection, keyname) {
-        var output = [],
-            keys = [];
 
-        angular.forEach(collection, function (item) {
-            var key = item[keyname];
-            if (keys.indexOf(key) === -1) {
-                keys.push(key);
-                output.push(item);
-            }
-        });
-
-        return output;
-    };
-});
 app.filter('uniqueSimpleArray', function () {
     return function (collection) {
         var output = [],
@@ -865,7 +945,6 @@ app.filter('uniqueSimpleArray', function () {
 app.filter('returnConfigurationIcon', function () {
     return function (configurationId) {
         var cssClass = "";
-
 
         switch (configurationId) {
             case 1:
@@ -926,13 +1005,11 @@ app.filter('returnConfigurationIcon', function () {
 
                 cssClass = "icon config-digital";
                 break;
-
         }
 
         return cssClass;
     };
 });
-
 
 app.filter('isNoneSelected', function () {
     return function (arr) {
@@ -974,7 +1051,6 @@ app.filter("isEmpty", function () {
         if (!input) return true;
         return false;
     };
-
 });
 app.filter("format", function () {
     return function (input) {
@@ -984,6 +1060,12 @@ app.filter("format", function () {
         });
     };
 });
+
+app.filter('uniqueContactsOnly', function() {
+    return function(arr) {
+        
+    }
+})
 
 // This filter makes the assumption that the input will be in decimal form (i.e. 17%).
 app.filter('percentage', ['$filter', function ($filter) {
@@ -1054,7 +1136,6 @@ app.directive('digitsOnly', function () {
         require: 'ngModel',
         link: function (scope, element, attrs, ngModel) {
             scope.$watch(attrs.ngModel, function (newValue, oldValue) {
-
                 if (newValue) {
                     if (newValue.length === 1 && newValue === '.') return;
 
@@ -1063,7 +1144,6 @@ app.directive('digitsOnly', function () {
                         ngModel.$render();
                     }
                 }
-
             });
         }
     };
@@ -1075,7 +1155,6 @@ app.directive('lettersOnly', function () {
         require: 'ngModel',
         link: function (scope, element, attrs, ngModel) {
             scope.$watch(attrs.ngModel, function (newValue, oldValue) {
-
                 if (newValue) {
                     if (!/^[a-zA-Z ]*$/.test(newValue)) {
                         ngModel.$setViewValue(oldValue);
@@ -1097,11 +1176,10 @@ app.directive('phoneNumber', function () {
         require: 'ngModel',
         link: function (scope, $element, attrs, ngModel) {
             scope.$watch(attrs.ngModel, function (newValue, oldValue) {
-
                 var changed = $element[0].classList.contains('ng-dirty');
 
                 if (newValue) {
-                    if (newValue.length === 1 && newValue === '+') return;
+                    if (newValue.length === 1 && newValue === '+' || newValue.includes("-") && !isNaN(newValue)) return;
 
                     if (isNaN(newValue)) {
                         ngModel.$setViewValue(oldValue);
@@ -1121,13 +1199,62 @@ app.directive('phoneNumber', function () {
     };
 });
 
+app.filter('tel', function () {
+    return function (tel) {
+        if (!tel) { return ''; }
+        if (tel.length > 10) {
+            return tel;
+        }
+        var value = tel.toString().trim().replace(/^\+/, '');
+
+        if (value.match(/[^0-9]/)) {
+            return tel;
+        }
+
+        var country, city, number;
+
+        switch (value.length) {
+            case 10: // +1PPP####### -> C (PPP) ###-####
+                country = 1;
+                city = value.slice(0, 3);
+                number = value.slice(3);
+                break;
+
+            case 11: // +CPPP####### -> CCC (PP) ###-####
+                country = value[0];
+                city = value.slice(1, 4);
+                number = value.slice(4);
+                break;
+
+            case 12: // +CCCPP####### -> CCC (PP) ###-####
+                country = value.slice(0, 3);
+                city = value.slice(3, 5);
+                number = value.slice(5);
+                break;
+
+            default:
+                return tel;
+        }
+
+        //if (country == 1) {
+        //    country = "";
+        //}
+
+      number = number.slice(0, 3) + '-' + number.slice(3);
+
+        return (country + " (" + city + ") " + number).trim();
+    };
+});
+
 app.directive('emailAddress', function () {
     return {
         restrict: 'A',
         require: 'ngModel',
         link: function ($scope, $element, $attrs, ngModel) {
             $scope.$watch($attrs.ngModel, function (value) {
-                var isValid = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/.test(value);
+
+                //var isValid = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/.test(value); //old Regex USL-1213
+                var isValid = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/.test(value); //new Regex, tests positive for: tsnell@dc.rr.com
                 ngModel.$setValidity($attrs.ngModel, isValid);
 
                 if (value && !isValid && $element[0].classList.contains('ng-dirty')) {
@@ -1141,13 +1268,34 @@ app.directive('emailAddress', function () {
     }
 });
 
+app.directive('AllowNonIntegers',
+    function() {
+        return {
+            restrict: 'A',
+            require: 'ngModel',
+            link: function($scope, $element, $attrs, ngModel) {
+                $scope.$watch($attrs.ngModel,
+                    function(value) {
+                        var isValid = /[^0-9]/.test(value);
+                        ngModel.$setValidity($attrs.ngModel, isValid);
+                        if (value && !isValid && $element[0].classList.contains('ng-dirty')) {
+                            $element[0].classList.add("field-error");
+                        } else {
+                            $element[0].classList.remove("field-error");
+                        }
+
+                    });
+            }
+        }
+    });
+
 app.directive('underValue', function () {
     return {
         restrict: 'A',
         require: 'ngModel',
         link: function ($scope, $element, $attrs, ngModel) {
             $scope.$watch($attrs.ngModel, function (value) {
-                var isValid = Number(value) > 0 && Number(value) <= $attrs.underValue;
+                var isValid = Number(value) >= 0 && Number(value) <= $attrs.underValue;
                 ngModel.$setValidity($attrs.ngModel, isValid);
 
                 if (!isValid && $element[0].classList.contains('ng-dirty')) {
@@ -1161,7 +1309,6 @@ app.directive('underValue', function () {
     }
 });
 
-
 //This turns off Angular debugging tools which makes angular faster for production
 //app.config(function ($stateProvider, $urlRouterProvider, $compileProvider) {
 app.config(function ($stateProvider) {
@@ -1173,10 +1320,7 @@ app.config(function ($stateProvider) {
     //    controller: "licensesController",
     //    templateUrl: "/app/views/home.html"
     //});
-    
-    
-    
-    
+
     $stateProvider.state('Licenses', {
         url: "/search-MyView",
         templateUrl: { '@': { controller: "licensesController", templateUrl: "/app/views/search-MyView.html" } },
@@ -1258,7 +1402,6 @@ app.config(function ($stateProvider) {
         params:
         {
             myView: ''
-
         }
     }).state('SearchMyView.DetailMyLicense', {
         url: "/detail-MyLicense/{licenseId}/:myview",
@@ -1280,7 +1423,6 @@ app.config(function ($stateProvider) {
             {
                 templateUrl: "/app/views/partials/modal-step-AddProducts.html",
                 controller: "addProductsController"
-
             }
         }
     }).state("SearchMyView.DetailLicense.StepsModal.CreateLicense", {
@@ -1302,7 +1444,6 @@ app.config(function ($stateProvider) {
         data:
         {
             displayName: 'Edit License',
-
         },
         params: { licenseData: null, actionId: "", products: null },
         views:
@@ -1318,7 +1459,6 @@ app.config(function ($stateProvider) {
         data:
         {
             displayName: 'Edit Rates',
-
         },
         params: { licenseData: null, actionId: "", products: null },
         views:
@@ -1363,7 +1503,6 @@ app.config(function ($stateProvider) {
         data:
         {
             displayName: 'Edit Configs',
-
         },
         params: { licenseData: null, actionId: "", products: null },
         views:
@@ -1379,7 +1518,6 @@ app.config(function ($stateProvider) {
         data:
         {
             displayName: 'Generate Document',
-
         },
         params: { licenseData: null, actionId: "", products: null, files: null },
         views:
@@ -1395,7 +1533,6 @@ app.config(function ($stateProvider) {
         data:
         {
             displayName: 'Execute Document'
-
         },
         params: { licenseData: null, actionId: "", products: null, files: null },
         views:
@@ -1411,7 +1548,6 @@ app.config(function ($stateProvider) {
         data:
         {
             displayName: 'Generate Document',
-
         },
         params: { licenseData: null, actionId: "", products: null },
         views:
@@ -1426,7 +1562,6 @@ app.config(function ($stateProvider) {
         data:
         {
             displayName: 'Generate Direct Document',
-
         },
         params: { licenseData: null, actionId: "", products: null, otherValues: null },
         views:
@@ -1443,7 +1578,6 @@ app.config(function ($stateProvider) {
             data:
             {
                 displayName: 'Edit Writer Rate'
-
             },
             params: { license: null, licenseTypeId: null, licenseId: null, writer: null, productId: null, recordingId: null, songDuration: null, claimException: null, statsRollup: null, trackStatsRollup: null },
             views:
@@ -1459,9 +1593,8 @@ app.config(function ($stateProvider) {
             data:
             {
                 displayName: 'Add Writer Note'
-
             },
-            params: { writer: null},
+            params: { writer: null },
             views:
                 {
                     "modalView@":
@@ -1475,9 +1608,8 @@ app.config(function ($stateProvider) {
             data:
             {
                 displayName: 'View/Edit Writer Note'
-
             },
-            params: { writer: null, writerNotes: null, buttons:null},
+            params: { writer: null, writerNotes: null, buttons: null },
             views:
                 {
                     "modalView@":
@@ -1491,7 +1623,6 @@ app.config(function ($stateProvider) {
             data:
             {
                 displayName: 'Upload Document'
-
             },
             params: { licenseId: null, files: null },
             views:
@@ -1510,7 +1641,6 @@ app.config(function ($stateProvider) {
             data:
             {
                 displayName: 'Writers Consent'
-
             },
             params: { config: null, files: null, recording: null, writer: null, product: null },
             views:
@@ -1526,7 +1656,6 @@ app.config(function ($stateProvider) {
             data:
             {
                 displayName: 'Writers Is Included'
-
             },
             params: { config: null, files: null, recording: null, writer: null, product: null, rate1: null },
             views:
@@ -1542,7 +1671,6 @@ app.config(function ($stateProvider) {
             data:
             {
                 displayName: 'Edit Paid Quarter'
-
             },
             params: { licenesId: null, config: null, recording: null, writer: null, product: null },
             views:
@@ -1553,7 +1681,26 @@ app.config(function ($stateProvider) {
                         controller: "padiQuarterController"
                     }
                 }
-        }).state("SearchMyView.DetailProduct.StepsModal", createModalStateObject()).state("SearchMyView.DetailProduct.StepsModal.EditProduct", {
+        })
+
+        .state("SearchMyView.DetailLicense.StepsModal.DataHamonization", {
+            parent: 'SearchMyView.DetailLicense.StepsModal',
+            data:
+            {
+                displayName: 'Recs DataHamonization'
+            },
+            params: { data: null, licenseId: null },
+            views:
+                {
+                    "modalView@":
+                    {
+                        templateUrl: "/app/views/partials/modal-DataHarmonization.html",
+                        controller: "dataChangeHarmonizationController"
+                    }
+                }
+        })
+
+        .state("SearchMyView.DetailProduct.StepsModal", createModalStateObject()).state("SearchMyView.DetailProduct.StepsModal.EditProduct", {
             parent: 'SearchMyView.DetailProduct.StepsModal',
             data:
             {
@@ -1617,7 +1764,6 @@ app.config(function ($stateProvider) {
         data:
         {
             displayName: 'Edit License',
-
         },
         params: { licenseData: null, actionId: "", products: null },
         views:
@@ -1640,10 +1786,8 @@ app.config(function ($stateProvider) {
             {
                 templateUrl: "/app/views/partials/modal-step-AddProducts.html",
                 controller: "addProductsController"
-
             }
         }
-
     }).state("SearchMyView.DetailProduct.StepsModal.EditConfigs", {
         parent: 'SearchMyView.DetailProduct.StepsModal',
         data:
@@ -1660,7 +1804,6 @@ app.config(function ($stateProvider) {
             }
         }
     });;
-
 
     $stateProvider.state('SearchMyView.Tabs.ProductsTab', {
         url: "/ProductsTab",
@@ -1784,10 +1927,8 @@ app.config(function ($stateProvider) {
             {
                 templateUrl: "/app/views/partials/modal-step-AddProducts.html",
                 controller: "addProductsController"
-
             }
         }
-
     }).
     state("SearchMyView.Tabs.LicenseTab.StepsModal.CreateProduct", {
         parent: 'SearchMyView.Tabs.LicenseTab.StepsModal',
@@ -1853,7 +1994,6 @@ app.config(function ($stateProvider) {
         data:
         {
             displayName: 'Edit License',
-
         },
         params: { licenseData: null, actionId: "", products: null },
         views:
@@ -1869,7 +2009,6 @@ app.config(function ($stateProvider) {
         data:
         {
             displayName: 'Edit Rates',
-
         },
         params: { licenseData: null, actionId: "", products: null },
         views:
@@ -1885,7 +2024,6 @@ app.config(function ($stateProvider) {
         data:
         {
             displayName: 'Edit Rates',
-
         },
         params: { licenseData: null, actionId: "", products: null },
         views:
@@ -1954,10 +2092,8 @@ app.config(function ($stateProvider) {
             {
                 templateUrl: "/app/views/partials/modal-step-AddProducts.html",
                 controller: "addProductsController"
-
             }
         }
-
     }).state("SearchMyView.Tabs.MyViewTab.StepsModal.CreateProduct", {
         parent: 'SearchMyView.Tabs.MyViewTab.StepsModal',
         data:
@@ -2026,7 +2162,6 @@ app.config(function ($stateProvider) {
             data:
             {
                 displayName: 'Edit License',
-
             },
             params: { licenseData: null, actionId: "", products: null },
             views:
@@ -2042,7 +2177,6 @@ app.config(function ($stateProvider) {
             data:
             {
                 displayName: 'Edit Rates',
-
             },
             params: { licenseData: null, actionId: "", products: null },
             views:
@@ -2105,7 +2239,6 @@ app.config(function ($stateProvider) {
         }
     });
     ////States for reports
-
 
     $stateProvider.state('SearchReports', {
         url: "/search-Reports",
@@ -2179,7 +2312,7 @@ app.config(function ($stateProvider) {
             displayName: 'Login'
         }
     });
-   
+
     $stateProvider.state('Orders', {
         url: "/orders",
         templateUrl: "/app/views/orders.html",
@@ -2245,11 +2378,11 @@ app.config(function ($stateProvider) {
 });
 app.constant('ngAuthSettings', APPCONFIG);
 
-/*
+
 app.config(function ($httpProvider) {
     $httpProvider.interceptors.push('authInterceptorService');
 });
-
+/*
 app.run(['authService', function (authService) {
     authService.fillAuthData();
 }]);
@@ -2262,9 +2395,6 @@ app.run(['authService', function (authService) {
 app.run(['safeService', function (safeService) {
     safeService.checkAuthentication();
 }]);
-
-
-
 
 function createModalStateObject() {
     return {
@@ -2303,4 +2433,13 @@ function subNavController($scope, $location) {
     };
 }
 
+function containsObject(obj, list) {
+    var i;
+    for (i = 0; i < list.length; i++) {
+        if (list[i] === obj) {
+            return true;
+        }
+    }
 
+    return false;
+}

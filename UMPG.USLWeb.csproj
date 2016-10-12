@@ -99,7 +99,6 @@
     <Content Include="app\controllers\productsController.js" />
     <Content Include="app\controllers\viewSongsController.js" />
     <Content Include="app\custom\common.js" />
-    <Content Include="app\views\partials\license-configurations-PO.html" />
     <Content Include="app\views\partials\licenseDetail-Writers.html" />
     <Content Include="app\services\filesService.js" />
     <Content Include="app\services\licenseWritersConsentTypesService.js" />
@@ -140,6 +139,7 @@
     <Content Include="app\views\license-render.html" />
     <Content Include="app\views\partials\modal-AddWriterNote.html" />
     <Content Include="app\views\partials\modal-EditWriterNote.html" />
+    <Content Include="app\views\partials\productOverview-WriterRates.html" />
     <Content Include="app\views\partials\tabsReports-Partial.html" />
     <Content Include="app\views\partials\license-template.html" />
     <Content Include="app\views\partials\modal-AddNote.html" />
@@ -234,6 +234,12 @@
     <Content Include="doc_templates\Physical and Digital with Escalated_files\themedata.thmx" />
     <Content Include="doc_templates\Physical Rates only_files\themedata.thmx" />
     <Content Include="po.json" />
+    <Content Include="Specs\controllers\associateControllerSpecs.js" />
+    <Content Include="Specs\controllers\contactsControllerSpecs.js" />
+    <Content Include="Specs\controllers\logInControllerSpecs.js" />
+    <Content Include="Specs\controllers\singupControllerSpecs.js" />
+    <Content Include="Specs\directives\breadcrumbDirectiveSpecs.js" />
+    <Content Include="tom_Original.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -294,10 +300,6 @@
     <Content Include="scripts\moment.min.js" />
     <Content Include="scripts\ngSmoothScroll.js" />
     <Content Include="scripts\ui-bootstrap.js" />
-    <Content Include="Specs\associateControllerSpecs.js" />
-    <Content Include="Specs\contactsControllerSpecs.js" />
-    <Content Include="Specs\logInControllerSpecs.js" />
-    <Content Include="Specs\singupControllerSpecs.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -312,6 +314,9 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Shared\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

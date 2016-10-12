@@ -65,7 +65,7 @@ app.factory('licensesService', ['$http', 'ngAuthSettings','$state', function ($h
     //        return response;
     //    });
     //};
-    //todo: to be deleted... never used
+    
     var _getLicensesForProducts = function (productId) {
         var url = serviceBase + 'api/licenseCTRL/licenses/GetProductLicenses/' + productId;
         return $http.get(url)

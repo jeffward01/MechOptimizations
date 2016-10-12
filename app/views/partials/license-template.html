@@ -4,7 +4,24 @@
     <meta charset="utf-8">
     <title></title>
 </head>
+<!--<style type="text/css">
+    table {
+        page-break-inside: auto;
+    }
 
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+</style>-->
 <body style="margin:auto 20px;">
     <section class="license-template" style="font-size:11pt; 'Hoefler Text', 'Liberation Serif', Times, 'Times New Roman', serif!important;">
         <section class="address-header" style="position:relative; display:block; width:100%; margin:20pt auto; text-align:center;">
@@ -74,7 +91,7 @@
             </ol>
         </section><!-- End License List -->
         <section class="legal-letter" style="page-break-after: always;">
-
+        
             <!-- *** IMPORTANT *** I added the ONLY in front of the IF Statements here because we need to
                  replace the ENTIRE section for the three options below -->
             <!-- ONLY IF Default Template -->
@@ -195,7 +212,7 @@
             <br />
         </section><!-- End Legal Letter -->
 
-        <div ng-repeat="product in selectedLicense.licensePreview.licenseProducts | orderBy: 'scheduleId'" style="page-break-before: always;">
+    <div ng-repeat="product in selectedLicense.licensePreview.licenseProducts | orderBy: 'scheduleId'" style="page-break-before: always;">
             <div ng-if="displayProductHeader(product)">
                 <section class="schedule-header">
                     <br />
@@ -233,9 +250,9 @@
                                 <td style="padding: 3pt 6pt; vertical-align: top;"><span ng-bind="config.configuration.name"></span></td>
                                 <td style="padding: 3pt 6pt; vertical-align: top;"><span ng-bind="config.licenseProductConfiguration.catalogNumber"></span></td><!--USL-1169-->
                                 <!-- USL-1169
-                                <td ng-repeat="x in product.productHeader | filter:emptyOrNull" ng-if="x.catalogNumber.length > 1 " style="padding: 3pt 6pt; vertical-align: top;">{{x.catalogNumber}}{{config.licenseProductConfiguration.catalogNumber}}</td>
-                                <td style="padding: 3pt 6pt; vertical-align: top;"></td>
-                                -->
+                            <td ng-repeat="x in product.productHeader | filter:emptyOrNull" ng-if="x.catalogNumber.length > 1 " style="padding: 3pt 6pt; vertical-align: top;">{{x.catalogNumber}}{{config.licenseProductConfiguration.catalogNumber}}</td>
+                            <td style="padding: 3pt 6pt; vertical-align: top;"></td>
+                            -->
                                 <!--Jeff Added blank cell to allow release date to display properly. Catalog nuymber was displaying 12 blank cells and pushing the date far right.-->
                                 <!--USL-1169 Steve commented blank cell after fixing the catalog number display -->
                                 <td style="padding: 3pt 6pt; vertical-align: top;"><span ng-bind="config.releaseDate | timezone | date:'MM/dd/yyyy'"></span></td>
@@ -249,7 +266,7 @@
 
             </div>
             <div ng-repeat="record in product.recordings">
-                <section class="rates-table" style="page-break-inside:avoid;">
+            <section class="rates-table" style="page-break-inside:avoid;">
                     <br />
 
                     <!--EXAMPLE SAMPLE TABLE-->
@@ -257,26 +274,26 @@
 
                         <thead>
                             <!--
-                            <tr>
-                                <th rowspan="2" class="track-writer" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 40%;">
-                                    Song Title / Timing / ISRC –
-                                    sample(s) of <span class="sample-track">“SAMPLED SONG TITLE”</span><br/>
-                                    Writer(s) <br/>Publisher(s) (Affiliation)
-                                </th>
-                                <th rowspan="2" class="track-writer" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 20%;">
-                                    <div ng-if="displaySpecialStatusHeader(record)">Special Status</div></th>
-                                <th rowspan="2" class="track-writer" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 15%;">Rate Type</th>
-                                <th rowspan="2" class="split" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 10%; text-align: center;">Collectable %</th>
-                                <th colspan="2" class="rates" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; text-align: center; border-bottom: none;">
-                                    Rates
-                                    <span style="display: block; width: 100%; height: 4pt; border: solid 1pt #000000; border-bottom: none;"></span>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th height="29" class="base-rate" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 10%; text-align: center;">Base</th>
-                                <th class="pro-rata-rate" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 10%; text-align: center;">Pro-Rata</th>
-                            </tr>
-                                -->
+                <tr>
+                    <th rowspan="2" class="track-writer" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 40%;">
+                        Song Title / Timing / ISRC –
+                        sample(s) of <span class="sample-track">“SAMPLED SONG TITLE”</span><br/>
+                        Writer(s) <br/>Publisher(s) (Affiliation)
+                    </th>
+                    <th rowspan="2" class="track-writer" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 20%;">
+                        <div ng-if="displaySpecialStatusHeader(record)">Special Status</div></th>
+                    <th rowspan="2" class="track-writer" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 15%;">Rate Type</th>
+                    <th rowspan="2" class="split" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 10%; text-align: center;">Collectable %</th>
+                    <th colspan="2" class="rates" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; text-align: center; border-bottom: none;">
+                        Rates
+                        <span style="display: block; width: 100%; height: 4pt; border: solid 1pt #000000; border-bottom: none;"></span>
+                    </th>
+                </tr>
+                <tr>
+                    <th height="29" class="base-rate" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 10%; text-align: center;">Base</th>
+                    <th class="pro-rata-rate" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 10%; text-align: center;">Pro-Rata</th>
+                </tr>
+                    -->
                             <tr>
                                 <th rowspan="2" class="track-writer" style="padding: 3pt 6pt; vertical-align: bottom; white-space: nowrap; border-bottom: solid 1px #000000; width: 40%;">
                                     Song Title / Timing / ISRC<br />
@@ -320,7 +337,7 @@
                             </tr>
                             <tr ng-if="displayWriter(writer)">
                                 <td colspan="6" ng-if="writer.licenseProductRecordingWriter.rateList[0].writerRateInclude" class="track-writer" style="padding: 3pt 6pt; vertical-align: top; font-weight:bold;">
-                                    <span ng-bind="writer.name"></span> 
+                                    <span ng-bind="writer.name"></span>
                                 </td>
                             </tr>
                             <tr ng-if="displayWriter(writer)">
@@ -339,7 +356,7 @@
                                                 </span>
                                             </span>
                                             <span ng-if='originalPublisher.SeExists && administrator.capacityCode=="SE" && !originalPublisher.zeroValue'>
-                                                <span ng-bind="administrator.name"></span> 
+                                                <span ng-bind="administrator.name"></span>
                                                 <span ng-repeat='affiliation in administrator.affiliations | filter:{incomeGroup:"Performance"}'>
                                                     <span ng-repeat='a in affiliation.affiliations'>
                                                         (<span ng-bind="a.societyAcronym"></span>)
@@ -351,29 +368,29 @@
                                         <br />
                                     </span>
                                     <!-- pre
-                                    <span ng-repeat="originalPublisher in writer.originalPublishers | filter:{zeroValue:false}">
-                                        <span style="margin-left: 5px;">{{originalPublisher.name}}</span>
-                                        <span ng-if='!originalPublisher.SeExists' ng-repeat='aff in originalPublisher.affiliations | filter:{incomeGroup:"Performance"}'>
-                                            <span ng-repeat='aa in aff.affiliations'>
-                                                ({{aa.societyAcronym}})
-                                            </span>
+                        <span ng-repeat="originalPublisher in writer.originalPublishers | filter:{zeroValue:false}">
+                            <span style="margin-left: 5px;">{{originalPublisher.name}}</span>
+                            <span ng-if='!originalPublisher.SeExists' ng-repeat='aff in originalPublisher.affiliations | filter:{incomeGroup:"Performance"}'>
+                                <span ng-repeat='aa in aff.affiliations'>
+                                    ({{aa.societyAcronym}})
+                                </span>
+                            </span>
+                            <span style="float: left; margin-right: 5px;" ng-repeat="administrator in originalPublisher.administrators">
+                                <span ng-if='!originalPublisher.SeExists && administrator.capacityCode=="AM" && !originalPublisher.zeroValue'>
+                                    {{administrator.name}} <span>&nbsp<span>/</span> </span>
+                                </span>
+                                <span ng-if='originalPublisher.SeExists && administrator.capacityCode=="SE" && !originalPublisher.zeroValue'>
+                                    {{administrator.name}}
+                                    <span ng-repeat='affiliation in administrator.affiliations | filter:{incomeGroup:"Performance"}'>
+                                        <span ng-repeat='a in affiliation.affiliations'>
+                                            ({{a.societyAcronym}})
                                         </span>
-                                        <span style="float: left; margin-right: 5px;" ng-repeat="administrator in originalPublisher.administrators">
-                                            <span ng-if='!originalPublisher.SeExists && administrator.capacityCode=="AM" && !originalPublisher.zeroValue'>
-                                                {{administrator.name}} <span>&nbsp<span>/</span> </span>
-                                            </span>
-                                            <span ng-if='originalPublisher.SeExists && administrator.capacityCode=="SE" && !originalPublisher.zeroValue'>
-                                                {{administrator.name}}
-                                                <span ng-repeat='affiliation in administrator.affiliations | filter:{incomeGroup:"Performance"}'>
-                                                    <span ng-repeat='a in affiliation.affiliations'>
-                                                        ({{a.societyAcronym}})
-                                                    </span>
-                                                </span>
-                                            </span>
-                                        </span>
-                                        <br />
                                     </span>
-                                    -->
+                                </span>
+                            </span>
+                            <br />
+                        </span>
+                        -->
                                 </td>
                             </tr>
 
@@ -390,17 +407,17 @@
                                 <td ng-if="rate.writerRateInclude" class="base-rate" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;"><span ng-bind="rate.escalatedRate"></span></td>
                                 <td ng-if="rate.writerRateInclude" class="base-rate no-wrap" style="padding: 3pt 6pt; vertical-align: top; width: 10%; text-align: center;">
                                     <span ng-if="rate.rateType.rateTypeId == 3 || rate.rateType.rateTypeId ==4 || rate.rateType.rateTypeId ==10 || rate.rateType.rateTypeId ==6 || rate.rateType.rateTypeId ==7 || rate.rateType.rateTypeId ==11">
-                                       <span ng-bind="rate.percentOfStat"></span>% of Stat
+                                        <span ng-bind="rate.percentOfStat"></span>% of Stat
                                     </span>
                                     <span ng-if="rate.rateType.rateTypeId != 1 && rate.rateType.rateTypeId != 3 && rate.rateType.rateTypeId !=4 && rate.rateType.rateTypeId !=10 && rate.rateType.rateTypeId !=6 && rate.rateType.rateTypeId !=7 && rate.rateType.rateTypeId !=11">
-                                        <span ng-bind="rate.rate"></span>
+                                        <span ng-bind="rate.rate | number:4"></span>
                                     </span>
                                     <span ng-if="rate.rateType.rateTypeId == 1">
-                                        <span ng-bind="rate.rate | displayStat"></span>
+                                        <span ng-bind="rate.rate | displayStat | number:4"></span>
                                     </span>
 
                                 </td>
-                                <td ng-if="rate.writerRateInclude" class="pro-rata-rate" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">{{rate.proRataRate}}</td>
+                                <td ng-if="rate.writerRateInclude" class="pro-rata-rate" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">{{rate.proRataRate | number:4}}</td>
                             </tr>
 
                             <!--<tr ng-if="displayWriter(writer)" ng-repeat="rate in writer.licenseProductRecordingWriter.rateList | orderBy: ['configuration_name','product_configuration_id']">-->
@@ -408,28 +425,28 @@
                             <!--<td ng-if="rate.writerRateInclude" class="track-writer" style="padding:3pt 6pt; vertical-align:top; width:40%;">{{rate.configuration_name}}TEST <span ng-if="getProductConfigurationUpc(rate.product_configuration_id)">({{getProductConfigurationUpc(rate.product_configuration_id)}})</span></td>-->
                             <!-- <td ng-if="writer.licenseProductRecordingWriter.rateList[0].writerRateInclude" class="track-writer" style="padding: 3pt 6pt; vertical-align: top; width: 40%;">{{writer.licenseProductRecordingWriter.rateList[0].configuration_name}}<span ng-if="getProductConfigurationUpc(writer.licenseProductRecordingWriter.rateList[0].configuration_id)">({{getProductConfigurationUpc(writer.licenseProductRecordingWriter.rateList[0].configuration_id)}})</span></td> Jeff turned this off, Jeff added a new line below this one AND an ng-repeat 'rate' above ths one. Testing Needed.-->
                             <!--
-                            <td ng-if="rate.writerRateInclude" class="track-writer" style="padding: 3pt 6pt 3pt 26pt; vertical-align: top; width: 40%;">{{rate.configuration_name}} <span ng-if="getProductConfigurationUpc(rate.product_configuration_id)">({{getProductConfigurationUpc(rate.product_configuration_id)}})</span></td>
-                            <td ng-if="writer.licenseProductRecordingWriter.rateList[0].writerRateInclude" class="track-writer" style="padding: 3pt 6pt; vertical-align: top; width: 20%;">{{displaySpecialStatus(writer.licenseProductRecordingWriter.rateList[0])}}</td>
-                            <td ng-if="writer.licenseProductRecordingWriter.rateList[0].writerRateInclude" class="track-writer no-wrap" style="padding: 3pt 6pt; vertical-align: top; width: 10%;">{{writer.licenseProductRecordingWriter.rateList[0].rateType.rateType}}</td>
-                            <td ng-if="writer.licenseProductRecordingWriter.rateList[0].writerRateInclude" class="split" style="padding: 3pt 6pt; vertical-align: top; width: 10%; text-align: center;">{{getSplit(writer)}}%</td>
-                            <td ng-if="writer.licenseProductRecordingWriter.rateList[0].writerRateInclude" class="base-rate no-wrap" style="padding: 3pt 6pt; vertical-align: top; width: 10%; text-align: center;">
-                                <span ng-if="writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId == 3 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==4 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==10 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==6 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==7 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==11">
-                                        Stat
-                                    </span>
-                                <span ng-if="writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId != 3 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=4 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=10 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=6 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=7 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=11">
-                                        {{writer.licenseProductRecordingWriter.rateList[0].rate}}
-                                    </span>
-                            </td>
-                            <td ng-if="writer.licenseProductRecordingWriter.rateList[0].writerRateInclude" class="pro-rata-rate" style="padding: 3pt 6pt; vertical-align: top; width: 10%; text-align: center;">
-                                <span ng-if="writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId == 3 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==4 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==10 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==6 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==7 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==11">
-                                        {{writer.licenseProductRecordingWriter.rateList[0].percentOfStat}}% of Stat
-                                    </span>
-                                <span ng-if="writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId != 3 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=4 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=10 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=6 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=7 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=11">
-                                        {{writer.licenseProductRecordingWriter.rateList[0].proRataRate}}
-                                    </span>
-                            </td>
-                            </tr>
-                            -->
+                <td ng-if="rate.writerRateInclude" class="track-writer" style="padding: 3pt 6pt 3pt 26pt; vertical-align: top; width: 40%;">{{rate.configuration_name}} <span ng-if="getProductConfigurationUpc(rate.product_configuration_id)">({{getProductConfigurationUpc(rate.product_configuration_id)}})</span></td>
+                <td ng-if="writer.licenseProductRecordingWriter.rateList[0].writerRateInclude" class="track-writer" style="padding: 3pt 6pt; vertical-align: top; width: 20%;">{{displaySpecialStatus(writer.licenseProductRecordingWriter.rateList[0])}}</td>
+                <td ng-if="writer.licenseProductRecordingWriter.rateList[0].writerRateInclude" class="track-writer no-wrap" style="padding: 3pt 6pt; vertical-align: top; width: 10%;">{{writer.licenseProductRecordingWriter.rateList[0].rateType.rateType}}</td>
+                <td ng-if="writer.licenseProductRecordingWriter.rateList[0].writerRateInclude" class="split" style="padding: 3pt 6pt; vertical-align: top; width: 10%; text-align: center;">{{getSplit(writer)}}%</td>
+                <td ng-if="writer.licenseProductRecordingWriter.rateList[0].writerRateInclude" class="base-rate no-wrap" style="padding: 3pt 6pt; vertical-align: top; width: 10%; text-align: center;">
+                    <span ng-if="writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId == 3 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==4 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==10 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==6 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==7 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==11">
+                            Stat
+                        </span>
+                    <span ng-if="writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId != 3 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=4 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=10 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=6 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=7 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=11">
+                            {{writer.licenseProductRecordingWriter.rateList[0].rate}}
+                        </span>
+                </td>
+                <td ng-if="writer.licenseProductRecordingWriter.rateList[0].writerRateInclude" class="pro-rata-rate" style="padding: 3pt 6pt; vertical-align: top; width: 10%; text-align: center;">
+                    <span ng-if="writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId == 3 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==4 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==10 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==6 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==7 || writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId ==11">
+                            {{writer.licenseProductRecordingWriter.rateList[0].percentOfStat}}% of Stat
+                        </span>
+                    <span ng-if="writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId != 3 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=4 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=10 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=6 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=7 && writer.licenseProductRecordingWriter.rateList[0].rateType.rateTypeId !=11">
+                            {{writer.licenseProductRecordingWriter.rateList[0].proRataRate}}
+                        </span>
+                </td>
+                </tr>
+                -->
                         </tbody>
                     </table>
                     <br />
@@ -500,34 +517,34 @@
                                         <br />
                                     </span>
                                     <!-- pre fix
-                                    <span ng-repeat="originalPublisher in writer.originalPublishers | filter:{zeroValue:false}">
-                                        <span style="margin-left: 5px;">{{originalPublisher.name}}</span>
-                                        <span ng-if='!originalPublisher.SeExists' ng-repeat='aff in originalPublisher.affiliations | filter:{incomeGroup:"Performance"}'>
-                                            <span ng-repeat='aa in aff.affiliations'>
-                                                ({{aa.societyAcronym}})
-                                            </span>
+                        <span ng-repeat="originalPublisher in writer.originalPublishers | filter:{zeroValue:false}">
+                            <span style="margin-left: 5px;">{{originalPublisher.name}}</span>
+                            <span ng-if='!originalPublisher.SeExists' ng-repeat='aff in originalPublisher.affiliations | filter:{incomeGroup:"Performance"}'>
+                                <span ng-repeat='aa in aff.affiliations'>
+                                    ({{aa.societyAcronym}})
+                                </span>
+                            </span>
+                            <span style="float: left; margin-right: 5px;" ng-repeat="administrator in originalPublisher.administrators">
+                                <span ng-if='!originalPublisher.SeExists && administrator.capacityCode=="AM" && !originalPublisher.zeroValue'>
+                                    {{administrator.name}} <span>&nbsp<span>/</span> </span>
+                                </span>
+                                <span ng-if='originalPublisher.SeExists && administrator.capacityCode=="SE" && !originalPublisher.zeroValue'>
+                                    {{administrator.name}} <!-UNiversal Music - MGB Songs?-> <span ng-if="administrator.name != ''"><span>&nbsp<span>/</span> </span> </span>
+                                     <-- Jeff moved this 'UMPG MGB France to below the SE Publishers per Samira's request'->
+                                    <span ng-repeat='affiliation in administrator.affiliations | filter:{incomeGroup:"Performance"}'>
+                                        <span ng-repeat='a in affiliation.affiliations'>
+                                            ({{a.societyAcronym}})<!- <span>&nbsp<span>/</span> </span>  ->
                                         </span>
-                                        <span style="float: left; margin-right: 5px;" ng-repeat="administrator in originalPublisher.administrators">
-                                            <span ng-if='!originalPublisher.SeExists && administrator.capacityCode=="AM" && !originalPublisher.zeroValue'>
-                                                {{administrator.name}} <span>&nbsp<span>/</span> </span>
-                                            </span>
-                                            <span ng-if='originalPublisher.SeExists && administrator.capacityCode=="SE" && !originalPublisher.zeroValue'>
-                                                {{administrator.name}} <!-UNiversal Music - MGB Songs?-> <span ng-if="administrator.name != ''"><span>&nbsp<span>/</span> </span> </span>
-                                                 <-- Jeff moved this 'UMPG MGB France to below the SE Publishers per Samira's request'->
-                                                <span ng-repeat='affiliation in administrator.affiliations | filter:{incomeGroup:"Performance"}'>
-                                                    <span ng-repeat='a in affiliation.affiliations'>
-                                                        ({{a.societyAcronym}})<!- <span>&nbsp<span>/</span> </span>  ->
-                                                    </span>
-                                                </span>
-                                            </span>
-                                            <-SE Publisher Ends Above--
-                                        </span>
-                                        <br />
                                     </span>
-                                    -->
+                                </span>
+                                <-SE Publisher Ends Above--
+                            </span>
+                            <br />
+                        </span>
+                        -->
                                 </td>
                                 <!------
-                                <span ng-if="!$last">, </span>-->
+                    <span ng-if="!$last">, </span>-->
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -544,40 +561,40 @@
                                         <span ng-bind="rate.percentOfStat"></span>% of Stat
                                     </span>
                                     <span ng-if="rate.rateType.rateTypeId != 1 && rate.rateType.rateTypeId != 3 && rate.rateType.rateTypeId !=4 && rate.rateType.rateTypeId !=10 && rate.rateType.rateTypeId !=6 && rate.rateType.rateTypeId !=7 && rate.rateType.rateTypeId !=11">
-                                        <span ng-bind="rate.rate"></span>
+                                        <span ng-bind="rate.rate | number:4"></span>
                                     </span>
                                     <span ng-if="rate.rateType.rateTypeId == 1">
-                                        <span ng-bind="rate.rate | displayStat"></span>
+                                        <span ng-bind="rate.rate | displayStat | number: 4"></span>
                                     </span>
                                 </td>
                                 <td ng-if="rate.writerRateInclude" class="pro-rata-rate" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">
-                                    <span ng-bind="rate.proRataRate"></span>
+                                    <span ng-bind="rate.proRataRate | number: 4"></span>
                                 </td>
                             </tr>
 
                             <!-- Medley Component Track Row Here
-                               <tr ng-if="$index==0">
-                                  <td class="track-writer" style="padding:3pt 6pt; vertical-align:top; width:55%; padding-left:30px;">
-                                      {{record.track.title}} {{record.track.duration}} - {{displayIsrc(record.track.isrc)}}
-                                  </td>
-                                  <td style="padding:3pt 6pt; vertical-align:top;"></td>
-                                  <td colspan="2" style="padding:3pt 6pt; vertical-align:top;"></td>
-                            </tr>
-                              <tr>
-                                  <td rowspan="2" class="track-writer" style="padding:3pt 6pt; vertical-align:top; width:55%; padding-left:30px;">
-                                      {{writer.name}}<br />
-                                      {{joinValues(writer.originalPublishers,'name')}}
-                                  </td>
-                                  <td style="padding:3pt 6pt; vertical-align:top;"></td>
-                                  <td colspan="2" class="rate-type" style="padding:3pt 6pt; vertical-align:top; text-align:center; background-color:#EFEFEF;">{{getRateTypes('P', writer)}}</td>
-                              </tr>
-                              <tr>
-                                  <td class="split" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">{{writer.licenseProductRecordingWriter.split}}</td>
-                                  <td class="base-rate" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">{{getRate('P','rate',writer)}}</td>
-                                  <td class="pro-rata-rate" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">{{getRate('P','proRataRate',writer)}}</td>
-                              </tr>
-                              -->
-                        </tbody>
+                   <tr ng-if="$index==0">
+                      <td class="track-writer" style="padding:3pt 6pt; vertical-align:top; width:55%; padding-left:30px;">
+                          {{record.track.title}} {{record.track.duration}} - {{displayIsrc(record.track.isrc)}}
+                      </td>
+                      <td style="padding:3pt 6pt; vertical-align:top;"></td>
+                      <td colspan="2" style="padding:3pt 6pt; vertical-align:top;"></td>
+                </tr>
+                  <tr>
+                      <td rowspan="2" class="track-writer" style="padding:3pt 6pt; vertical-align:top; width:55%; padding-left:30px;">
+                          {{writer.name}}<br />
+                          {{joinValues(writer.originalPublishers,'name')}}
+                      </td>
+                      <td style="padding:3pt 6pt; vertical-align:top;"></td>
+                      <td colspan="2" class="rate-type" style="padding:3pt 6pt; vertical-align:top; text-align:center; background-color:#EFEFEF;">{{getRateTypes('P', writer)}}</td>
+                  </tr>
+                  <tr>
+                      <td class="split" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">{{writer.licenseProductRecordingWriter.split}}</td>
+                      <td class="base-rate" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">{{getRate('P','rate',writer)}}</td>
+                      <td class="pro-rata-rate" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">{{getRate('P','proRataRate',writer)}}</td>
+                  </tr>
+                  -->
+                        </tbody>         
                     </table>
                     <br />
 
@@ -647,29 +664,29 @@
                                     </span>
 
                                     <!-- pre fix
-                                    <span ng-repeat="originalPublisher in writer.originalPublishers | filter:{zeroValue:false}">
-                                        <span style="margin-left: 5px;">{{originalPublisher.name}}</span>
-                                        <span ng-if='!originalPublisher.SeExists' ng-repeat='aff in originalPublisher.affiliations | filter:{incomeGroup:"Performance"}'>
-                                            <span ng-repeat='aa in aff.affiliations'>
-                                                ({{aa.societyAcronym}})
-                                            </span>
+                        <span ng-repeat="originalPublisher in writer.originalPublishers | filter:{zeroValue:false}">
+                            <span style="margin-left: 5px;">{{originalPublisher.name}}</span>
+                            <span ng-if='!originalPublisher.SeExists' ng-repeat='aff in originalPublisher.affiliations | filter:{incomeGroup:"Performance"}'>
+                                <span ng-repeat='aa in aff.affiliations'>
+                                    ({{aa.societyAcronym}})
+                                </span>
+                            </span>
+                            <span style="float: left; margin-right: 5px;" ng-repeat="administrator in originalPublisher.administrators">
+                                <span ng-if='!originalPublisher.SeExists && administrator.capacityCode=="AM" && !originalPublisher.zeroValue'>
+                                    {{administrator.name}} <!-<span>&nbsp<span>/</span> </span> Jeff removed this, refrence licesne 4620 on DE ->
+                                </span>
+                                <span ng-if='originalPublisher.SeExists && administrator.capacityCode=="SE" && !originalPublisher.zeroValue'>
+                                    {{administrator.name}}
+                                    <span ng-repeat='affiliation in administrator.affiliations | filter:{incomeGroup:"Performance"}'>
+                                        <span ng-repeat='a in affiliation.affiliations'>
+                                            ({{a.societyAcronym}})
                                         </span>
-                                        <span style="float: left; margin-right: 5px;" ng-repeat="administrator in originalPublisher.administrators">
-                                            <span ng-if='!originalPublisher.SeExists && administrator.capacityCode=="AM" && !originalPublisher.zeroValue'>
-                                                {{administrator.name}} <!-<span>&nbsp<span>/</span> </span> Jeff removed this, refrence licesne 4620 on DE ->
-                                            </span>
-                                            <span ng-if='originalPublisher.SeExists && administrator.capacityCode=="SE" && !originalPublisher.zeroValue'>
-                                                {{administrator.name}}
-                                                <span ng-repeat='affiliation in administrator.affiliations | filter:{incomeGroup:"Performance"}'>
-                                                    <span ng-repeat='a in affiliation.affiliations'>
-                                                        ({{a.societyAcronym}})
-                                                    </span>
-                                                </span>
-                                            </span>
-                                        </span>
-                                        <br />
                                     </span>
-                                    -->
+                                </span>
+                            </span>
+                            <br />
+                        </span>
+                        -->
                                 </td>
                             </tr>
                             <tr ng-if="displayWriter(writer)" ng-repeat="rate in writer.licenseProductRecordingWriter.rateList | orderBy: ['configuration_name','product_configuration_id']">
@@ -687,56 +704,56 @@
                                         <span ng-bind="rate.percentOfStat"></span>% of Stat
                                     </span>
                                     <span ng-if="rate.rateType.rateTypeId != 1 && rate.rateType.rateTypeId != 3 && rate.rateType.rateTypeId !=4 && rate.rateType.rateTypeId !=10 && rate.rateType.rateTypeId !=6 && rate.rateType.rateTypeId !=7 && rate.rateType.rateTypeId !=11">
-                                        <span ng-bind="rate.rate"></span>
+                                        <span ng-bind="rate.rate | number: 4"></span>
                                     </span>
                                     <span ng-if="rate.rateType.rateTypeId == 1">
-                                        <span ng-bind="rate.rate | displayStat "></span>
+                                        <span ng-bind="rate.rate | displayStat | number:4"></span>
                                     </span>
                                 </td>
-                                <td ng-if="rate.writerRateInclude" class="pro-rata-rate" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;"><span ng-bind="rate.proRataRate"></span></td>
+                                <td ng-if="rate.writerRateInclude" class="pro-rata-rate" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;"><span ng-bind="rate.proRataRate| number:4"></span></td>
                             </tr>
 
                             <!-- IF Medley Track
 
-                            <tr ng-if="$index==0">
-                                <td class="track-writer" style="padding:3pt 6pt; vertical-align:top; width:55%; padding-left:30px;">
-                                    {{record.track.title}} {{record.track.duration}} - {{displayIsrc(record.track.isrc)}}
-                                </td>
-                                <td class="split" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">&nbsp;</td>
-                                <td colspan="3" style="padding:3pt 6pt; vertical-align:top;"></td>
+                <tr ng-if="$index==0">
+                    <td class="track-writer" style="padding:3pt 6pt; vertical-align:top; width:55%; padding-left:30px;">
+                        {{record.track.title}} {{record.track.duration}} - {{displayIsrc(record.track.isrc)}}
+                    </td>
+                    <td class="split" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">&nbsp;</td>
+                    <td colspan="3" style="padding:3pt 6pt; vertical-align:top;"></td>
 
-                            </tr>
-                            <tr>
-                                <td rowspan="2" class="track-writer" style="padding:3pt 6pt; vertical-align:top; width:55%; padding-left:30px;">
-                                    {{writer.name}}<br />
-                                    {{joinValues(writer.originalPublishers,'name')}}
-                                </td>
-                                <td style="padding:3pt 6pt; vertical-align:top;"></td>
-                                <td colspan="3" class="rate-type" style="padding:3pt 6pt; vertical-align:top; text-align:center; background-color:#EFEFEF;">{{getRateTypes('P', writer)}}</td>
+                </tr>
+                <tr>
+                    <td rowspan="2" class="track-writer" style="padding:3pt 6pt; vertical-align:top; width:55%; padding-left:30px;">
+                        {{writer.name}}<br />
+                        {{joinValues(writer.originalPublishers,'name')}}
+                    </td>
+                    <td style="padding:3pt 6pt; vertical-align:top;"></td>
+                    <td colspan="3" class="rate-type" style="padding:3pt 6pt; vertical-align:top; text-align:center; background-color:#EFEFEF;">{{getRateTypes('P', writer)}}</td>
 
-                            </tr>
-                            <tr>
-                                <td class="split" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">{{writer.licenseProductRecordingWriter.split}}</td>
-                                <td class="base-rate" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">
-                                    <div ng-repeat-start="rate in writer.licenseProductRecordingWriter.rateList">
-                                        <p>{{rate.escalatedRate}}</p>
-                                    </div>
-                                    <div ng-repeat-end=""></div>
-                                </td>
-                                <td class="base-rate" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">
-                                    <div ng-repeat-start="rate in writer.licenseProductRecordingWriter.rateList">
-                                        <p>{{rate.rate}}</p>
-                                    </div>
-                                    <div ng-repeat-end=""></div>
-                                </td>
-                                <td class="pro-rata-rate" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">
-                                    <div ng-repeat-start="rate in writer.licenseProductRecordingWriter.rateList">
-                                        <p>{{rate.proRataRate}}</p>
-                                    </div>
-                                    <div ng-repeat-end=""></div>
-                                </td>
-                            </tr>
-                                -->
+                </tr>
+                <tr>
+                    <td class="split" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">{{writer.licenseProductRecordingWriter.split}}</td>
+                    <td class="base-rate" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">
+                        <div ng-repeat-start="rate in writer.licenseProductRecordingWriter.rateList">
+                            <p>{{rate.escalatedRate}}</p>
+                        </div>
+                        <div ng-repeat-end=""></div>
+                    </td>
+                    <td class="base-rate" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">
+                        <div ng-repeat-start="rate in writer.licenseProductRecordingWriter.rateList">
+                            <p>{{rate.rate}}</p>
+                        </div>
+                        <div ng-repeat-end=""></div>
+                    </td>
+                    <td class="pro-rata-rate" style="padding:3pt 6pt; vertical-align:top; width:10%; text-align:center;">
+                        <div ng-repeat-start="rate in writer.licenseProductRecordingWriter.rateList">
+                            <p>{{rate.proRataRate}}</p>
+                        </div>
+                        <div ng-repeat-end=""></div>
+                    </td>
+                </tr>
+                    -->
 
                         </tbody>
                     </table>
