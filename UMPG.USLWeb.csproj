@@ -138,6 +138,7 @@
     <Content Include="app\views\home.html" />
     <Content Include="app\views\license-render.html" />
     <Content Include="app\views\partials\modal-AddWriterNote.html" />
+    <Content Include="app\views\partials\modal-DataHarmonization.html" />
     <Content Include="app\views\partials\modal-EditWriterNote.html" />
     <Content Include="app\views\partials\productOverview-WriterRates.html" />
     <Content Include="app\views\partials\tabsReports-Partial.html" />
@@ -306,6 +307,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Code\TestHandler.cs" />
+    <Content Include="app\controllers\modals\dataChangeHarmonizationController.js" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -174,8 +174,8 @@
 
             </td>
         </tr>
-        <!--<tr ng-repeat="link in licensee.licenseeContactsFiltered | unique: ['fullName']">-->
-            <tr ng-repeat="link in licensee.licenseeContactsFiltered | filter: uniqueAdvFilter">
+        <tr ng-repeat="link in licensee.licenseeContactsFiltered | unique: ['fullName']">
+            <!--<tr ng-repeat="link in licensee.licenseeContactsFiltered | filter: uniqueAdvFilter">-->   <!--Doesnt filter out all cases-->
                 <td ng-if="!link.editContactVisible" class="ten-percent"><span ng-bind="link.firstName"></span></td>
                 <td ng-if="!link.editContactVisible" class="fifteen-percent"><span ng-bind="link.lastName"></span></td>
                 <td ng-if="!link.editContactVisible" class="ten-percent"><span ng-bind="link.phone.phoneNumber | tel"></span></td>

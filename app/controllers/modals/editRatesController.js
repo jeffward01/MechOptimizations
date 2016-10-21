@@ -758,39 +758,60 @@ app.controller('editRatesController', ['$scope', 'licensesService', 'licenseProd
                                 writer.combinedRatesIds = [];
                                 writer.display = true;
                                 $scope.writers.push(writer);
-                                angular.forEach(writer.licenseProductRecordingWriter.rateList, function (rate) {
-                                    if (rate.licenseDate != null) {
-                                        $scope.licenseWriterHasLicenseDate.push(writer.licenseProductRecordingWriter.licenseWriterId);
-                                    }
-                                    rate.rateType.combinedIds = product.licenseProductId + '.' + recording.licenseRecording.licenseRecordingId + '.' + writer.caeNumber + '.' + rate.rateType.rateTypeId;
-                                    rate.rateType.combinedRatesIds = [];
-                                    rate.rateType.combinedRatesIds.push(rate.rateType.combinedIds);
-                                    product.combinedRatesIds.push(rate.rateType.combinedIds);
-                                    $scope.listOfCombinedRateIdsAll.push(rate.rateType.combinedIds);
-                                    writer.combinedRatesIds.push(rate.rateType.combinedIds);
-                                    recording.combinedRatesIds.push(rate.rateType.combinedIds);
-                                    rate.selected = false;
-                                    rate.display = false;
-                                    rate.rateType.selected = false;
-                                    rate.rateType.display = true;
-                                    $scope.rates.push(rate);
-                                    rate.rateType.GUID = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-                                        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-                                        return v.toString(16);
-                                    });
-                                    $scope.ratetypes.push(rate.rateType);
-                                    angular.forEach(rate.specialStatusList, function (specialStatus) {
-                                        specialStatus.combinedIds = product.licenseProductId + '.' + recording.licenseRecording.licenseRecordingId + '.' + writer.caeNumber;
-                                        specialStatus.selected = false;
-                                        specialStatus.display = true;
-                                        specialStatus.writerCae = writer.caeNumber;
-                                        specialStatus.displayName = specialStatus.lU_SpecialStatuses.specialStatus;
-                                        product.combinedStatusIds = specialStatus.combinedIds;
-                                        writer.combinedStatusIds = specialStatus.combinedIds;
-                                        recording.combinedStatusIds = specialStatus.combinedIds;
-                                        $scope.specialstatuses.push(specialStatus);
-                                    });
-                                });
+                                if (writer.licenseProductRecordingWriter != null) {
+                                    angular.forEach(writer.licenseProductRecordingWriter.rateList,
+                                        function(rate) {
+                                            if (rate.licenseDate != null) {
+                                                $scope.licenseWriterHasLicenseDate
+                                                    .push(writer.licenseProductRecordingWriter.licenseWriterId);
+                                            }
+                                            rate.rateType
+                                                .combinedIds =
+                                                product.licenseProductId +
+                                                '.' +
+                                                recording.licenseRecording.licenseRecordingId +
+                                                '.' +
+                                                writer.caeNumber +
+                                                '.' +
+                                                rate.rateType.rateTypeId;
+                                            rate.rateType.combinedRatesIds = [];
+                                            rate.rateType.combinedRatesIds.push(rate.rateType.combinedIds);
+                                            product.combinedRatesIds.push(rate.rateType.combinedIds);
+                                            $scope.listOfCombinedRateIdsAll.push(rate.rateType.combinedIds);
+                                            writer.combinedRatesIds.push(rate.rateType.combinedIds);
+                                            recording.combinedRatesIds.push(rate.rateType.combinedIds);
+                                            rate.selected = false;
+                                            rate.display = false;
+                                            rate.rateType.selected = false;
+                                            rate.rateType.display = true;
+                                            $scope.rates.push(rate);
+                                            rate.rateType.GUID = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,
+                                                function(c) {
+                                                    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                                                    return v.toString(16);
+                                                });
+                                            $scope.ratetypes.push(rate.rateType);
+                                            angular.forEach(rate.specialStatusList,
+                                                function(specialStatus) {
+                                                    specialStatus
+                                                        .combinedIds =
+                                                        product.licenseProductId +
+                                                        '.' +
+                                                        recording.licenseRecording.licenseRecordingId +
+                                                        '.' +
+                                                        writer.caeNumber;
+                                                    specialStatus.selected = false;
+                                                    specialStatus.display = true;
+                                                    specialStatus.writerCae = writer.caeNumber;
+                                                    specialStatus
+                                                        .displayName = specialStatus.lU_SpecialStatuses.specialStatus;
+                                                    product.combinedStatusIds = specialStatus.combinedIds;
+                                                    writer.combinedStatusIds = specialStatus.combinedIds;
+                                                    recording.combinedStatusIds = specialStatus.combinedIds;
+                                                    $scope.specialstatuses.push(specialStatus);
+                                                });
+                                        });
+                                }
                             }
                         });
                     });

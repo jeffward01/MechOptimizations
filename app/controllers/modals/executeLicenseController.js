@@ -48,8 +48,9 @@ app.controller('executeLicenseController', ['$scope', '$stateParams', 'ngAuthSet
         var message = "Invalid Date, use mm/dd/yyyy format (click to close)";
         notyService.error(message);
     }
-
+    
     $scope.ok = function () {
+        console.log(JSON.stringify($scope.licenseDetail));
         var form1 = $scope.someForm11;
         var form2 = $scope.someForm12;
         var form3 = $scope.someForm13;
@@ -100,6 +101,7 @@ app.controller('executeLicenseController', ['$scope', '$stateParams', 'ngAuthSet
     }
 
     $scope.upload = function () {
+        alert("upload btn pressed");
         if (attachmentValidation()) {
             var fileId = 'fileToUpload';
             var progressId = 'progressbar';
@@ -117,6 +119,7 @@ app.controller('executeLicenseController', ['$scope', '$stateParams', 'ngAuthSet
                 var message = "The file which were you trying to upload exceeds the maximum admited size.";
                 notyService.error(message);
             }
+         
 
             if (fileExists) {
                 var text = 'We have found an existing file with the same name: "' +
@@ -136,6 +139,22 @@ app.controller('executeLicenseController', ['$scope', '$stateParams', 'ngAuthSet
         return;
     };
 
+    function isNewAttachment(attachments, fileId, progressId, attachmentTypeId) {
+        alert("test");
+        var fileToUpload = document.getElementById('fileToUpload');
+        angular.forEach($scope.licenseAttachments,
+            function(attacment) {
+                if (attacment.fileName === fileToUpload.fileName) {
+                    var text = 'We have found an existing file with the same name: "' +
+                        fileToUpload.fileName +
+                        '". Would you like to overwrite it?';
+                    notyService.modalConfirm(text)
+                        .then(function() {
+                            uploadFiles(licenseId, fileId, progressId, attachmentTypeId);
+                        });
+                }
+            });
+    }
 
     var uploadFiles = function (licenseId, fileId, progressId, attachmentTypeId) {
         $scope.progressVisible = true;
@@ -153,6 +172,7 @@ app.controller('executeLicenseController', ['$scope', '$stateParams', 'ngAuthSet
             return false;
         } else {
             $scope.errorPresent = false;
+            isNewAttachment($scope.licenseAttachments, fileId, progressId, attachmentTypeId);
             return true;
         }
     }
@@ -175,11 +195,10 @@ app.controller('executeLicenseController', ['$scope', '$stateParams', 'ngAuthSet
     }
 
     getAllAttchmentTypes();
-
     function getAllAttchmentTypes() {
         filesService.getAllAttachmentTypes()
             .then(function (res) {
-                console.log(JSON.stringify(res.data));
+                
                 $scope.AttachmentTypes = res.data;
             },
                 function (err) {
@@ -207,6 +226,7 @@ app.controller('executeLicenseController', ['$scope', '$stateParams', 'ngAuthSet
     $scope.populatelicenseAttachments = function (licenseId) {
         licensesService.getlicenseAttachments(licenseId).then(function (result) {
             $scope.licenseAttachments = result.data;
+            console.log(JSON.stringify($scope.licenseAttachments));
         });
     }
     $scope.open = function ($event) {

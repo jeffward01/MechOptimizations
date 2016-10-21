@@ -57,7 +57,6 @@ app.controller('adminController', ['$scope', 'licenseesService', 'contactsServic
         angular.forEach($scope.licensees,
             function (licensee, index) {
                 if (!licensee.contactsCollapsed || !licensee.groupCollapsed) {
-                    console.log("GIT");
                     counter++;
                 }
             });
@@ -1125,7 +1124,7 @@ app.controller('adminController', ['$scope', 'licenseesService', 'contactsServic
         angular.forEach(output,
             function(item) {
                 angular.forEach(output,
-                    function(compareItem) {
+                    function (compareItem) {
                         if (item
                             .fullName ===
                             compareItem.fullName &&
@@ -1233,11 +1232,36 @@ app.controller('adminController', ['$scope', 'licenseesService', 'contactsServic
                 angular.forEach(licnesee.licenseeContactsFiltered,
                     function (filteredContact) {
                         if (filteredContact.fullName == null) {
-                            filteredContact.fullName = filteredContact.firstName + " " + filteredContact.lastName;
+                            filteredContact.fullName = filteredContact.firstName.trim() +
+                                " " +
+                                filteredContact.lastName.trim();
                         }
                     });
             });
+      unique(licensees);
     };
+
+    function unique(origArr) {
+        var newArr = [],
+            origLen = origArr.length,
+            found, x, y;
+
+        for (x = 0; x < origLen; x++) {
+            found = undefined;
+            for (y = 0; y < newArr.length; y++) {
+                if (origArr[x].fullName === newArr[y].fullName) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                newArr.push(origArr[x]);
+            }
+        }
+        return newArr;
+    }
+
+
 
     function removeContactFromLabelGroup(licensee, licenseeLabelGroupId, contactId) {
         angular.forEach(licensee.licenseeLabelGroupFiltered,

@@ -22,7 +22,9 @@ app.factory('labelsService', ['$http', 'ngAuthSettings', function ($http, ngAuth
     };
     var _labelGroupSuggest = function (request) {
         var url = serviceBase + 'api/RECsCTRL/Autosuggests/LabelGroups';
-        return $http.post(url, '"' + request + '"')
+        return $http.post(url, '"' + request + '"',  {
+            ignoreLoadingBar: true
+        })
         //return $http.post(url, request)
         .then(function (response) {
             return response;

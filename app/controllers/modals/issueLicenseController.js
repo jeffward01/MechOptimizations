@@ -138,7 +138,7 @@ app.controller('issueLicenseController', ['$scope', 'licensesService', 'licenseP
     }
 
     $scope.ok = function () {
-
+        console.log(JSON.stringify($scope.selectedLicense));
         $scope.selectedLicense.licenseStatusId = 6;
         $scope.selectedLicense.licenseStatus.licenseStatus = "Issued";
         removeOutForSignatureAttachments();
@@ -448,9 +448,13 @@ app.controller('issueLicenseController', ['$scope', 'licensesService', 'licenseP
     $scope.getSplit = function (writer) {
         
         if ( writer.licenseProductRecordingWriter.splitOverride!=null && writer.licenseProductRecordingWriter.splitOverride >= 0) return writer.licenseProductRecordingWriter.splitOverride;
-        if (writer.licenseProductRecordingWriter.claimExceptionOverride !== 0 && writer.licenseProductRecordingWriter.claimExceptionOverride!=null) return writer.licenseProductRecordingWriter.claimExceptionOverride;
-        return writer.contribution;
+        if (writer.licenseProductRecordingWriter.claimExceptionOverride !== 0 && writer.licenseProductRecordingWriter.claimExceptionOverride != null) return writer.licenseProductRecordingWriter.claimExceptionOverride;
+        return toPercent(writer.contribution);
         
+    }
+
+    function toPercent (x) {
+        return ((x / 100) * 100).toFixed(2);
     }
 
     $scope.joinValues = function (currentArray, attr) {
