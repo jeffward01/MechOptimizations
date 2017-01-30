@@ -226,6 +226,10 @@ app.controller('editConfigurationsController', ['$scope', '$filter', 'licensesSe
             }
         }
 
+        if (config.configuration.id == null) {
+            config.configuration.id = 1;
+        }
+
         var request = {
             action: 'ADDEXISTING',
             addToLicenseId: $scope.licenseId,

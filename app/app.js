@@ -1,4 +1,4 @@
-﻿var app = angular.module('AngularAuthApp', ['ui.router', 'LocalStorageModule', 'angular-loading-bar', 'ui.bootstrap', 'ui.bootstrap-slider', 'smoothScroll']);
+﻿var app = angular.module('AngularAuthApp', ['ui.router', 'LocalStorageModule', 'angular-loading-bar', 'ui.bootstrap', 'ui.bootstrap-slider', 'smoothScroll', 'checklist-model']);
 
 //custom directives
 app.directive('showTab',
@@ -26,13 +26,12 @@ app.filter('timezone', function () {
                         date.getUTCSeconds());
     };
 });
-
 app.filter('emptyOrNull',
-    function() {
+    function () {
         return function (items) {
             var filtered = [];
             angular.forEach(items,
-                function(item) {
+                function (item) {
                     if (item.upc != null) {
                         filtered.push(item);
                     }
@@ -40,6 +39,36 @@ app.filter('emptyOrNull',
             return filtered;
         }
     });
+
+app.filter('emptyOrNullUpc',
+    function () {
+        return function (items) {
+            var filtered = [];
+            angular.forEach(items,
+                function (item) {
+                    if (item.upc != null) {
+                        filtered.push(item);
+                    }
+                });
+            return filtered;
+        }
+    });
+
+
+app.filter('emptyOrNullCatalogNumber',
+    function () {
+        return function (items) {
+            var filtered = [];
+            angular.forEach(items,
+                function (item) {
+                    if (item.catalogNumber != null) {
+                        filtered.push(item);
+                    }
+                });
+            return filtered;
+        }
+    });
+
 
 //Filters only checked configurations (ProductOverview),if none are checked, show all
 app.filter('checkedOnly',
@@ -237,7 +266,6 @@ app.filter('unique', function () {
     };
 });
 
-
 app.directive('productDetail',
     function () {
         return {
@@ -326,7 +354,7 @@ function () {
         }
     };
 });
-
+ 
 app.directive('customfileupload',
 function () {
     return {
@@ -1061,9 +1089,8 @@ app.filter("format", function () {
     };
 });
 
-app.filter('uniqueContactsOnly', function() {
-    return function(arr) {
-        
+app.filter('uniqueContactsOnly', function () {
+    return function (arr) {
     }
 })
 
@@ -1129,6 +1156,7 @@ app.directive('editColumns', ['$filter', function ($filter) {
     };
 }]);
 
+
 app.directive('digitsOnly', function () {
     // type: 123 or 123.45 or .123
     return {
@@ -1137,16 +1165,29 @@ app.directive('digitsOnly', function () {
         link: function (scope, element, attrs, ngModel) {
             scope.$watch(attrs.ngModel, function (newValue, oldValue) {
                 if (newValue) {
-                    if (newValue.length === 1 && newValue === '.') return;
+                    //if (newValue.length === 1 && newValue === ".") {
+                    //    return;
+                    //}
 
-                    if (isNaN(newValue)) {
+                    //if (isNaN(newValue)) {
+                    //        ngModel.$setViewValue(oldValue);
+                    //        ngModel.$render();
+
+                    //    }
+
+                    //}
+
+                    if (!/^[0-9 \-.]+$/.test(newValue)) {
                         ngModel.$setViewValue(oldValue);
-                        ngModel.$render();
+                    } else {
+                        ngModel.$setViewValue(newValue);
                     }
+                    ngModel.$render();
                 }
             });
         }
     };
+
 });
 
 app.directive('lettersOnly', function () {
@@ -1240,7 +1281,7 @@ app.filter('tel', function () {
         //    country = "";
         //}
 
-      number = number.slice(0, 3) + '-' + number.slice(3);
+        number = number.slice(0, 3) + '-' + number.slice(3);
 
         return (country + " (" + city + ") " + number).trim();
     };
@@ -1252,7 +1293,6 @@ app.directive('emailAddress', function () {
         require: 'ngModel',
         link: function ($scope, $element, $attrs, ngModel) {
             $scope.$watch($attrs.ngModel, function (value) {
-
                 //var isValid = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/.test(value); //old Regex USL-1213
                 var isValid = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/.test(value); //new Regex, tests positive for: tsnell@dc.rr.com
                 ngModel.$setValidity($attrs.ngModel, isValid);
@@ -1269,13 +1309,13 @@ app.directive('emailAddress', function () {
 });
 
 app.directive('AllowNonIntegers',
-    function() {
+    function () {
         return {
             restrict: 'A',
             require: 'ngModel',
-            link: function($scope, $element, $attrs, ngModel) {
+            link: function ($scope, $element, $attrs, ngModel) {
                 $scope.$watch($attrs.ngModel,
-                    function(value) {
+                    function (value) {
                         var isValid = /[^0-9]/.test(value);
                         ngModel.$setValidity($attrs.ngModel, isValid);
                         if (value && !isValid && $element[0].classList.contains('ng-dirty')) {
@@ -1283,7 +1323,6 @@ app.directive('AllowNonIntegers',
                         } else {
                             $element[0].classList.remove("field-error");
                         }
-
                     });
             }
         }
@@ -1356,6 +1395,31 @@ app.config(function ($stateProvider) {
             displayName: 'Admin'
         }
     });
+
+
+    $stateProvider.state('AppManagement', {
+        url: "/appManagement",
+        templateUrl: "/app/views/appManagement.html",
+        controller: "appManagementController",
+        data:
+        {
+            displayName: 'App Management'
+        }
+    });
+
+    $stateProvider.state('ProcessorEntries',
+    {
+        url: "/processorEntries/{processorName}",
+        templateUrl: "/app/views/viewProcessorEntries.html",
+        controller: "processorEntryController",
+        data:
+        {
+            displayName: 'Processor Entries'
+        },
+        params: { processorName: null }
+
+    });
+
 
     $stateProvider.state('Contacts', {
         url: "/contact/edit",
@@ -1624,7 +1688,7 @@ app.config(function ($stateProvider) {
             {
                 displayName: 'Upload Document'
             },
-            params: { licenseId: null, files: null },
+            params: { licenseId: null, files: null, state: null },
             views:
                 {
                     "modalView@":
@@ -1683,22 +1747,22 @@ app.config(function ($stateProvider) {
                 }
         })
 
-        .state("SearchMyView.DetailLicense.StepsModal.DataHamonization", {
-            parent: 'SearchMyView.DetailLicense.StepsModal',
-            data:
-            {
-                displayName: 'Recs DataHamonization'
-            },
-            params: { data: null, licenseId: null },
-            views:
-                {
-                    "modalView@":
-                    {
-                        templateUrl: "/app/views/partials/modal-DataHarmonization.html",
-                        controller: "dataChangeHarmonizationController"
-                    }
-                }
-        })
+       .state("SearchMyView.DetailLicense.StepsModal.DataHamonization", {
+           parent: 'SearchMyView.DetailLicense.StepsModal',
+           data:
+           {
+               displayName: 'Recs DataHamonization'
+           },
+           params: { data: null, licenseId: null },
+           views:
+               {
+                   "modalView@":
+                   {
+                       templateUrl: "/app/views/partials/modal-DataHarmonization.html",
+                       controller: "dataChangeHarmonizationController"
+                   }
+               }
+       })
 
         .state("SearchMyView.DetailProduct.StepsModal", createModalStateObject()).state("SearchMyView.DetailProduct.StepsModal.EditProduct", {
             parent: 'SearchMyView.DetailProduct.StepsModal',
@@ -2257,7 +2321,7 @@ app.config(function ($stateProvider) {
             displayName: ''
         }
     });
-
+    /*
     $stateProvider.state('SearchReports.Tabs.Priority', {
         url: "/Priority",
         templateUrl: "/app/views/partials/search-ReportsGridPriority.html",
@@ -2267,7 +2331,7 @@ app.config(function ($stateProvider) {
             displayName: ''
         }
     });
-
+    */
     $stateProvider.state('SearchReports.Tabs.Mechanical', {
         url: "/Mechanical",
         templateUrl: "/app/views/partials/search-ReportsGridMechanical.html",
@@ -2277,7 +2341,7 @@ app.config(function ($stateProvider) {
             displayName: ''
         }
     });
-
+    /*
     $stateProvider.state('SearchReports.Tabs.Consent', {
         url: "/Consent",
         templateUrl: "/app/views/partials/search-ReportsGridConsent.html",
@@ -2287,6 +2351,7 @@ app.config(function ($stateProvider) {
             displayName: ''
         }
     });
+    */
 
     //? is this necessary
     /*
@@ -2377,7 +2442,6 @@ app.config(function ($stateProvider) {
     //});
 });
 app.constant('ngAuthSettings', APPCONFIG);
-
 
 app.config(function ($httpProvider) {
     $httpProvider.interceptors.push('authInterceptorService');

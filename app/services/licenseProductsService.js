@@ -13,9 +13,10 @@ app.factory('licenseProductsService', ['$http', 'ngAuthSettings', '$state',  fun
         });
     };
 
-    var _getRecsDataChangesFast = function (products) {
-        var url = serviceBase + 'api/RECsCTRL/Products/FindOutOfSyncRecItems';
-        return $http.post(url,products,
+    var _getRecsDataChangesFast = function (products, licenseId) {
+        var url = serviceBase + 'api/dataHarmonCTRL/methods/FindOutOfSyncRecItems/' + licenseId;
+        console.log("Sent Request to Data Harmonization Sync");
+        return $http.post(url,products, 
             {
                 ignoreLoadingBar: true
             })
@@ -34,9 +35,25 @@ app.factory('licenseProductsService', ['$http', 'ngAuthSettings', '$state',  fun
             });
     }
 
+    var _findTrackDifferences = function(requestObj, licenseId) {
+        var url = serviceBase + 'api/dataHarmonCTRL/methods/GetTrackDifferences/' + licenseId;
+        console.log("Sent Request to Data Harmonization - Track Differences - Sync");
+
+  
+
+        return $http.post(url, requestObj,
+            {
+                ignoreLoadingBar: true
+            })
+        .then(function (response) {
+            return response.data;
+        });
+    };
+    
+
     //products in the license and products not in the license
     var _deleteLicenseProduct = function (licenseId, productId) {
-        if (licenseId == null) {
+        if (licenseId === null) {
             licenseId = 0;
         }
         var url = serviceBase + 'api/licenseProductCTRL/licenseproducts/DeleteLicenseProduct/' + licenseId + '/' + productId;
@@ -231,6 +248,7 @@ app.factory('licenseProductsService', ['$http', 'ngAuthSettings', '$state',  fun
     }
     
     licenseProductsServiceFactory.getRecsDataChangesFast = _getRecsDataChangesFast;
+    licenseProductsServiceFactory.getTrackDifferences = _findTrackDifferences;
     licenseProductsServiceFactory.getCatalogNumber = _getCatalogNumber;
     licenseProductsServiceFactory.getLicenseProducts = _getProducts;
     licenseProductsServiceFactory.getWriterNotes = _getWriterNotes;

@@ -189,7 +189,43 @@ app.controller('editRatesController', ['$scope', 'licensesService', 'licenseProd
     $scope.selectedSpecialStatuses = [];
     $scope.selectedRateType = [];
     $scope.selectedRateTypeforSave = [];
-   
+
+    $scope.testArray = [
+        {
+            name: "test"
+        }, {
+            name: "test"
+        }, {
+            name: "test"
+        }, {
+            name: "test"
+        }, {
+            name: "test"
+        }, {
+            name: "test"
+        }, {
+            name: "test"
+        }, {
+            name: "test"
+        }, {
+            name: "test"
+        }, {
+            name: "test"
+        }, {
+            name: "test"
+        }, {
+            name: "test"
+        }, {
+            name: "test"
+        }, {
+            name: "test"
+        }, {
+            name: "test"
+        }, {
+            name: "test"
+        }
+    ];
+
     $scope.getQuarters = function () {
         if ($scope.quarters == null) {
             licensesService.getQuarters().then(function (result) {
@@ -1418,6 +1454,7 @@ app.controller('editRatesController', ['$scope', 'licensesService', 'licenseProd
                 lList = lList.concat(i);
             });
             $scope.listOfCombinedRateIdsSelected = lList;
+       
         }
         if ($scope.selectedRateType.length > 0) {
             lList = [];
@@ -1459,6 +1496,15 @@ app.controller('editRatesController', ['$scope', 'licensesService', 'licenseProd
             var lresult = $filter('unique')($scope.selectedWriters, 'caeNumber');
             $scope.computedWriterIds = lresult;
         }
+    }
+
+
+    function testAlltheDatas() {
+        var array = $scope.selectedWriters;
+        var array2 = array;
+        var array4 = array;
+
+        $scope.selectedWriters.push.apply(array, array2);
     }
 
 }]);

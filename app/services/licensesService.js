@@ -30,6 +30,28 @@ app.factory('licensesService', ['$http', 'ngAuthSettings','$state', function ($h
         });
     };
 
+    var _snapshotExistAndComplete = function (licenseId) {
+        var url = serviceBase + 'api/dataHarmonCTRL/methods/DoesSnapshotExistAndComplete/' + licenseId;
+        return $http.get(url,
+        {
+            ignoreLoadingBar: true
+        })
+        .then(function (response) {
+            return response;
+        });
+    }
+
+    var _snapshotInProcess = function (licenseId) {
+        var url = serviceBase + 'api/dataHarmonCTRL/methods/IsSnapshotInProcess/' + licenseId;
+        return $http.get(url,
+        {
+            ignoreLoadingBar: true
+    })
+        .then(function (response) {
+            return response;
+        });
+    }
+
     var _searchInboxLicenses = function (assigneeId) {
         var url = serviceBase + 'api/licenseCTRL/licenses/GetInboxLicenses/' + assigneeId;
         return $http.get(url)
@@ -42,6 +64,15 @@ app.factory('licensesService', ['$http', 'ngAuthSettings','$state', function ($h
     var _getlicenseAttachments = function (licenseId) {
         var url = serviceBase + 'api/licenseCTRL/licenseAttachments/GetAllAttachmentsByLicenseId/'+ licenseId;
         return $http.get(url)
+        .then(function (response) {
+            return response;
+        });
+    };
+
+
+    var _editLicenseAttachment = function(attachment) {
+        var url = serviceBase + 'api/licenseCTRL/licenseAttachments/UpdateLicenseAttachment';
+        return $http.post(url, attachment)
         .then(function (response) {
             return response;
         });
@@ -275,7 +306,10 @@ app.factory('licensesService', ['$http', 'ngAuthSettings','$state', function ($h
        });
     };
 
+    licensesServiceFactory.DoesExistAndComplete = _snapshotExistAndComplete;
+    licensesServiceFactory.IsSnapshotInProcess = _snapshotInProcess;
     licensesServiceFactory.getlicenseAttachments = _getlicenseAttachments;
+    licensesServiceFactory.editAttachment = _editLicenseAttachment;
     licensesServiceFactory.getLicenses = _getLicenses;
     licensesServiceFactory.getLicenseDetail = _getLicenseDetail;
     licensesServiceFactory.searchLicenses = _searchLicenses;

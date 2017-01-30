@@ -1,8 +1,22 @@
 ﻿'use strict';
-app.controller('uploadDocController', ['$scope', 'ngAuthSettings', '$stateParams', 'licensesService', 'filesService', 'notyService', '$timeout', function ($scope, ngAuthSettings, $stateParams, licensesService, filesService, notyService, $timeout) {
+app.controller('uploadDocController', ['$scope', 'ngAuthSettings', '$stateParams', 'licensesService', 'filesService', 'notyService', '$timeout', '$rootScope',  function ($scope, ngAuthSettings, $stateParams, licensesService, filesService, notyService, $timeout, $rootScope) {
     $scope.progressVisible = false;
     // $scope.safeauthentication = safeService.safeauthentication;
     $scope.errorPresent = false;
+    $scope.modalState = $stateParams.state;
+    
+   getSelected($stateParams.files);
+
+    function getSelected(files) {
+        angular.forEach(files,
+            function(file) {
+                if (file.selected) {
+                 
+                    $scope.licenseAttachmentToEdit = file;
+                }
+            });
+    }
+
     $scope.checkIfValidFile = function () {
         var element = document.getElementById('fileToUpload');
         var input = document.getElementsByClassName('form-control')[0];
@@ -34,7 +48,13 @@ app.controller('uploadDocController', ['$scope', 'ngAuthSettings', '$stateParams
 
     $scope.selectAttachmentType = function (attachmentType) {
         $scope.chosenAttachment = attachmentType;
+        if ($scope.licenseAttachmentToEdit != null) {
+            $scope.licenseAttachmentToEdit.attachmentTypeId = attachmentType.attachmentTypeId;
+            $scope.licenseAttachmentToEdit.attachmentType = attachmentType;
+        }
         attachmentValidation();
+        $scope.isCollapsed = !$scope.isCollapsed;
+        $scope.setCaret($scope.isCollapsed);
     }
 
     $scope.upload = function () {
@@ -49,12 +69,13 @@ app.controller('uploadDocController', ['$scope', 'ngAuthSettings', '$stateParams
             var fileSelected = filesService.isFileSelected(fileId);
             var attachmentTypeId = $scope.chosenAttachment.attachmentTypeId;
 
-            //if (!fileSelected) {
-            //    var message = "No file has been selected for upload. Please select a file.";
-            //    notyService.error(message);
-            //}
+            if (!fileSelected) {
+                var message = "No file has been selected for upload. Please select a file.";
+                notyService.error(message);
+            }
+     
             if (validSize && fileExists == null && fileSelected) {
-                uploadFiles(licenseId, fileId, progressBarId, attachmentTypeId);
+          uploadFiles(licenseId, fileId, progressBarId, attachmentTypeId);
             }
 
             if (!validSize) {
@@ -71,9 +92,56 @@ app.controller('uploadDocController', ['$scope', 'ngAuthSettings', '$stateParams
                         uploadFiles(licenseId, fileId, progressBarId, attachmentTypeId);
                     });
             }
+            var file = document.getElementById(fileId);
+
+           // $scope.uploadMultiFiles(file.files);
         }
         return;
     };
+
+
+
+    // for multiple files:
+    $scope.uploadMultiFiles = function (files) {
+        var licenseId = $stateParams.licenseId;
+      var attachmentTypeId = $scope.chosenAttachment.attachmentTypeId;
+        if (files && files.length) {
+            for (var i = 0; i < files.length; i++) {
+                Upload.upload({
+                    url: 'spa.service/api/licenseCTRL/licenseAttachments/UploadAttachmentsByLicenseId/' +
+                    licenseId +
+                    "/" +
+                    attachmentTypeId,
+                    data: { file: files[i]}
+                }).then(function (resp) {
+                    console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+                }, function (resp) {
+                    console.log('Error status: ' + resp.status);
+                }, function (evt) {
+                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                    console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+                });
+        }
+
+}
+}
+
+
+
+
+
+    $scope.save = function() {
+        licensesService.editAttachment($scope.licenseAttachmentToEdit)
+            .then(function () {
+                $rootScope.$broadcast("AttachmentUpdated");
+                var message = "Edit Completed";
+                notyService.success(message);
+                $timeout(function() {
+                        $scope.goToParent(null, false);
+                    },
+                    1200);
+            });
+    }
 
     var uploadFiles = function (licenseId, fileId, progressBarId, attachmentTypeId) {
         $scope.progressVisible = true;
@@ -89,16 +157,19 @@ app.controller('uploadDocController', ['$scope', 'ngAuthSettings', '$stateParams
             var attachmentTypeErrorMessage = "Please select an Attachment Type";
             $scope.errorPresent = true;
             notyService.error(attachmentTypeErrorMessage);
+            
             return false;
         } else {
             $scope.errorPresent = false;
+            
             return true;
         }
     }
 
     function validateAttachmentType() {
-        if ($scope.chosenAttachment.attachmentTypeId == 0) {
-            return false;
+        if ($scope.chosenAttachment.attachmentTypeId === 0) {
+            $scope.chosenAttachment.attachmentTypeId = 1;
+            return true;
         }
         return true;
     };
@@ -114,7 +185,7 @@ app.controller('uploadDocController', ['$scope', 'ngAuthSettings', '$stateParams
 
     var uploadComplete = function (evt) {
         /* This event is raised when the server send back a response */
-
+        
         var message = "Upload Completed";
         notyService.success(message);
         $stateParams.stateCallbackArguments = {

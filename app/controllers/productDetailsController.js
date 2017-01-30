@@ -222,25 +222,23 @@ app.controller('productDetailsController',
                                             var thisLicenseProductId = licenseProduct.licenseProductId;
                                             angular.forEach(license.licenseProductConfigurations,
                                                 function (config) {
+                                                 
+                                                 
+                                                 
                                                     config.id = config.product_configuration_id;
-                                                    if (thisLicenseProductId === config.licenseProductId) {
+                                                 
+                                                if (thisLicenseProductId === config.licenseProductId) {
                                                         //Validation so configurations with same product_configuration_id dont get added
                                                         if (prodConfigIds.length === 0) {
                                                             prodConfigIds
                                                                 .push(parseInt(config.product_configuration_id));
                                                             config.checked = false;
-                                                            $scope.configurationFilters
-                                                                .push(config);
+                                                            $scope.configurationFilters.push(config);
                                                         }
                                                         //if is not in array
-                                                        if (
-                                                            isInArray(config.product_configuration_id,
-                                                                    prodConfigIds) ==
-                                                                -1) {
-                                                            prodConfigIds
-                                                                .push(parseInt(config.product_configuration_id));
+                                                        if (isInArray(config.product_configuration_id, prodConfigIds) === -1) {
+                                                            prodConfigIds.push(parseInt(config.product_configuration_id));
                                                             config.checked = false;
-                                                            //console.log("LOOKY LOOKY:          " + JSON.stringify(config));
                                                             $scope.configurationFilters.push(config);
                                                         }
                                                     }
@@ -249,6 +247,7 @@ app.controller('productDetailsController',
                                     });
                             });
 
+                        fillUnlicesedConfiguration();
                         getRecordings();
                     });
             },
@@ -256,16 +255,43 @@ app.controller('productDetailsController',
                     alert(error.data.message);
                 });
 
-        //function getLicensedConfigs(x) {  Delete this
-        //    var count = 0;
-        //    angular.forEach(x,
-        //        function (config) {
-        //            if (config.licensedAmount === config.totalAmount) {
-        //                count++;
-        //            }
-        //        });
-        //    return count;
-        //}
+
+
+        function fillUnlicesedConfiguration() {
+            var configs = getAllProductConfigIds($scope.configurationFilters);
+            angular.forEach($scope.productDetail.configurations,
+                function(config) {
+                    if (isInArray(config.id, configs) === -1) {
+                        config.checked = false;
+                        config = normalizeConfig(config);
+                                                            $scope.configurationFilters.push(config);
+                                                        }
+
+
+                });
+        }
+        function normalizeConfig(x) {
+            var newConfig = {
+                "configuration_name": x.configuration.name,
+                "configuration_id": x.configuration.id,
+                "product_configuration_id": x.id,
+                "upc_code": x.upc,
+                "checked": false,
+                "releaseDate": x.releaseDate
+
+        }
+            return newConfig;
+        }
+
+        function getAllProductConfigIds(x) {
+            var configs = [];
+            angular.forEach(x,
+                function(config) {
+                    configs.push(config.product_configuration_id);
+
+                });
+            return configs;
+        }
 
         function setLicenseWriterNotes(x) {
             var writerNotes = [];
@@ -316,44 +342,92 @@ app.controller('productDetailsController',
 
                 var executedSplitPresent = false;
                 var rootWriterExecutedSplit = 0;
-
+                var recordingId = 0;
                 var rootWriterSplitOverRide = 0;
                 var overRidePresent = false;
                 angular.forEach($scope.productOverview_Original, function (license) {
                     angular.forEach(license.licenseProducts, function (licenseProduct) {
                         angular.forEach(licenseProduct.recordings, function (lp_recording) {
+                            if (lp_recording.licenseRecording != null) {
+                                //    recordingId = lp_recording.licenseRecording.licenseRecordingId;
+                                recordingId = recording.id;
+                            }
+                            var judgeRecordingId = lp_recording.id;
                             angular.forEach(lp_recording.writers, function (writer) {
                                 if (writer.licenseProductRecordingWriter != null) {
-                                    if (writer.caeNumber === rootWriter.caeNumber &&
-                                        writer.name === rootWriter.name) {
+                                    var lprwRecordingId = writer.licenseProductRecordingWriter.licenseRecordingId;
+                                    if (recording.licenseRecording != null) {
 
-                                        //   console.log(rootWriter.name + "----Saving licenseProductRecordingWriter");
-                                        //   console.log("--------------writer.licenseProductRecordingWriter-------------" + JSON.stringify(writer.licenseProductRecordingWriter));
-                                        rootWriter.licenseProductRecordingWriter = writer.licenseProductRecordingWriter;
+                                        if (writer.caeNumber === rootWriter.caeNumber &&
+                                            writer.name === rootWriter.name &&
+                                            recordingId === judgeRecordingId) {
 
-                                        //logic to control the overWriting of splitOverrides.  We always are overwriting the current if the new is higher
-                                        if (writer.licenseProductRecordingWriter.splitOverride != null &&
-                                            writer.licenseProductRecordingWriter.splitOverride >= 0) {
-                                            overRidePresent = true;
+                                            //   console.log(rootWriter.name + "----Saving licenseProductRecordingWriter");
+                                            //   console.log("--------------writer.licenseProductRecordingWriter-------------" + JSON.stringify(writer.licenseProductRecordingWriter));
+                                            rootWriter
+                                                .licenseProductRecordingWriter = writer.licenseProductRecordingWriter;
 
-                                            //update the highest SplitOverride
-                                            if (rootWriterSplitOverRide <=
-                                                writer.licenseProductRecordingWriter.splitOverride) {
-                                                rootWriterSplitOverRide =
-                                                    writer.licenseProductRecordingWriter.splitOverride;
+                                            //logic to control the overWriting of splitOverrides.  We always are overwriting the current if the new is higher
+                                            if (writer.licenseProductRecordingWriter.splitOverride != null &&
+                                                writer.licenseProductRecordingWriter.splitOverride >= 0) {
+                                                overRidePresent = true;
+
+                                                //update the highest SplitOverride
+                                                if (rootWriterSplitOverRide <=
+                                                    writer.licenseProductRecordingWriter.splitOverride) {
+                                                    rootWriterSplitOverRide =
+                                                        writer.licenseProductRecordingWriter.splitOverride;
+                                                }
+                                            }
+
+                                            //logic to control the overWriting of Executable split.  We always are overwriting the current if the new is higher
+                                            if (writer.licenseProductRecordingWriter.executedSplit >= 0 &&
+                                                writer.licenseProductRecordingWriter.executedSplit != null) {
+                                                executedSplitPresent = true;
+
+                                                //update the highest ExecutedSplit
+                                                if (writer.licenseProductRecordingWriter.executedSplit >=
+                                                    rootWriterExecutedSplit) {
+                                                    rootWriterExecutedSplit =
+                                                        writer.licenseProductRecordingWriter.executedSplit;
+                                                }
                                             }
                                         }
+                                    } else {
 
-                                        //logic to control the overWriting of Executable split.  We always are overwriting the current if the new is higher
-                                        if (writer.licenseProductRecordingWriter.executedSplit >= 0 &&
-                                            writer.licenseProductRecordingWriter.executedSplit != null) {
-                                            executedSplitPresent = true;
+                                        if (writer.caeNumber === rootWriter.caeNumber &&
+                                            writer.name === rootWriter.name) {
 
-                                            //update the highest ExecutedSplit
-                                            if (writer.licenseProductRecordingWriter.executedSplit >=
-                                                rootWriterExecutedSplit) {
-                                                rootWriterExecutedSplit =
-                                                    writer.licenseProductRecordingWriter.executedSplit;
+                                            //   console.log(rootWriter.name + "----Saving licenseProductRecordingWriter");
+                                            //   console.log("--------------writer.licenseProductRecordingWriter-------------" + JSON.stringify(writer.licenseProductRecordingWriter));
+                                            rootWriter
+                                                .licenseProductRecordingWriter = writer.licenseProductRecordingWriter;
+
+                                            //logic to control the overWriting of splitOverrides.  We always are overwriting the current if the new is higher
+                                            if (writer.licenseProductRecordingWriter.splitOverride != null &&
+                                                writer.licenseProductRecordingWriter.splitOverride >= 0) {
+                                                overRidePresent = true;
+
+                                                //update the highest SplitOverride
+                                                if (rootWriterSplitOverRide <=
+                                                    writer.licenseProductRecordingWriter.splitOverride) {
+                                                    rootWriterSplitOverRide =
+                                                        writer.licenseProductRecordingWriter.splitOverride;
+                                                }
+                                            }
+
+                                            //logic to control the overWriting of Executable split.  We always are overwriting the current if the new is higher
+                                            if (writer.licenseProductRecordingWriter.executedSplit >= 0 &&
+                                                writer.licenseProductRecordingWriter.executedSplit != null) {
+
+                                                executedSplitPresent = true;
+
+                                                //update the highest ExecutedSplit
+                                                if (writer.licenseProductRecordingWriter.executedSplit >=
+                                                    rootWriterExecutedSplit) {
+                                                    rootWriterExecutedSplit =
+                                                        writer.licenseProductRecordingWriter.executedSplit;
+                                                }
                                             }
                                         }
                                     }
@@ -378,6 +452,11 @@ app.controller('productDetailsController',
             });
 
         }
+
+        $scope.ToPercent = function (x) {
+            return ((x / 100) * 100).toFixed(2) + '%';
+        }
+
 
         $scope.isWriterLicensedIncluded = function (writer) {
             var licensed = false;
@@ -949,50 +1028,51 @@ app.controller('productDetailsController',
         }
 
         //This counts the number of filtered writers on a recording
-        $scope.getFilteredWriterCount = function (recording) {
+        $scope.getFilteredWriterCount = function(recording) {
             var count = 0;
+            if (recording.writers != null) {
             angular.forEach(recording.writers,
-                function (writer) {
+                function(writer) {
                     //console.log(JSON.stringify(writer));
                     if ($scope.writerFilter(writer)) {
                         count++;
                     };
                 });
-
-            return count;
+        }
+        return count;
         }
 
         //Writer Filter Information
         $scope.writerFilter = function (writer) {
-            if ($scope.selectedWriterFilter.Name == "Controlled Writers") {
-                if (writer.controlled == true) {
+            if ($scope.selectedWriterFilter.Name === "Controlled Writers") {
+                if (writer.controlled === true) {
                     return true;
                 } else {
                     return false;
                 }
             }
-            if ($scope.selectedWriterFilter.Name == "Uncontrolled Writers") {
-                if (writer.controlled == false) {
+            if ($scope.selectedWriterFilter.Name === "Uncontrolled Writers") {
+                if (writer.controlled === false) {
                     return true;
                 } else {
                     return false;
                 }
             }
-            if ($scope.selectedWriterFilter.Name == "Licensed Writers") {
+            if ($scope.selectedWriterFilter.Name === "Licensed Writers") {
                 if (writer.isLicensed) {
                     return true;
                 } else {
                     return false;
                 }
             }
-            if ($scope.selectedWriterFilter.Name == "Unlicensed Writers") {
+            if ($scope.selectedWriterFilter.Name === "Unlicensed Writers") {
                 if (!writer.isLicensed) {
                     return true;
                 } else {
                     return false;
                 }
             }
-            if ($scope.selectedWriterFilter.Name == "All Writers") {
+            if ($scope.selectedWriterFilter.Name === "All Writers") {
                 {
                     return true;
                 }
@@ -1160,7 +1240,7 @@ app.controller('productDetailsController',
                     $scope.productDetail.recordings = result.data;
                     angular.forEach($scope.productDetail.recordings,
                         function(recording) {
-                            if (recording.track.copyrights != null){
+                            if (recording.track.copyrights != null) {
                                 productsService.getWorksWriters(recording.track.copyrights[0].workCode)
                                     .then(function(result) {
                                         angular.forEach(result.data,
@@ -1181,7 +1261,7 @@ app.controller('productDetailsController',
                                                         }
                                                     });
                                             });
-                                          
+
                                         recording.paidQtr = $scope.getMostRecentPaidQuarter(recording);
                                         var response = result.data;
                                         recording.writers = result.data;
@@ -1230,6 +1310,8 @@ app.controller('productDetailsController',
                                         $scope.productPaidQuarter = $scope
                                             .calculateProductPaidQtr(recording, $scope.productPaidQuarter);
                                     });
+                            } else {
+                                recording.filteredWriterCount = $scope.getFilteredWriterCount(recording);
                             }
                         });
 
@@ -2260,12 +2342,12 @@ app.controller('productDetailsController',
         }
 
         $scope.updateProductPriority = function (productId, mechsProductPriority) {
-            mechsProductPriority = !mechsProductPriority;
             var request = { id: productId, mechsPriority: mechsProductPriority };
 
             productsService.updateProductPriority(request).then(function (result) {
             });
         }
+
         $scope.format = "MM/dd/yyyy";
 
         $scope.cbChecked = function () {
@@ -2346,23 +2428,31 @@ app.controller('productDetailsController',
 
         $scope.controlDeciamlProRataColumn = function (input, control) {
             var rateType = ifNullNA(control);
-            if (rateType === "N/A") {
-                var result1 = input.toFixed(0);
-                return result1;
+            if (input === 0) {
+                return "N/A";
             } else {
-                var result = input.toFixed(4);
-                return result;
+                if (rateType === "N/A") {
+                    var result1 = input.toFixed(0);
+                    return result1;
+                } else {
+                    var result = input.toFixed(4);
+                    return result;
+                }
             }
         }
 
         $scope.controlDeciamlPerSongRateColumn = function (input, control) {
             var rateType = ifNullNA(control);
-            if (rateType === "N/A") {
-                var result1 = input.toFixed(0);
-                return result1;
+            if (input === 0) {
+                return "N/A";
             } else {
-                var result = input.toFixed(3);
-                return result;
+                if (rateType === "N/A") {
+                    var result1 = input.toFixed(0);
+                    return result1;
+                } else {
+                    var result = input.toFixed(3);
+                    return result;
+                }
             }
         }
 

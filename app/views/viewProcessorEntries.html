@@ -1,0 +1,280 @@
+﻿<nav class="breadcrumbs">
+    <ul>
+        <li>
+            <a href="/#/search-MyView/Tabs/MyViewTab">My View </a>
+            <a href="/#/appManagement">App Management </a>
+            <label>{{ProcessorName}} Entries</label>
+        </li>
+    </ul>
+</nav>
+
+
+<div class="col-md-12" ng-if="ProcessorName == 'SolrProcessor'">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="center-text centered">
+                    <h3 class="panel-title" style="color:#A5A5A5;">
+                        {{ProcessorName}} UnProcessed Items
+                    </h3>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th class="ten-percent centered"></th>
+                        <!--<th class="thirty-percent"><button ng-hide="SolrProcessorUnProcessedItems.length === 0" type="button" class="btn btn-warning btn-sm" style="color: black" ng-click="setAllUnProcessedSolrItemsToPending()">Set All to Pending</button></th>-->
+                        <th class="ten-percent centered">SolrQueueId</th>
+                        <th class="ten-percent centered">SolrActionType</th>
+                        <th class="ten-percent centered">IdParam</th>
+                        <th class="ten-percent centered">Times Failed</th>
+                        <th class="ten-percent centered">Created Date</th>
+                        <th class="ten-percent centered"><button ng-hide="SolrProcessorUnProcessedItems.length === 0" type="button" class="btn btn-warning btn-sm" style="color: black" ng-click="deleteAllUnprocesedSolrItem()">Delete All</button></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    
+                    <tr ng-repeat="item in SolrProcessorUnProcessedItems| orderBy: '-createdDate' track by $index" ng-if="SolrProcessorUnProcessedItems.length > 0">
+                        <td class="centered">{{$index + 1}}).</td>
+                        <!--<td class="centered"><button type="button" class="btn btn-default btn-sm" ng-click="resetIndivdualSolrItem(item.solrIndexQueueId)">Reset</button></td>-->
+                        <td class="centered"><span>{{item.solrIndexQueueId}}</span></td>
+                        <td class="centered"><span>{{getActionType(item.solrActionTypeId)}}</span></td>
+                        <td class="centered"><span>{{getStatus(item.solrQueueStatus)}}</span></td>
+                        <td class="centered"><span>{{item.idParam}}</span></td>
+                        <td class="centered"><span>{{item.createdDate | timezone | date:'MM/dd/yyyy'}}</span></td>
+                        <td class="centered"><button type="button" class="btn btn-default btn-sm" ng-click="deleteIndividualSolrItem(item.solrIndexQueueId)">Delete</button></td>
+                    </tr>
+                    <tr ng-if="SolrProcessorUnProcessedItems.length === 0">
+                        <td class="centered" colspan="7"><span>No Entries to display</span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="center-text centered">
+                    <h3 class="panel-title" style="color:#A5A5A5;">
+                        {{ProcessorName}} Failed Items
+                    </h3>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th class="ten-percent centered"></th>
+                        <th class="thirty-percent centered"><button type="button" class="btn btn-warning btn-sm" style="color: black" ng-click="setAllFailedSolrItemsPending()">Reset All</button></th>
+                        <th class="ten-percent centered">SolrQueueId</th>
+                        <th class="ten-percent centered">SolrActionType</th>
+                        <th class="ten-percent centered">Status</th>
+                        <th class="ten-percent centered">IdParam</th>
+                        <th class="ten-percent centered">Created Date</th>
+                        <th class="thirty-percent centered"><button type="button" class="btn btn-warning btn-sm" style="color: black" ng-click="deleteAllFailedSolrItems()">Delete All</button></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="item in SolrProcessorFailedItems | orderBy: '-createdDate' track by $index" ng-if="SolrProcessorFailedItems.length > 0">
+                        <td class="centered">{{$index + 1}}).</td>
+                        <td class="centered"><button type="button" class="btn btn-default btn-sm" ng-click="resetIndivdualSolrItem(item.solrIndexQueueId)">Reset</button></td>
+                        <td class="centered"><span>{{item.solrIndexQueueId}}</span></td>
+                        <td class="centered"><span>{{getActionType(item.solrActionTypeId)}}</span></td>
+                        <td class="centered"><span>{{getStatus(item.solrQueueStatus)}}</span></td>
+                        <td class="centered"><span>{{item.idParam}}</span></td>
+                        <td class="centered"><span>{{item.createdDate | timezone | date:'MM/dd/yyyy'}}</span></td>
+                        <td class="centered"><button type="button" class="btn btn-default btn-sm" ng-click="deleteIndividualSolrItem(item.solrIndexQueueId)">Delete</button></td>
+                    </tr>
+                        <tr ng-if="SolrProcessorFailedItems.length === 0">
+                            <td class="centered" colspan="8"><span>No Entries to display</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="col-md-12" ng-if="ProcessorName == 'LicenseProcessor'">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="center-text centered">
+                    <h3 class="panel-title" style="color:#A5A5A5;">
+                        {{ProcessorName}} UnProcessed Items
+                    </h3>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th class="ten-percent centered"></th>
+                        <th class="ten-percent centered">License Id</th>
+                        <th class="thirty-percent centered">Subject</th>
+                        <th class="ten-percent centered">Created Date</th>
+                        <th class="ten-percent centered">Status</th>
+                        <!--<th class="thirty-percent centered"><button type="button" class="btn btn-warning btn-sm" style="color: black" ng-click="deleteAllUnProcessedLicenseItems()">Delete All</button></th>-->
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr ng-repeat="item in LicenseProcessorUnProcessedItems | orderBy: '-createdDate' track by $index" ng-if="LicenseProcessorUnProcessedItems.length > 0">
+                        <td class="centered">{{$index + 1}}).</td>
+                        <td class="centered"><span>{{item.licenseId}}</span></td>
+                        <td class="centered"><span>{{item.subject}}</span></td>
+                        <td class="centered"><span>{{item.createdDate | timezone | date:'MM/dd/yyyy'}}</span></td>
+                        <td class="centered"><span>{{getStatus(item.generateLicenseStatusId)}}</span></td>
+
+
+                        <!--<td class="centered"><button type="button" class="btn btn-default btn-sm" ng-click="deleteFailedLicenseItem(item.generateLicenseQueueId)">Delete</button></td>-->
+                    </tr>
+                        <tr ng-if="LicenseProcessorUnProcessedItems.length === 0">
+                            <td class="centered" colspan="5"><span>No Entries to display</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="center-text centered">
+                    <h3 class="panel-title" style="color:#A5A5A5;">
+                        {{ProcessorName}} Failed Items
+                    </h3>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th class="ten-percent centered"></th>
+                        <th class="ten-percent centered"><button type="button" ng-hide="LicenseProcessorUnProcessedItems.length === 0" class="btn btn-warning btn-sm" style="color: black" ng-click="restartAllProcessors()">Reset All</button></th>
+                        <th class="ten-percent centered">License Id</th>
+
+                        <th class="thirty-percent centered">Subject</th>
+                        <th class="ten-percent centered">Created Date</th>
+                        <th class="ten-percent centered">Status</th>
+                        
+                        <!--<th class="thirty-percent centered"><button type="button" ng-hide="LicenseProcessorFailedItems.length === 0" class="btn btn-warning btn-sm" style="color: black" ng-click="deleteAllFailedLicenseItems()">Delete All</button></th>-->
+                        
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr ng-repeat="item in LicenseProcessorFailedItems | orderBy: '-createdDate' track by $index" ng-if="LicenseProcessorFailedItems.length > 0">
+                        <td class="centered">{{$index + 1}}).</td>
+                        <td class="centered"><button type="button" class="btn btn-default btn-sm" ng-click="setFailedLicenseItemToPending(item.generateLicenseQueueId)">Reset</button></td>
+                        <td class="centered"><span>{{item.licenseId}}</span></td>
+
+                        <td class="centered"><span>{{item.subject}}</span></td>
+                        <td class="centered"><span>{{item.createdDate | timezone | date:'MM/dd/yyyy'}}</span></td>
+                        <td class="centered"><span>{{getStatus(item.generateLicenseStatusId)}}</span></td>
+
+
+                        <!--<td class="centered"><button type="button" class="btn btn-default btn-sm" ng-click="deleteSingleLicenseItem(item.generateLicenseQueueId)">Delete</button></td>-->
+                    </tr>
+                        <tr ng-if="LicenseProcessorFailedItems.length === 0">
+                            <td class="centered" colspan="6"><span>No Entries to display</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="col-md-12" ng-if="ProcessorName == 'DataHarmonizationProcessor'">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="center-text centered">
+                    <h3 class="panel-title" style="color:#A5A5A5;">
+                        {{ProcessorName}} UnProcessed Items
+                    </h3>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="five-percent centered"></th>
+                            <!--<th class="ten-percent centered"><button type="button" class="btn btn-warning btn-sm" style="color: black" ng-click="setAllDHUnProcessedItemsToPending()">Reset All</button></th>-->
+                            <th class="ten-percent centered">License Id</th>
+                            <th class="ten-percent centered">Action Type</th>
+                            <th class="ten-percent centered">Created Date</th>
+                            <th class="ten-percent centered">Status</th>
+                            <!--<th class="ten-percent centered"><button type="button" class="btn btn-warning btn-sm" style="color: black" ng-click="deleteAllUnProcessedDhItems()">Delete All</button></th>-->
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr ng-repeat="item in DataHarmonizationUnProcessedItems | orderBy: '-createdDate' track by $index" ng-if="DataHarmonizationUnProcessedItems.length > 0">
+                            <td class="centered">{{$index + 1}}).</td>
+                            <!--<td class="centered"><button type="button" class="btn btn-default btn-sm" ng-click="setIndividualFailedDhItemToPending(item.generateLicenseQueueId)">Reset</button></td>-->
+                            <td class="centered"><span>{{item.licenseId}}</span></td>
+                            <td class="centered"><span>{{getActionType(item.actionTypeId)}}</span></td>
+                            <td class="centered"><span>{{item.createdDate | timezone | date:'MM/dd/yyyy'}}</span></td>
+                            <td class="centered"><span>{{getStatus(item.dataProcessorStatusId)}}</span></td>
+
+
+                            <!--<td class="centered"><button type="button" class="btn btn-default btn-sm" ng-click="viewProcessorEntries(item.generateLicenseQueueId)">Delete</button></td>-->
+                        </tr>
+                        <tr ng-if="DataHarmonizationUnProcessedItems.length === 0">
+                            <td class="centered" colspan="5"><span>No Entries to display</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="center-text centered">
+                    <h3 class="panel-title" style="color:#A5A5A5;">
+                        {{ProcessorName}} Failed Items
+                    </h3>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="five-percent centered"></th>
+                            <th class="ten-percent centered"><button type="button" class="btn btn-warning btn-sm" style="color: black" ng-click="setAllFailedDhItemsToPending()">Reset All</button></th>
+                            <th class="ten-percent centered">License Id</th>
+                            <th class="ten-percent centered">Action Type</th>
+                            <th class="ten-percent centered">Created Date</th>
+                            <th class="ten-percent centered">Status</th>
+                            <th class="ten-percent centered"><button type="button" class="btn btn-warning btn-sm" style="color: black" ng-click="deleteAllFailedDhItems()">Delete All</button></th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr ng-repeat="item in DataHarmonizationProcessorFailedItems | orderBy: '-createdDate' track by $index" ng-if="DataHarmonizationProcessorFailedItems.length > 0">
+                            <td class="centered">{{$index + 1}} </td>
+                            <td class="centered"><button type="button" class="btn btn-default btn-sm" ng-click="setIndividualFailedDhItemToPending(item.dataHarmonizationQueueId)">Reset</button></td>
+                            <td class="centered"><span>{{item.licenseId}}</span></td>
+                            <td class="centered"><span>{{getActionType(item.actionTypeId)}}</span></td>
+                            <td class="centered"><span>{{item.createdDate | timezone | date:'MM/dd/yyyy'}}</span></td>
+                            <td class="centered"><span>{{getStatus(item.dataProcessorStatusId)}}</span></td>
+                            <td class="centered"><button type="button" class="btn btn-default btn-sm" ng-click="deleteIndividualFailedDhItem(item.dataHarmonizationQueueId)">Delete</button></td>
+                        </tr>
+                        <tr ng-if="DataHarmonizationProcessorFailedItems.length === 0">
+                            <td class="centered" colspan="7"><span>No Entries to display</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

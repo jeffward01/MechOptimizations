@@ -11,10 +11,7 @@ app.controller('productsController', ['$scope', 'productsService', 'contactsServ
     $scope.$on("modalAddNewProductEvent", function ($event, args) {
         $scope.addNewProductEvent(args);
     });
-    $scope.selectAllProducts = function () {
-        var allSelected = !$filter('isAllSelected')($scope.products);
-        $filter('selectAll')($scope.products, allSelected);
-    }
+
     $scope.selectedProductssFromGrid = [];
     $scope.products = [];
     $scope.columns = [];
@@ -380,14 +377,169 @@ app.controller('productsController', ['$scope', 'productsService', 'contactsServ
         var exists = USL.Common.FirstInArray($scope.selectedProducts, 'product_id', product.product_id);
         if (!exists) $scope.selectedProducts.push(JSON.parse(JSON.stringify(product)));
 
+
+  
     }
+
+    $scope.cleanSelectedProducts = function() {
+        var selectedIds = [];
+        angular.forEach($scope.selectedProductssFromGrid,
+            function(each, index) {
+                if (!each.selected) {
+                    $scope.selectedProductssFromGrid.splice(index, 1);
+                    unCheckProduct(each);
+                }
+                //       selectedIds.push(each.product_id);
+            });
+        if ($scope.selectedProductssFromGrid.length === 0) {
+            unCheckAllProduct();
+        }
+
+        controlWithProducts();
+        // setCheckMarks(selectedIds);
+
+    }
+
+    function control() {
+        var selectedProducts = [];
+        angular.forEach($scope.products,
+       function (product) {
+      if (product.selected) {
+          selectedProducts.push(product.product_Id);
+      }
+       });
+
+        //ensure that the list has this item if it is selected
+    }
+
+
+
+    function controlWithProducts() {
+        angular.forEach($scope.selectedProductssFromGrid,
+             function(each, index) {
+                 if (!each.selected) {
+                     $scope.selectedProductssFromGrid.splice(index, 1);
+                 }
+             });
+
+   
+    }
+
+    function setCheckMarks(array) {
+        if (array.length === 0) {
+            unCheckAllProduct();
+        }
+        angular.forEach($scope.products,
+            function(product) {
+                if (isInArray(product.product_id, array)) {
+                    product.selected = true;
+                } else {
+                    product.selected = false;
+                }
+            });
+    }
+
+
+
+    function unCheckProduct(id) {
+        angular.forEach($scope.products,
+            function(product) {
+                if (product.product_id === id.product_id) {
+                    product.selected = false;
+                }
+            });
+    }
+
+        function isInArray(id, array) {
+            angular.forEach(array,
+                function(item) {
+                    if (item === id) {
+                        return true;
+                    }
+                });
+            return false;
+        }
+
+    function unCheckAllProduct() {
+        angular.forEach($scope.products,
+            function (product) {
+                    product.selected = false;
+            });
+    }
+
+
+    $scope.toggleAll = function () {
+        var toggleStatus = !$scope.allSelectedChecks;
+        if (toggleStatus) {
+            var allSelected = !$filter('isAllSelected')($scope.products);
+            $filter('selectAll')($scope.products, allSelected);
+            // $scope.selectedProductssFromGrid = $scope.products.map(function (item) { return item; });
+            angular.copy($scope.products, $scope.selectedProductssFromGrid);
+        } else {
+            angular.copy([], $scope.selectedProductssFromGrid);
+
+        }
+        angular.forEach($scope.products, function (itm) { itm.selected = toggleStatus; });
+        $scope.allSelectedChecks = toggleStatus;
+    }
+
+
+    function markAllAsUnSelected() {
+        angular.forEach($scope.products,
+          function (product) {
+              product.selected = false;
+          });
+    }
+
+    $scope.optionToggled = function() {
+        $scope.allSelectedChecks = isAllSelected();
+        if ($scope.products.length === $scope.selectedProductssFromGrid.length) {
+            $scope.allSelectedChecks = true;
+        }
+    }
+
+
+
+    function isAllSelected() {
+        if ($scope.products.length === $scope.selectedProductssFromGrid.length) {
+            $scope.allSelectedChecks = true;
+        }
+    }
+
+
+    
+    $scope.selectAllProducts = function () {
+        if (!$scope.allSelectedChecks) {
+            var allSelected = !$filter('isAllSelected')($scope.products);
+            $filter('selectAll')($scope.products, allSelected);
+            angular.copy($scope.products, $scope.selectedProductssFromGrid);
+            $scope.allSelectedChecks = true;
+        } else {
+            angular.copy([], $scope.selectedProductssFromGrid);
+            $scope.allSelectedChecks = false;
+            markAllAsUnSelected();
+        }
+
+    }
+ 
+    $scope.allSelectedChecks = false;
+   
     $scope.selectProductFromGrid = function (product) {
+        product.selected = !product.selected;
         var exists = USL.Common.FirstInArray($scope.selectedProductssFromGrid, 'product_id', product.product_id);
-        if (!exists) $scope.selectedProductssFromGrid.push(JSON.parse(JSON.stringify(product)))
+        if (!exists) $scope.selectedProductssFromGrid.push(JSON.parse(JSON.stringify(product)));
         else {
             USL.Common.FindAndRemove($scope.selectedProductssFromGrid, 'product_id', product.product_id);
         }
-        ;
+   
+    }
+
+    $scope.selectProductFromGridSmart = function (product) {
+        var exists = USL.Common.FirstInArray($scope.selectedProductssFromGrid, 'product_id', product.product_id);
+        if (!exists) $scope.selectedProductssFromGrid.push(JSON.parse(JSON.stringify(product)));
+        else {
+            USL.Common.FindAndRemove($scope.selectedProductssFromGrid, 'product_id', product.product_id);
+        }
 
     }
     $scope.removeSelected = function (product) {

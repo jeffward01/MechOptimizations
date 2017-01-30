@@ -1,22 +1,64 @@
 ﻿<div class="modal-header">
-    <h3 class="modal-title">Upload Document</h3>
+    <h3 ng-if="modalState == 'upload'" class="modal-title">Upload Document</h3>
+    <h3 ng-if="modalState == 'edit'" class="modal-title">Edit Attachment Type</h3>
     <button class="btn btn-default narrow close-modal" ng-click="$parent.cancel()"><span class="icon cancel"></span></button>
 </div>
-<div class="modal-body upload-document clearfix">
+<div class="modal-body upload-document clearfix" ng-if="modalState == 'upload'">
+    
+        <input type="file" class="filestyle" id="fileToUpload" customfileupload onchange="angular.element(this).scope().checkIfValidFile()" ng-model="selectedFilesForUpload" multiple />
+        <progress id="progressbar" class="progress-striped" value="0" max="100" ng-show="progressVisible">0%</progress>
 
-    <input type="file" class="filestyle" id="fileToUpload" customfileupload onchange="angular.element(this).scope().checkIfValidFile()" />
-    <progress id="progressbar" class="progress-striped" value="0" max="100" ng-show="progressVisible">0%</progress>
-
-    <div class="dropdown" dropdown style="margin-top: 15px; position: absolute">  
-        <button ng-class="{'field-error': errorPresent == true}" type="button" name="attachmentTypeBtn" ng-click="isCollapsed = !isCollapsed" class="btn btn-default dropdown-toggle" id="attachmentType" data-toggle="dropdown">
-            <span ng-bind="chosenAttachment.attachmentType"></span>&nbsp;<span class="{{setCaret(isCollapsed)}}"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="attachmentType">
-            <li ng-repeat="attachmentType in AttachmentTypes"><a ng-click="selectAttachmentType(attachmentType);$event.preventDefault()">{{attachmentType.attachmentType}}</a></li>
-        </ul>
-    </div>
+        <div class="dropdown uploadDoc-dropdown" dropdown style="margin-right: 67px">
+            <button ng-class="{'field-error': errorPresent == true}" type="button" name="attachmentTypeBtn" ng-click="isCollapsed = !isCollapsed" class="btn btn-default dropdown-toggle blank-dropdownWidth" id="attachmentType" data-toggle="dropdown">
+                <span ng-bind="chosenAttachment.attachmentType"></span>&nbsp;<span ng-class="{'blank-dropdownMargin': chosenAttachment.attachmentTypeId === 1}" class="{{setCaret(isCollapsed)}}"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="attachmentType">
+                <li ng-repeat="attachmentType in AttachmentTypes"><a class="blank-dropdownHeight" ng-click="selectAttachmentType(attachmentType);$event.preventDefault()">{{attachmentType.attachmentType}}</a></li>
+            </ul>
+        </div>
 </div>
+
+<div class="modal-body upload-document clearfix" ng-if="modalState == 'edit'">
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="eight-percent">Date Added</th>
+                <th class="fifteen-percent">Added By</th>
+                <th class="forty-percent">File Name</th>
+               
+                <th class="five-percent">File Type</th>
+                <th class="eight-percent">Attachment Type</th>
+           
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+
+                <td class="eigth-percent"><span ng-bind="licenseAttachmentToEdit.uploaddedDate | timezone | date:'MM/dd/yyyy'"></span></td>
+                <td class="fifteen-percent"><span ng-bind="licenseAttachmentToEdit.contact.fullName"></span></td>
+                <td class="forty-percent">
+                    <a href="" ng-click="downloadAttachments(licenseAttachmentToEdit)" target="_blank"><span ng-bind="licenseAttachmentToEdit.fileName"></span></a>
+                </td>
+       
+                <td class="five-percent"><span ng-bind="licenseAttachmentToEdit.fileType"></span></td>
+                <td>
+                    <div class="dropdown" dropdown>
+                        <button ng-class="{'field-error': errorPresent == true}" type="button" name="attachmentTypeBtn" ng-click="isCollapsed = !isCollapsed" class="btn btn-default dropdown-toggle blank-dropdownWidth" id="attachmentType" data-toggle="dropdown">
+                            <span ng-bind="licenseAttachmentToEdit.attachmentType.attachmentType"></span>&nbsp;<span ng-class="{'blank-dropdownMargin': licenseAttachmentToEdit.attachmentType.attachmentTypeId === 1}" class="{{setCaret(isCollapsed)}}"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="attachmentType">
+                            <li ng-repeat="attachmentType in AttachmentTypes"><a class="blank-dropdownHeight" ng-click="selectAttachmentType(attachmentType);$event.preventDefault();isCollapsed = !isCollapsed">{{attachmentType.attachmentType}}</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
 <div class="modal-footer" style="margin-top:40px">
-    <button class="btn btn-default" ng-click="upload()">Upload</button>
+    <button ng-if="modalState == 'upload'" class="btn btn-default" ng-click="upload()">Upload</button>
+    <button ng-if="modalState == 'edit'" class="btn btn-default" ng-click="save()">Save</button>
     <button class="btn btn-default" ng-click="cancel()">Cancel</button>
 </div>

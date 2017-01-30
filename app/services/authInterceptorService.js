@@ -6,12 +6,18 @@ app.factory('authInterceptorService', ['$q', '$injector', '$location', 'localSto
     var _request = function (config) {
 
         config.headers = config.headers || {};
+        
        
         var authToken= localStorageService.get('authToken');
+        //var safeId = localStorageService.get("authenticationData");
+        //if (safeId === null) {
+        //    safeId = {};
+        //    safeId.safeId = null;
+        //}
         if (authToken) {
             config.headers.Token = authToken;
+        //    config.headers["x-modified-by"] = safeId.safeId;
         }
-
         return config;
     }
 

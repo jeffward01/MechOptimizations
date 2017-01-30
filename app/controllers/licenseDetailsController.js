@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.controller('licenseDetailsController', ['$scope', '$filter', 'licensesService', 'licenseProductsService', 'productsService', '$modal', '$stateParams', 'localStorageService', 'licenseesService', 'labelsService', 'prioritiesService', 'contactDefaultsService', 'licenseStatusService', 'auditService', 'safeService', '$state', 'notyService', 'filesService', '$sce', 'smoothScroll', '$timeout', '$window', '$http', function ($scope, $filter, licensesService, licenseProductsService, productsService, $modal, $stateParams, localStorageService, licenseesService, labelsService, prioritiesService, contactDefaultsService, licenseStatusService, auditService, safeService, $state, notyService, filesService, $sce, smoothScroll, $timeout, $window, $http) {
+app.controller('licenseDetailsController', ['$scope', '$filter', 'licensesService', 'licenseProductsService', 'productsService', '$modal', '$stateParams', 'localStorageService', 'licenseesService', 'labelsService', 'prioritiesService', 'contactDefaultsService', 'licenseStatusService', 'auditService', 'safeService', '$state', 'notyService', 'filesService', '$sce', 'smoothScroll', '$timeout', '$window', '$http', '$rootScope', '$interval', function ($scope, $filter, licensesService, licenseProductsService, productsService, $modal, $stateParams, localStorageService, licenseesService, labelsService, prioritiesService, contactDefaultsService, licenseStatusService, auditService, safeService, $state, notyService, filesService, $sce, smoothScroll, $timeout, $window, $http, $rootScope, $interval) {
     $scope.dt =
     {
         from: null,
@@ -7,8 +7,27 @@ app.controller('licenseDetailsController', ['$scope', '$filter', 'licensesServic
     };
     $scope.auditTables = ["License", "LicenseProduct"];
     $scope.selectedTable = "Please Select";
-
+    
     //http://spa.local/#/search-MyView/detail-License/9642/ownLicense  <-- Jeff! expando writers automatically expand... why?
+    
+    var dataHarmonCodeOn = true;
+//Check if snapshot is in progress
+    checkIfInProcess();
+    $scope.glowingClass = "glowingBorder-infinite";
+    $scope.hideRecDiffResults = false;
+    $scope.$on('DataHarmonizationModalOpen',
+        function(event, args) {
+            toggleInfiniteClass();
+        });
+
+    function toggleInfiniteClass() {
+        if ($scope.glowingClass === "glowingBorder-infinite") {
+            $scope.glowingClass = "";
+        } else {
+            $scope.glowingClass = "glowingBorder-infinite";
+        }
+
+    }
 
     $scope.expandAll = true;
     $scope.dataHarmonizationChanges = [];
@@ -42,6 +61,13 @@ app.controller('licenseDetailsController', ['$scope', '$filter', 'licensesServic
             }
         }
         return lreturn;
+    }
+
+    function snapshotInProcess() {
+        licensesService.IsSnapshotInProcess($stateParams.licenseId)
+            .then(function(result) {
+                $scope.InProcess = result.data;
+            });
     }
 
     function isInArray(arr, item) {
@@ -514,6 +540,7 @@ app.controller('licenseDetailsController', ['$scope', '$filter', 'licensesServic
         deleteNotes: false,
         addAttachment: false,
         downloadAttachment: false,
+        editAttachment: false,
         deleteAttachment: false,
         writerConsentBtn: false,
         writerNoteBtn: false,
@@ -550,6 +577,7 @@ app.controller('licenseDetailsController', ['$scope', '$filter', 'licensesServic
         licensesService.getlicenseAttachments(licenseId)
             .then(function (result) {
                 $scope.licenseAttachments = result.data;
+                 removeOutForSignatureAttachmentsIfSignedPresent();
                 angular.forEach($scope.licenseAttachments,
                     function (attach) {
                         attach.selected = false;
@@ -558,6 +586,11 @@ app.controller('licenseDetailsController', ['$scope', '$filter', 'licensesServic
     }
 
     $scope.populatelicenseAttachments(licenseId);
+
+    $rootScope.$on("AttachmentUpdated",
+        function() {
+            $scope.populatelicenseAttachments(licenseId);
+        });
 
     $scope.licenseAttachmentsTabClick = function () {
         if ($scope.licenseAttachments == null)
@@ -884,7 +917,7 @@ function () {
                             angular.forEach(item.originalPublishers,
                                 function (publisher) {
                                     publisher.SeExists = false;
-                                     publisher.zeroValue = false;
+                                    publisher.zeroValue = false;
                                     angular.forEach(publisher.administrators,
                                         function (subpub) {
                                             var lpub = angular.toJson(publisher);
@@ -1050,7 +1083,6 @@ function () {
                                 var llpub = angular.fromJson(lpub);
                                 subpub.pub = llpub;
                                 if (subpub.capacityCode == "SE") {
-
                                     publisher.SeExists = true;
                                 }
                                 if (subpub.mechanicalCollectablePercentage == 0) {
@@ -1090,12 +1122,25 @@ function () {
         angular.forEach(recording.licensePRWriters,
             function (writer, i_writer) {
                 if ($scope.writerFilter(writer)) {
+
+
+
+
+
                     recording.licensePRWriterCount += 1;
                     if (writer.controlled) {
                         controlled = true;
                     } else {
                         controlled = false;
                     }
+
+
+                    //testing
+                    // if (writer.name === "Carlos Alexander McKinney") {
+                    //     writer.controlled = false;
+                    //     controlled = false;
+                    // }
+
 
                     //need to set licensed
                     writer_row_id++;
@@ -1132,11 +1177,10 @@ function () {
                             //check for zero value false
                             angular.forEach(originalPublisher.administrators,
                                 function (administrator) {
-
                                     w += "<span class='float-left-subpub'>";
 
                                     if (!originalPublisher.SeExists &&
-                                        administrator.capacityCode == 'AM' &&
+                                        administrator.capacityCode === 'AM' &&
                                         !originalPublisher.zeroValue) {
                                         w += "<span>";
                                         w += "<span>" +
@@ -1156,7 +1200,7 @@ function () {
                                         w += "</span>";
                                     }
                                     else if (originalPublisher.SeExists &&
-                                        administrator.capacityCode == "SE" &&
+                                        administrator.capacityCode === "SE" &&
                                                     !originalPublisher.zeroValue) {
                                         w += "<span>";
                                         w += "<span>" + administrator.name + "</span>";
@@ -1181,7 +1225,7 @@ function () {
                     w += "<div></div>";
                     w += "</td>";
 
-                    if (recording.track.claimException == true) {
+                    if (recording.track.claimException === true) {
                         w += "<td class='ten-percent top'>";
                         //if (recording.track.claimException == true) {
                         //<!-- Override -->
@@ -1232,11 +1276,13 @@ function () {
 
                     if ($scope.licenseDetail.licenseStatusId == 5 || $scope.licenseDetail.licenseStatusId == 7) {
                         w += "<td class='ten-percent top'>";
-                        if (writer.licenseProductRecordingWriter.executedSplit >= 0) {
-                            w += "<div><span><strong>" +
-                                toPercent(writer.licenseProductRecordingWriter.executedSplit) +
-                                "</span></div>";
-                            // | percentage:2
+                        if (writer.licenseProductRecordingWriter != null) {
+                            if (writer.licenseProductRecordingWriter.executedSplit >= 0) {
+                                w += "<div><span><strong>" +
+                                    toPercent(writer.licenseProductRecordingWriter.executedSplit) +
+                                    "</span></div>";
+                                // | percentage:2
+                            }
                         }
                         w += "</td>";
                     }
@@ -1400,6 +1446,7 @@ function () {
                     w += "<th class='fifteen-percent'>Rate Type</th>";
                     if (writer.statPrcentageVisible == true) {
                         w += "<th class='five-percentage nowrap top centered'>% of Stat</th>";
+                        w += "<th class='five-percent'></th>";
                     }
                     //Regulates Writer Threshold
 
@@ -1410,9 +1457,20 @@ function () {
                     //   if (writer.escalatedRateVisible) {
                     if (writer.thresholdRate) {
                         w += "<th class='five-percent'>Rate</th>";
+                        w += "<th class='five-percent'></th>";
+                        w += "<th class='five-percent'></th>";
+                       w += "<th class='five-percent'></th>";
+                    }
+                    if (!writer.thresholdRate) {
+                        //filler column
+                        w += "<th class='five-percent'></th>";
+                        w += "<th class='five-percent'></th>";
+                       w += "<th class='five-percent'></th>";
                     }
                     w += "<th class='five-percent'>Pro-Rata Rate </th>";
                     w += "<th class='five-percent'>Per Song Rate</th>";
+
+
 
                     //<!--Not: NOI, Advice Letter or Gratis-->
                     if ($scope.licenseDetail.licenseTypeId !== 2 &&
@@ -1493,6 +1551,7 @@ function () {
                                             w += "                            </span>";
                                         }
                                         w += "    </td>";
+
                                         w += "    <td class='fifteen-percent top'>";
 
                                         if (iRate == 0) {
@@ -1517,6 +1576,7 @@ function () {
                                             w += "                            </span>";
                                         }
                                         w += "    </td>";
+
                                         if (writer.controlled == true || writer.escalatedRateVisible == true) {
                                             w += "    <td class='fifteen-percent'>";
                                             if (iRate == 0 || writer.escalatedRateVisible == true) {
@@ -1530,20 +1590,35 @@ function () {
                                         }
                                         if (iRate !== 0) {
                                             w += "    <td class='fifteen-percent'></td>";
+
                                         }
                                         if (writer.controlled == false) {
                                             w += "    <td class='fifteen-percent'>";
                                             if (iRate == 0) {
-                                                w += "<span>N/A</span></td>";
+                                                w += "<span>" + ifNullNA(rate.rateType.rateType) + "</span></td>";
                                             }
                                         }
+
+
                                         if (writer.controlled == false) {
-                                            w += "    <td class='five-percent'>N/A</td>";
+                                            w += "    <td class='five-percent'>";
+                                            //this will never be hit, its a cell filler
+                                            if (writer.thresholdRate) {
+                                                controlDeciamlRateColumn(rate.rate, rate.rateType.rateType) + "-rATE";
+                                            }
+                                            w += "</td>";
                                         }
                                         if (writer.controlled == true && writer.statPrcentageVisible == true) {
                                             w += "    <td class='five-percent centered'><span>" +
                                                 ifNullBlank(rate.percentOfStat) +
                                                 "</span></td>";
+
+                                        }
+
+                                        if (writer.statPrcentageVisible) {
+                                            //Filler cell
+                                            w += "    <td class='five-percent'></td>";
+
                                         }
                                         //       if (writer.controlled == true && writer.thresholdRate == true) {
                                         if (writer.controlled == true && writer.escalatedRateVisible == true) {
@@ -1552,7 +1627,10 @@ function () {
                                                 "</span></td>"; //Threshold
                                         }
                                         if (writer.controlled == false) {
-                                            w += "    <td class='five-percent'>N/A</td>";
+                                            //Filler cell
+                                            w += "    <td class='five-percent'></td>";
+                                            w += "    <td class='five-percent'></td>";
+                                        
                                         }
                                         //if (writer.controlled == true && writer.escalatedRateVisible == true) {
                                         if (writer.controlled == true && writer.thresholdRate == true) {
@@ -1562,22 +1640,32 @@ function () {
                                         }
 
                                         if (writer.controlled == true) {
-                                            w += "    <td class='five-percent'><span>" +
-                                                controlDeciamlProRataColumn(rate.proRataRate, rate.rateType.rateType) +
-                                                "</span></td>";
+                                            w += "    <td class='five-percent'><span>" + "</span></td>";
+                                            w += "    <td class='five-percent'><span>" + "</span></td>";
+                                            // controlDeciamlProRataColumn(rate.proRataRate, rate.rateType.rateType) +"555" + 
+                                            //  "</span></td>";
                                         }
                                         if (writer.controlled == false) {
-                                            w += "    <td class='five-percent'>N/A</td>";
+                                            w += "    <td class='five-percent'>" + setToNAFilter(controlDeciamlProRataColumn(rate.proRataRate, rate.rateType.rateType)) + "</td>";
                                         }
                                         if (writer.controlled == true) {
-                                            w += "    <td class='five-percent'><span>" +
-                                                controlDeciamlPerSongRateColumn(rate.perSongRate,
-                                                    rate.rateType.rateType) +
-                                                "</span></td>";
+                                            w += "    <td class='five-percent'><span>" + "</span></td>";
+                                            //controlDeciamlPerSongRateColumn(rate.perSongRate,
+                                            //   rate.rateType.rateType) +
+                                            //"</span></td>";
+                                            w += "    <td class='ten-percent centered'>" + setToNAFilter(controlDeciamlProRataColumn(rate.proRataRate, rate.rateType.rateType)) + "</td>";
+                                            w += "    <td class='ten-percent centered'>" + controlDeciamlPerSongRateColumn(rate.perSongRate,
+                                                    rate.rateType.rateType) + "</td>";
                                         }
                                         if (writer.controlled == false) {
-                                            w += "    <td class='ten-percent centered'>N/A</td>";
+                                            w += "    <td class='ten-percent centered'>" + setToNAFilter(controlDeciamlPerSongRateColumn(rate.perSongRate,
+                                                    rate.rateType.rateType)) + "</td>";
+                                            w += "    <td class='ten-percent centered'>" + ifNullDateBlank(rate.licenseDate) + "</td>";
+                                            w += "    <td class='ten-percent centered'>" + setToNAFilter(rateConfiguration.paidQuarter) + "</td>";
+
                                         }
+
+
 
                                         //w += "    <!--Display License Date, Signed Date or Effective Date-->";
                                         //                   w += "    <td class='ten-percent' ng-show='writer.controlled == true && $index==0'>"+rate.licenseDate+"<span ng-bind='rate.licenseDate | timezone | date:'MM/dd/yyyy''></span></td>";
@@ -1629,7 +1717,6 @@ function () {
         //escape quotes jsfiddle http://jsfiddle.net/3j25m/2/
         recording.writerHtml = $sce.trustAsHtml(ww);
         $scope.banned = false;
-
 
         //    var jsonData = {
         //        glossary: {
@@ -1871,20 +1958,17 @@ function () {
         </tbody>
         </table><!-- END Writer Table-->
 */
-
         $scope.goToLastModified();
     }
-    //$scope.removeExp = function () {
-    //    console.log('dfdfgdfgdfg');
-    //}
 
-    //$scope.alertMe = function (object) {
-    //    alert(JSON.parse(JSON.stringify(object)));
-    //}
-    //$scope.cf = function() {
-    //    alert("TEST");
-    //}
 
+
+    function setToNAFilter(x) {
+        if (x === 0 || x === null || x === "0") {
+            return "N/A";
+        }
+        return x.toString();
+    }
     function controlDeciamlRateColumn(input, control) {
         var rateType = ifNullNA(control);
         if (rateType === "N/A") {
@@ -2291,11 +2375,26 @@ function () {
         }
     }
 
+    $scope.editAttachments = function(obj) {
+        angular.forEach($scope.licenseAttachments,
+            function(attach) {
+                if (attach.selected) {
+                    filesService.downloadAttachment(attach.licenseAttachmentId)
+                        .then(function(result) {
+                            var link = document.createElement("a");
+                            link.href = result.data.url;
+                            link.click();
+                        });
+                }
+            });
+    }
+
     $scope.openAddNote = function (size) {
         var rootScope = $scope;
         var modalInstance = $modal.open({
             templateUrl: 'app/views/partials/modal-AddNote.html',
             controller: 'addNoteController',
+            backdrop: 'static',
             size: size,
             resolve: {
                 data: function () {
@@ -2308,7 +2407,16 @@ function () {
             //$scope.loadDetail();
         }, function () {
         });
+
+        unCheckAllLicenseNoteCheckBoxes();
     };
+
+    function unCheckAllLicenseNoteCheckBoxes() {
+        angular.forEach($scope.licenseDetail.licenseNoteList,
+            function (note) {
+                note.selected = false;
+            });
+    }
 
     $scope.openEditNote = function (size) {
         var rootScope = $scope;
@@ -2332,6 +2440,7 @@ function () {
             //$scope.loadDetail();
         }, function () {
         });
+        unCheckAllLicenseNoteCheckBoxes();
     };
 
     $scope.openUploadDoc = function (size) {
@@ -2467,30 +2576,35 @@ function () {
             $state.go('SearchMyView.Tabs.MyViewTab');
         });
 
-        licenseProductsService.getLicenseProducts($stateParams.licenseId).then(function (result) {
-        //JSON call
-        //$http.get("tom_Original.json")
-          //  .then(function (result) {
-                // $scope.productOverview_Original = res.data;
-                //$scope.productOverviewRates = res.data;
-             //   console.log("API call is off, JSON is on. Product for PROD");
-            $scope.products = result.data;
-            
-                if ($scope.products.length == 0) {
-                    $scope.noProductsOnLicense = true;
-                }
-                if (result.data.length > 0) {
-                    $scope.licenseDetail.claimException = result.data[0].licenseClaimException;
-                }
-                $scope.productConfigurations.length = 0;
-                // set configuration grid data
-                var totalLicensedAmount = 0;
-                var totalLicensedConfigs = 0;
-                var totalAmount = 0;
-                var totalConfigs = 0;
+       licenseProductsService.getLicenseProducts($stateParams.licenseId).then(function(result) {
+            //JSON call
+            //$http.get("tom_Original.json")
+            //  .then(function (result) {
+            // $scope.productOverview_Original = res.data;
+            //$scope.productOverviewRates = res.data;
+            //   console.log("API call is off, JSON is on. Product for PROD");
+           $scope.products = result.data;
+               checkIfInProcess();
+               CheckForRecsSync();
+               CheckForRemovedTracks();
 
-                //This toggles the products open/closed
-                angular.forEach($scope.products, function (product, iProduct) {
+            console.log("Jeff look at these products: \n \n \n \n \n \n " + JSON.stringify($scope.products));
+            if ($scope.products.length == 0) {
+                $scope.noProductsOnLicense = true;
+            }
+            if (result.data.length > 0) {
+                $scope.licenseDetail.claimException = result.data[0].licenseClaimException;
+            }
+            $scope.productConfigurations.length = 0;
+            // set configuration grid data
+            var totalLicensedAmount = 0;
+            var totalLicensedConfigs = 0;
+            var totalAmount = 0;
+            var totalConfigs = 0;
+
+            //This toggles the products open/closed
+            angular.forEach($scope.products,
+                function(product, iProduct) {
                     if (product.isCollapsed == null || product.isCollapsed == undefined) {
                         //check to make sure it is not in the array, if it is in the array, remove it.
                         var productCollapsedData = localStorageService.get("productCollapseData");
@@ -2520,33 +2634,35 @@ function () {
                     totalLicensedConfigs = 0;
                     totalConfigs = 0;
 
-                    angular.forEach(product.productHeader.configurations, function (config) {
-                        if (config.licenseProductConfiguration != null) {
-                            var lconfig = {
-                                productId: product.productHeader.id,
-                                title: product.productHeader.title,
-                                configuration_id: config.licenseProductConfiguration.configuration_id,
-                                configuration_name: config.licenseProductConfiguration.configuration_name,
-                                priorityReport: config.licenseProductConfiguration.priorityReport,
-                                statusReport: config.licenseProductConfiguration.statusReport,
-                                licensedAmount: config.licenseProductConfiguration.licensedAmount,
-                                notLicensedAmount: config.licenseProductConfiguration.notLicensedAmount,
-                                totalAmount: config.licenseProductConfiguration.totalAmount,
-                                licenseProductConfigurationId: config.licenseProductConfiguration.licenseProductConfigurationId,
-                                upc: config.upc,
-                                release_date: config.releaseDate,
-                                catalogNumber: config.licenseProductConfiguration.catalogNumber
-                            };
-                            if (config.release_date) {
-                                lconfig.release_date = moment.utc(config.releaseDate).format();
+                    angular.forEach(product.productHeader.configurations,
+                        function(config) {
+                            if (config.licenseProductConfiguration != null) {
+                                var lconfig = {
+                                    productId: product.productHeader.id,
+                                    title: product.productHeader.title,
+                                    configuration_id: config.licenseProductConfiguration.configuration_id,
+                                    configuration_name: config.licenseProductConfiguration.configuration_name,
+                                    priorityReport: config.licenseProductConfiguration.priorityReport,
+                                    statusReport: config.licenseProductConfiguration.statusReport,
+                                    licensedAmount: config.licenseProductConfiguration.licensedAmount,
+                                    notLicensedAmount: config.licenseProductConfiguration.notLicensedAmount,
+                                    totalAmount: config.licenseProductConfiguration.totalAmount,
+                                    licenseProductConfigurationId:
+                                        config.licenseProductConfiguration.licenseProductConfigurationId,
+                                    upc: config.upc,
+                                    release_date: config.releaseDate,
+                                    catalogNumber: config.licenseProductConfiguration.catalogNumber
+                                };
+                                if (config.release_date) {
+                                    lconfig.release_date = moment.utc(config.releaseDate).format();
+                                }
+                                $scope.productConfigurations.push(lconfig);
+                                totalLicensedConfigs += 1;
+                                totalLicensedAmount += config.licenseProductConfiguration.licensedAmount;
+                                totalAmount += config.licenseProductConfiguration.totalAmount;
                             }
-                            $scope.productConfigurations.push(lconfig);
-                            totalLicensedConfigs += 1;
-                            totalLicensedAmount += config.licenseProductConfiguration.licensedAmount;
-                            totalAmount += config.licenseProductConfiguration.totalAmount;
-                        }
-                        totalConfigs += 1;
-                    });
+                            totalConfigs += 1;
+                        });
 
                     product.totalConfigs = totalConfigs;
                     product.totalLicensedConfigs = totalLicensedConfigs;
@@ -2556,69 +2672,72 @@ function () {
                     var partial_licensed_recording_count = 0;
                     var unlicensed_recording_count = 0;
 
-                    angular.forEach(product.recordings, function (recording, iRecording) {
-                        //if ($scope.licenseDetail.licenseStatusId == 5 || $scope.licenseDetail.licenseStatusId == 7 ) { //executed or accepted
-                        // USL-1221 recording: cheesy code to replace percentages with literal values
-                        var writer_count = 0;
-                        var licensed_writer_count = 0;
-                        var partial_licensed_writer_count = 0;
-                        var unlicensed_writer_count = 0;
+                    angular.forEach(product.recordings,
+                        function(recording, iRecording) {
+                            //if ($scope.licenseDetail.licenseStatusId == 5 || $scope.licenseDetail.licenseStatusId == 7 ) { //executed or accepted
+                            // USL-1221 recording: cheesy code to replace percentages with literal values
+                            var writer_count = 0;
+                            var licensed_writer_count = 0;
+                            var partial_licensed_writer_count = 0;
+                            var unlicensed_writer_count = 0;
 
-                        angular.forEach(recording.writers, function (writer) {
-                            if (writer.controlled) {
-                                writer_count += 1;
-                                var writer_rate_licensed = 0;
-                                if (writer.licenseProductRecordingWriter != null) {
-                                    if (writer.licenseProductRecordingWriter.rateList) {
-                                        angular.forEach(writer.licenseProductRecordingWriter.rateList,
-                                            function (rate) {
-                                                if (rate.licenseDate != null) {
-                                                    writer_rate_licensed += 1;
-                                                }
-                                            });
+                            angular.forEach(recording.writers,
+                                function(writer) {
+                                    if (writer.controlled) {
+                                        writer_count += 1;
+                                        var writer_rate_licensed = 0;
+                                        if (writer.licenseProductRecordingWriter != null) {
+                                            if (writer.licenseProductRecordingWriter.rateList) {
+                                                angular.forEach(writer.licenseProductRecordingWriter.rateList,
+                                                    function(rate) {
+                                                        if (rate.licenseDate != null) {
+                                                            writer_rate_licensed += 1;
+                                                        }
+                                                    });
+                                            }
+                                        }
+
+                                        if (writer_rate_licensed == product.totalLicensedConfigs) {
+                                            licensed_writer_count += 1;
+                                        } else if (writer_rate_licensed > 0) {
+                                            partial_licensed_writer_count += 1;
+                                        } else { // == 0
+                                            unlicensed_writer_count += 1;
+                                        }
                                     }
-                                }
+                                });
 
-                                if (writer_rate_licensed == product.totalLicensedConfigs) {
-                                    licensed_writer_count += 1;
-                                } else if (writer_rate_licensed > 0) {
-                                    partial_licensed_writer_count += 1;
-                                } else { // == 0
-                                    unlicensed_writer_count += 1;
-                                }
+                            if (licensed_writer_count == writer_count) {
+                                recording.licenseLiteral = "Licensed";
+                                licensed_recording_count += 1;
+                            } else if (unlicensed_writer_count == writer_count) {
+                                recording.licenseLiteral = "None";
+                                unlicensed_recording_count += 1;
+                            } else {
+                                recording.licenseLiteral = "Partial";
+                                partial_licensed_recording_count += 1;
                             }
+                            //       }
+                            //       else {
+                            //           recording.licenseLiteral = "None";
+                            //           unlicensed_recording_count += 1;
+                            //       }
+
+                            $scope.getRecordingWriters(recording, iRecording, iProduct);
                         });
-
-                        if (licensed_writer_count == writer_count) {
-                            recording.licenseLiteral = "Licensed";
-                            licensed_recording_count += 1;
-                        }
-                        else if (unlicensed_writer_count == writer_count) {
-                            recording.licenseLiteral = "None";
-                            unlicensed_recording_count += 1;
-                        } else {
-                            recording.licenseLiteral = "Partial";
-                            partial_licensed_recording_count += 1;
-                        }
-                        //       }
-                        //       else {
-                        //           recording.licenseLiteral = "None";
-                        //           unlicensed_recording_count += 1;
-                        //       }
-
-                        $scope.getRecordingWriters(recording, iRecording, iProduct);
-                    });
-
+                  
                     // USL-1221 product : literal values to replace percentages
-                    if (partial_licensed_recording_count > 0 || (licensed_recording_count > 0 && unlicensed_recording_count > 0)) {
+                    if (partial_licensed_recording_count > 0 ||
+                        (licensed_recording_count > 0 && unlicensed_recording_count > 0)) {
+                        
                         product.totalLicenseLiteral = "Partial";
-                    }
-                    else if (licensed_recording_count > 0 && unlicensed_recording_count == 0) {
+                    } else if (licensed_recording_count > 0 && unlicensed_recording_count == 0) {
                         product.totalLicenseLiteral = "Licensed";
-                    }
-                    else {
+                    } else {
                         product.totalLicenseLiteral = "None";
                     }
+
+                    
 
                     //if (totalLicensedConfigs > 0) {
                     //    totalAmount = totalAmount / totalLicensedConfigs;
@@ -2626,29 +2745,73 @@ function () {
                     //}
 
                     if (product.message.length > 0) {
-                        var m = "License Information is not complete for Product '" + product.productHeader.title + "'<br/><br/>";
-                        angular.forEach(product.message, function (message) {
-                            m += message + "<br />";
-                        });
+                        var m = "License Information is not complete for Product '" +
+                            product.productHeader.title +
+                            "'<br/><br/>";
+                        angular.forEach(product.message,
+                            function(message) {
+                                m += message + "<br />";
+                            });
                         notyService.error(m);
                     }
                 });
-                if ($scope.products.length == 1) {
-                    $scope.checkRecordings(false, $scope.products[0].licenseProductId);
-                    $scope.isCollapsed = false;
+            if ($scope.products.length == 1) {
+                $scope.checkRecordings(false, $scope.products[0].licenseProductId);
+                $scope.isCollapsed = false;
+            }
+
+           //data harmonization code here
+            $scope.ProductsLoaded = true;
+            $scope.IsEIA();
+            $scope.IsVerifying();
+           
+                if (dataHarmonCodeOn) {
+                    console.log("About to send request to Data Harmonization");
+                    $scope.received = false;
+                    $scope.ExistsAndCompleted();
+              
+
+                    //5=Execyted
+                    //6 = Issued
+                    //7 = Accepted
+                    if ($scope.licenseDetail.licenseStatusId == undefined) {
+                        $scope.dataHarmonizationChanges = [];
+                    }
+               
+                    $scope.getRecDataHarmonizationComparison();
+
+                    //If in Verifying
+                    if ($scope.licenseDetail.licenseStatusId === 2) {
+
+                    
+
+                        //var callerInfo = {
+                        //    ContactId: authData.contactId,
+                        //    SafeUserId: authData.safeId,
+                        //    SiteLocationCode: "US2"
+                        //}
+
+                        //var requestObj = {
+                        //    LicenseProducts: $scope.products,
+                        //    CallerInfo: callerInfo
+                        //}
+
+                        licenseProductsService.getTrackDifferences($scope.products, $stateParams.licenseId)
+                            .then(function (result) {
+                                $scope.dataHarmonizationChanges = result;
+                                $scope.received = true;
+                                console.log("Response From Data Harmonization - Track Differences - Sync Recieved");
+                            });
+                   }
                 }
 
-
-            //data harmonization code ehre
-            licenseProductsService.getRecsDataChangesFast($scope.products)
-                .then(function (result) {
-                    $scope.dataHarmonizationChanges = result;
-                });
+            }, function () {
+            $state.go('SearchMyView.Tabs.MyViewTab');
+        }
 
 
-        }, function () {
-                $state.go('SearchMyView.Tabs.MyViewTab');
-            });
+
+);
 
         //licensesService.getLicenseProductConfigurations($stateParams.licenseId).then(function (result) {
         //    $scope.productConfigurations = result.data;
@@ -2687,10 +2850,114 @@ function () {
     $scope.goToLastModified();
 
     $scope.firstFilter = true;
+    $scope.ProductsLoaded = false;
+    $scope.snapshotExistAndComplteted = false;
+
+$scope.ExistsAndCompleted = function() {
+    licensesService.DoesExistAndComplete($stateParams.licenseId)
+        .then(function(result) {
+            $scope.snapshotExistAndComplteted = result.data;
+        });
 
 
-    $scope.seeRecChanges = function() {
+}
+    $scope.removedTracks = false;
+function CheckForRemovedTracks(products) {
+    angular.forEach(products,
+        function(product) {
+            if (product.licensePRecordingsNo != product.recordings.length) {
+                $scope.removedTracks = true;
+            }
+        });
+    
+}
+
+$scope.RecsOutOfSync = false;
+function CheckForRecsSync() {
+    angular.forEach($scope.products,
+        function(product) {
+            if (product.licensePRecordingsNo != product.recordings.length) {
+                $scope.RecsOutOfSync = true;
+            }
+        });
+}
+$scope.getRecDataHarmonizationComparison = function () {
+    $scope.received = false;
+    $scope.dataHarmonizationChanges = [];
+    if (dataHarmonCodeOn) {
+        if ($scope.licenseDetail.licenseStatusId === 6 ||
+            $scope.licenseDetail.licenseStatusId === 5 ||
+            $scope.licenseDetail.licenseStatusId === 7) {
+            licenseProductsService.getRecsDataChangesFast($scope.products, $stateParams.licenseId)
+                .then(function(result) {
+                    $scope.received = true;
+                    $scope.dataHarmonizationChanges = result;
+                    console.log("Response From Data Harmonization Sync Recieved");
+                });
+        }
+    }
+}
+
+    //Checks if the current license has a snapshot in process
+function checkIfInProcess() {
+    if (dataHarmonCodeOn) {
+        var started = false;
+        var dataHarmonCheckInterval = $interval(function() {
+                snapshotInProcess();
+                $scope.ExistsAndCompleted();
+                //Snapshot finished
+                if (!$scope.InProcess && started && $scope.ProductsLoaded) {
+                    $scope.getRecDataHarmonizationComparison();
+                }
+
+                //If in process, set started flag to true
+                if ($scope.InProcess && $scope.ProductsLoaded) {
+                    started = true;
+                }
+
+                //Snapshot Finished, cancel check$scop
+                if (!$scope.InProcess && started) {
+                    $interval.cancel(dataHarmonCheckInterval);
+                }
+
+                //Snapshot already exists, cancel check
+                if ($scope.snapshotExistAndComplteted) {
+                    $interval.cancel(dataHarmonCheckInterval);
+                }
+
+                //license is in verifying, no check needed
+                if ($scope.IsLicenseV) {
+                    $interval.cancel(dataHarmonCheckInterval);
+                }
+            },
+            10000);
+    }
+}
+
+    $scope.IsLicenseEIA = false;
+$scope.IsEIA = function () {
+    var licenseId = $scope.licenseDetail.licenseStatusId;
+    if (licenseId === 6 ||
+        licenseId === 5 ||
+        licenseId === 7) {
+        $scope.IsLicenseEIA = true;
+    } else {
+        $scope.IsLicenseEIA = false;
+    }
+}
+$scope.IsLicenseV = false;
+$scope.IsVerifying = function(){
+    var licenseId = $scope.licenseDetail.licenseStatusId;
+    if (licenseId === 2) {
+        $scope.IsLicenseV = true;
+    } else {
+        $scope.IsLicenseV = false;
+    }
+}
+
+    $scope.seeRecChanges = function () {
         $state.go('SearchMyView.DetailLicense.StepsModal.DataHamonization', { data: $scope.dataHarmonizationChanges, licenseId: $stateParams.licenseId });
+        $rootScope.$broadcast('DataHarmonizationModalOpen');
     }
 
     $scope.selectWriterFilter = function (f) {
@@ -2699,21 +2966,23 @@ function () {
             case 1:
                 angular.forEach($scope.products, function (product) {
                     angular.forEach(product.recordings, function (rec) {
-                        rec.computedWritersCount = rec.track.writerCount;
+                        //   rec.computedWritersCount = rec.track.writerCount;
+                        rec.computedWritersCount = rec.writers.length;
                     });
                 });
                 break;
             case 2:
                 angular.forEach($scope.products, function (product) {
                     angular.forEach(product.recordings, function (rec) {
-                        rec.computedWritersCount = rec.track.controlledWriterCount;
+                        //  rec.computedWritersCount = rec.track.controlledWriterCount;
+                        rec.computedWritersCount = getControlledWriterCount(rec.writers);
                     });
                 });
                 break;
             case 3:
                 angular.forEach($scope.products, function (product) {
                     angular.forEach(product.recordings, function (rec) {
-                        rec.computedWritersCount = rec.track.writerCount - rec.track.controlledWriterCount;
+                        rec.computedWritersCount = rec.writers.length - getControlledWriterCount(rec.writers);
                     });
                 });
                 break;
@@ -2734,6 +3003,17 @@ function () {
             default: break;
         }
     };
+
+    function getControlledWriterCount(writers) {
+        var count = 0;
+        angular.forEach(writers,
+            function(writer) {
+                if (writer.controlled) {
+                    count++;
+                }
+            });
+        return count;
+    }
 
     $scope.clickLicenseStatus = function () {
         if ($scope.licenseStatuses.length == 0) {
@@ -2832,7 +3112,7 @@ function () {
             message = "Are you sure you want to DELETE this license?";
         }
         else {
-            message = "Are you sure you want to restore this license?"
+            message = "Are you sure you want to restore this license?";
         }
         notyService.modalConfirm(message).then(function () {
             if ($scope.deleteButtonName == "Delete") {
@@ -2851,32 +3131,89 @@ function () {
         });
     };
 
-    function removeOutForSignatureAttachments() {
-        //remove previous OUT_FOR_SIGNATURE attachments
-        var selectedAttachments = [];
-        angular.forEach($scope.licenseAttachments, function (attachment) {
-            if (attachment.fileName.indexOf("_OUT_FOR_SIGNATURE") > -1) {
-                selectedAttachments.push(attachment);
-            }
-        });
-
-        filesService.removeMultiple(selectedAttachments).then(function (result) {
-            // Remove from UI
-            for (var i = 0; i < $scope.licenseAttachments.length; i++) {
-                var j = 0;
-                var found = false;
-                while (j < selectedAttachments.length && !found) {
-                    if (selectedAttachments[j].fileName == $scope.licenseAttachments[i].fileName) {
-                        $scope.licenseAttachments.splice(i, 1);
-                        found = true;
+    function removeOutForSignatureAttachmentsIfSignedPresent() {
+     //   if (isSignedPresent()) {
+            //remove previous OUT_FOR_SIGNATURE attachments
+            var selectedAttachments = [];
+            var flagSignedPresent = false;
+            angular.forEach($scope.licenseAttachments,
+                function(attachment) {
+                    if (attachment.fileName.indexOf("SIGNED") > -1) {
+                        flagSignedPresent = true;
                     }
-                    j++;
-                }
+                });
+
+            if (flagSignedPresent) {
+                angular.forEach($scope.licenseAttachments,
+                           function (attachment) {
+                               if (attachment.fileName.indexOf("OUT_FOR_SIGNATURE") > -1) {
+                                   selectedAttachments.push(attachment);
+                               }
+                           });
+                filesService.removeMultiple(selectedAttachments)
+                    .then(function(result) {
+                            // Remove from UI
+                            for (var i = 0; i < $scope.licenseAttachments.length; i++) {
+                                var j = 0;
+                                var found = false;
+                                while (j < selectedAttachments.length && !found) {
+                                    if (selectedAttachments[j].fileName == $scope.licenseAttachments[i].fileName) {
+                                        $scope.licenseAttachments.splice(i, 1);
+                                        found = true;
+                                    }
+                                    j++;
+                                }
+                            }
+                        },
+                        function(error) {
+                        });
+            } else {
+                console.log("No SIGNED Attachments present.  No attachment removed");
             }
-        }, function (error) {
-        });
+        }
+  //  }
+
+
+    function removeOnlyOutForSignatureAttachments() {
+               var selectedAttachments = [];
+        angular.forEach($scope.licenseAttachments,
+            function(attachment) {
+                if (attachment.fileName.indexOf("_OUT_FOR_SIGNATURE") > -1 ||
+                    attachment.fileName.indexOf("OUT_FOR_SIGNATURE") > -1) {
+                    selectedAttachments.push(attachment);
+                }
+            });
+
+        filesService.removeMultiple(selectedAttachments)
+            .then(function(result) {
+                // Remove from UI
+                for (var i = 0; i < $scope.licenseAttachments.length; i++) {
+                    var j = 0;
+                    var found = false;
+                    while (j < selectedAttachments.length && !found) {
+                        if (selectedAttachments[j].fileName == $scope.licenseAttachments[i].fileName) {
+                            $scope.licenseAttachments.splice(i, 1);
+                            found = true;
+                        }
+                        j++;
+                    }
+                }
+            },
+                function(error) {
+                });
     }
 
+    function isSignedPresent() {
+        angular.forEach($scope.licenseAttachments, function (attachment) {
+            if (attachment.fileName.indexOf("SIGNED") > -1) {
+                console.log("Signed Attachment is presnet");
+                return true;
+            }
+        });
+        console.log("Signed Attachment is NOT presnet");
+        return false;
+    }
+    
     $scope.verifyLicense = function () {
         var message = ""
         if ($scope.verifyButtonName == "Verify") {
@@ -2890,16 +3227,17 @@ function () {
                     licensesService.updateGeneratedLicenseStatus(data);
                 }
 
-                removeOutForSignatureAttachments();
+                removeOnlyOutForSignatureAttachments();
 
                 $scope.licenseDetail.licenseStatusId = 2;
                 $scope.licenseDetail.licenseStatus.licenseStatus = "Verifying";
+                $scope.hideRecDiffResults = true;
                 $scope.licenseDetail.licenseStatus.licenseStatusId = 2;
                 initializeButtons($scope.buttons, $scope.licenseDetail.licenseStatusId, $scope.licenseDetail.licenseTypeId);
                 licensesService.updateLicenseStatus($scope.licenseDetail).then(function (result) {
                     message = "Status Changed to Verifying";
                     notyService.success(message);
-                    $timeout($window.location.reload(),700);
+                    $timeout($window.location.reload(), 700);
                 }, function (error) {
                 });
             });
@@ -3177,6 +3515,7 @@ function () {
                 buttons.deleteNotes = true;
                 buttons.addAttachment = true;
                 buttons.downloadAttachment = true;
+                buttons.editAttachment = true;
                 buttons.deleteAttachment = true;
                 buttons.writerConsentBtn = true;
                 buttons.writerNoteBtn = true;
@@ -3202,6 +3541,7 @@ function () {
                 buttons.deleteNotes = true;
                 buttons.addAttachment = true;
                 buttons.downloadAttachment = true;
+                buttons.editAttachment = true;
                 buttons.deleteAttachment = true;
                 buttons.writerConsentBtn = true;
                 buttons.writerNoteBtn = true;
@@ -3227,6 +3567,7 @@ function () {
                 buttons.deleteNotes = true;
                 buttons.addAttachment = true;
                 buttons.downloadAttachment = true;
+                buttons.editAttachment = true;
                 buttons.deleteAttachment = true;
                 buttons.writerConsentBtn = true;
                 buttons.writerNoteBtn = true;
@@ -3253,6 +3594,7 @@ function () {
                 buttons.deleteNotes = true;
                 buttons.addAttachment = true;
                 buttons.downloadAttachment = true;
+                buttons.editAttachment = true;
                 buttons.deleteAttachment = true;
                 buttons.writerConsentBtn = true;
                 buttons.writerNoteBtn = true;
@@ -3279,6 +3621,7 @@ function () {
                 buttons.deleteNotes = true;
                 buttons.addAttachment = true;
                 buttons.downloadAttachment = true;
+                buttons.editAttachment = true;
                 buttons.deleteAttachment = true;
                 buttons.writerConsentBtn = true;
                 buttons.writerNoteBtn = true;
@@ -3366,6 +3709,7 @@ function () {
                 buttons.editNotes = true;
                 buttons.deleteNotes = true;
                 buttons.addAttachment = true;
+                buttons.editAttachment = true;
                 buttons.downloadAttachment = true;
                 buttons.deleteAttachment = true;
             }
@@ -3373,6 +3717,7 @@ function () {
                 buttons.addNotes = false;
                 buttons.editNotes = false;
                 buttons.deleteNotes = false;
+                buttons.editAttachment = false;
                 buttons.addAttachment = false;
                 buttons.downloadAttachment = false;
                 buttons.deleteAttachment = false;
@@ -3410,7 +3755,7 @@ function () {
                 buttons.addAttachment = false;  // || Ticket USL-1062
                 buttons.downloadAttachment = false; // || Ticket USL-1062
             }
-
+            buttons.editAttachment = true; //USL-1319
             buttons.deleteAttachment = false; //USL-1212 changed from FALSE to TRUE     | Temp true
             buttons.writerConsentBtn = false; //USL-1212 changed from FALSE to TRUE     | Temp true
             buttons.writerNoteBtn = false;    //USL-1212 changed from FALSE to TRUE     | Temp true
@@ -3459,10 +3804,12 @@ function () {
             }
             if ($scope.safeauthentication.roleId >= 3) {
                 buttons.addAttachment = true; //Jeff Changed from False to True || Ticket USL-1062
+                buttons.editAttachment = true;
                 buttons.downloadAttachment = true; //Jeff Changed from False to True || Ticket USL-1062
             }
             if ($scope.safeauthentication.roleId <= 2) {
                 buttons.addAttachment = false;  // || Ticket USL-1062
+                buttons.editAttachment = false;
                 buttons.downloadAttachment = false; // || Ticket USL-1062
             }
 
@@ -3828,4 +4175,7 @@ function () {
     $scope.eraseCookie = function (name) {
         $scope.createCookie(name, "", -1);
     }
+
+
+    
 }]);

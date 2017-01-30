@@ -51,7 +51,10 @@ app.controller('generateDocController', ['$scope', '$stateParams', 'ngAuthSettin
 
     $scope.selectAttachmentType = function (attachmentType) {
         $scope.chosenAttachment = attachmentType;
+        $scope.isCollapsed = !$scope.isCollapsed;
+        $scope.setCaret($scope.isCollapsed);
         attachmentValidation();
+ 
     }
 
     if (!$scope.selectedTemplate) {
@@ -438,12 +441,12 @@ app.controller('generateDocController', ['$scope', '$stateParams', 'ngAuthSettin
     }
 
     function validateAttachmentType() {
-        if ($scope.chosenAttachment.attachmentTypeId == 0) {
-            return false;
+        if ($scope.chosenAttachment.attachmentTypeId === 0) {
+            $scope.chosenAttachment.attachmentTypeId = 1;
+            return true;
         }
         return true;
     };
-
     var uploadFiles = function (licenseId, fileId, progressId, attachmentTypeId) {
         $scope.progressVisible = true;
         filesService.upload(licenseId, fileId, progressId, attachmentTypeId).then(uploadComplete, uploadError).finally(function () {

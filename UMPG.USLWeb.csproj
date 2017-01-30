@@ -63,6 +63,7 @@
     <Content Include="app\controllers\licensesConsentController.js" />
     <Content Include="app\controllers\modals\AddWriterNoteController.js" />
     <Content Include="app\controllers\modals\editWriterNoteController.js" />
+    <Content Include="app\controllers\processorEntryController.js" />
     <Content Include="app\controllers\productsReportsController.js" />
     <Content Include="app\controllers\licensesMechanicalController.js" />
     <Content Include="app\controllers\globalReportsController.js" />
@@ -90,6 +91,7 @@
     <Content Include="app\controllers\modals\paidQuarterController.js" />
     <Content Include="app\controllers\modals\licenseWriterController.js" />
     <Content Include="app\controllers\modals\writersConsentController.js" />
+    <Content Include="app\controllers\appManagementController.js" />
     <Content Include="app\custom\globalModals.js" />
     <Content Include="app\controllers\modals\loginController.js" />
     <Content Include="app\controllers\modals\registerController.js" />
@@ -99,6 +101,8 @@
     <Content Include="app\controllers\productsController.js" />
     <Content Include="app\controllers\viewSongsController.js" />
     <Content Include="app\custom\common.js" />
+    <Content Include="app\providers\headerProvider.js" />
+    <Content Include="app\services\processorService.js" />
     <Content Include="app\views\partials\licenseDetail-Writers.html" />
     <Content Include="app\services\filesService.js" />
     <Content Include="app\services\licenseWritersConsentTypesService.js" />
@@ -183,6 +187,8 @@
     <Content Include="app\views\archived\search-Products.html" />
     <Content Include="app\views\archived\search-SearchView.html" />
     <Content Include="app\views\songsList.html" />
+    <Content Include="app\views\appManagement.html" />
+    <Content Include="app\views\viewProcessorEntries.html" />
     <Content Include="authComplete.html" />
     <Content Include="content\css\bootstrap-licensing-theme.css" />
     <Content Include="content\images\licensing-header.png" />
@@ -235,6 +241,9 @@
     <Content Include="doc_templates\Physical and Digital with Escalated_files\themedata.thmx" />
     <Content Include="doc_templates\Physical Rates only_files\themedata.thmx" />
     <Content Include="po.json" />
+    <Content Include="scripts\ng-file-upload-all.min.js" />
+    <Content Include="scripts\ng-file-upload-shim.min.js" />
+    <Content Include="scripts\ng-file-upload.js" />
     <Content Include="Specs\controllers\associateControllerSpecs.js" />
     <Content Include="Specs\controllers\contactsControllerSpecs.js" />
     <Content Include="Specs\controllers\logInControllerSpecs.js" />

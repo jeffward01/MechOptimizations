@@ -36,12 +36,17 @@ app.controller('globalReportsController', ['$scope', '$state', 'licensesService'
     for (var i = 1; i <= $scope.sliderScale.length; i++) {
         $scope.sliderTicks.push(i);
     }
+    /*
     $scope.tabs = [
         { heading: "Priority", route: "SearchReports.Tabs.Priority", active: false },
         { heading: "Mechanical", route: "SearchReports.Tabs.Mechanical", active: false },
         { heading: "Consent", route: "SearchReports.Tabs.Consent", active: false }
     ];
-    $scope.initData = function() {
+    */
+    $scope.tabs = [
+        { heading: "Mechanical", route: "SearchReports.Tabs.Mechanical", active: false }
+    ];
+    $scope.initData = function () {
         $scope.GlobalAssignees = [];
         $scope.GlobalLicensees = [];
         $scope.GlobalPublishers = [];
@@ -73,6 +78,9 @@ app.controller('globalReportsController', ['$scope', '$state', 'licensesService'
     $scope.addToRecent = false;
     $scope.go = function (route) {
         $state.go(route);
+        $scope.currentTabName = { id: "Mechanical", name: "Mechanical Settings", route: "SearchReports.Tabs.Mechanical" };
+        $scope.selectedTabName = { id: "Mechanical", name: "Mechanical Settings", route: "SearchReports.Tabs.Mechanical" };
+        /*
         if (route == "SearchReports.Tabs.Priority") {
             $scope.currentTabName = { id: "Priority", name: "Priority Settings", route: "SearchReports.Tabs.Priority" };
             $scope.selectedTabName = { id: "Priority", name: "Priority Settings", route: "SearchReports.Tabs.Priority" };
@@ -84,6 +92,7 @@ app.controller('globalReportsController', ['$scope', '$state', 'licensesService'
             $scope.currentTabName = { id: "Consent", name: "Consent Settings", route: "SearchReports.Tabs.Consent" };
             $scope.selectedTabName = { id: "Consent", name: "Consent Settings", route: "SearchReports.Tabs.Consent" };
         }
+        */
     };
 
 
@@ -116,10 +125,16 @@ app.controller('globalReportsController', ['$scope', '$state', 'licensesService'
     $scope.checkSelected = function() {
         
     }
+    /*/
     $scope.tabNames = [{ id: "Priority", name: "Priority Settings", route: "SearchReports.Tabs.Priority" }, { id: "Mechanical", name: "Mechanical Settings", route: "SearchReports.Tabs.Mechanical" }, { id: "Consent", name: "Consent Settings", route: "SearchReports.Tabs.Consent" }];
     $scope.currentTabName = { id: "Priority", name: "Priority Settings", route: "SearchReports.Tabs.Priority" };
     $scope.selectedTabName = { id: "Priority", name: "Priority Settings", route: "SearchReports.Tabs.Priority" };
-    $scope.selectTabName = function(tab) {
+    */
+    $scope.tabNames = [{ id: "Mechanical", name: "Mechanical Settings", route: "SearchReports.Tabs.Mechanical" }];
+    $scope.currentTabName = { id: "Mechanical", name: "Mechanical Settings", route: "SearchReports.Tabs.Mechanical" };
+    $scope.selectedTabName = { id: "Mechanical", name: "Mechanical Settings", route: "SearchReports.Tabs.Mechanical" };
+
+    $scope.selectTabName = function (tab) {
         $scope.selectedTabName = tab;
         $scope.advancedSearch = $scope.advancedSearchData[currentPage(tab.route)];
         $scope.initData();
@@ -196,12 +211,14 @@ app.controller('globalReportsController', ['$scope', '$state', 'licensesService'
                 case "SearchReports.Tabs.Mechanical":
                 page = "MechanicalSearch";
                 break;
+                /*
                 case "SearchReports.Tabs.Consent":
                 page = "ConsentSearch";
                 break;
                 case "SearchReports.Tabs.Priority":
                 page = "PrioritySearch";
                 break;
+                */
             default:
                 break;
             }

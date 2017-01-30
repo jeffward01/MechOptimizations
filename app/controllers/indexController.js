@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.controller('indexController', ['$scope', '$state', '$location', '$modal', 'safeService', function ($scope, $state, $location, $modal, safeService) {
+app.controller('indexController', ['$scope', '$state', '$location', '$modal', 'safeService', 'localStorageService', 'processorService', '$interval', function ($scope, $state, $location, $modal, safeService, localStorageService, processorService, $interval) {
 
     $scope.logOut = function () {
         safeService.logout();
@@ -7,6 +7,30 @@ app.controller('indexController', ['$scope', '$state', '$location', '$modal', 's
     }
 
     $scope.safeauthentication = safeService.safeauthentication;
+
+    //Set auth data to show app Management or not to show it
+    var authenticationData = localStorageService.get("authenticationData");
+    if (authenticationData == null) {
+        var checkAdminInterval = $interval(function () {
+            authenticationData = localStorageService.get("authenticationData");
+            if (authenticationData != null) {
+                if (authenticationData.authenticated) {
+                    setAdminData(authenticationData);
+                    $interval.cancel(checkAdminInterval);
+                } else {
+                    $scope.IsAdmin = false;
+                }
+            }
+        },4000,20);
+    } else {
+        setAdminData(authenticationData);
+    }
+
+    function setAdminData(authenticationData) {
+        processorService.isAdmin(authenticationData.contactId).then(function (result) {
+            $scope.IsAdmin = result.data;
+        });
+    }
 
     $scope.openRegister = function (size) {
         var rootScope = $scope;

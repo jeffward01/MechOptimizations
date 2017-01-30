@@ -47,11 +47,11 @@
     <section class="file-upload">
         <input type="file" class="filestyle" id="fileToUpload" customfileupload />
         <div class="dropdown" dropdown style="display: -webkit-inline-box">
-            <button ng-class="{'field-error': errorPresent == true}" type="button" name="attachmentTypeBtn" class="btn btn-default dropdown-toggle" id="attachmentType" data-toggle="dropdown">
-                <span ng-bind="chosenAttachment.attachmentType"></span>&nbsp;<span class="{{setCaret(isCollapsed)}}"></span>
+            <button ng-class="{'field-error': errorPresent == true}" type="button" name="attachmentTypeBtn" ng-click="isCollapsed = !isCollapsed" class="btn btn-default dropdown-toggle blank-dropdownWidth" id="attachmentType" data-toggle="dropdown">
+                <span ng-bind="chosenAttachment.attachmentType"></span>&nbsp;<span ng-class="{'blank-dropdownMargin': chosenAttachment.attachmentTypeId === 1}"  class="{{setCaret(isCollapsed)}}"></span>
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="attachmentType">
-                <li ng-repeat="attachmentType in AttachmentTypes"><a ng-click="selectAttachmentType(attachmentType);$event.preventDefault()">{{attachmentType.attachmentType}}</a></li>
+                <li ng-repeat="attachmentType in AttachmentTypes"><a class="blank-dropdownHeight" ng-click="selectAttachmentType(attachmentType);$event.preventDefault()">{{attachmentType.attachmentType}}</a></li>
             </ul>
         </div>
         <button class="btn btn-default" ng-click="upload()"><span class="icon upload-doc"></span>Upload</button>

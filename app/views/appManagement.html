@@ -1,0 +1,70 @@
+﻿<nav class="breadcrumbs">
+    <ul>
+        <li>
+            <a href="/#/search-MyView/Tabs/MyViewTab">My View </a>
+            <label>App Management</label>
+        </li>
+    </ul>
+</nav>
+<div class="col-md-12">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="center-text centered">
+                    <h3 class="panel-title" style="color:#A5A5A5;">
+                        User Management
+                    </h3>
+                </div>
+            </div>
+            <div class="panel-body">
+                <h3 class="centered" style="text-align: center">Coming Soon</h3>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="center-text centered">
+                    <h3 class="panel-title" style="color:#A5A5A5;">
+                        Processor Management
+                    </h3>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="fifteen-percent"><button type="button" class="btn btn-warning btn-sm" style="color:black" ng-click="restartAllProcessors()">Restart All</button></th>
+                            <th class="ten-percent"></th>
+                            <th class="thirty-percent centered">Name</th>
+                            <th class="twentyfive-percent centered">Status</th>
+                            <th class="fifteen-percent centered">Unprocessed Items</th>
+                            <th class="fifteen-percent centered">Failed Items</th>
+                            <th class="fifteen-percent centered"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="processor in processorInfo">
+                            <td class="centered"><button type="button" class="btn btn-default btn-sm" ng-click="restartProcessor(processor.serviceName)">Restart</button></td>
+                            <td class="centered">
+                                <i class="fa fa-check-circle" aria-hidden="true" style="color: green" ng-show="processor.serviceStatus === 'Running'"></i>
+                                <i class="fa fa-times-circle-o" aria-hidden="true" style="color: red" ng-show="processor.serviceStatus === 'Stopped'"></i>
+                                <i class="fa fa-refresh rotate-360" aria-hidden="true" ng-show="processor.serviceStatus === 'Restarting' || processor.serviceStatus === 'Status Changing'"></i>
+                                <i class="fa fa-hourglass-start rotate-360" aria-hidden="true" ng-show="processor.serviceStatus === 'Starting'"></i>
+                            </td>
+                            <td class="centered"><span ng-bind="processor.serviceName"></span></td>
+                            <td class="centered">
+                                <span ng-bind="processor.serviceStatus" ng-show="!processor.restartInProgress"></span>
+                                <span ng-show="processor.restartInProgress">Restarting</span>
+                            </td>
+                            <td class="centered"><span ng-bind="processor.numberOfItemsInQueue"></span></td>
+                            <td class="centered"><span ng-bind="processor.numberOfErrorItems"></span></td>
+                            <td class="centered"><button type="button" class="btn btn-default btn-sm" ng-click="viewProcessorEntries(processor.serviceName)">View</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

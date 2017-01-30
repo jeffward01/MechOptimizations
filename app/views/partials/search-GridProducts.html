@@ -1,9 +1,14 @@
 ﻿<section class="search-grid" id="Products-Grid">
     <section class="search-filters" ng-include="'app/views/partials/search-Filters.html'"></section>
+    <!--<pre>{{products | json}}</pre>-->
+    <!--<pre>{{selectedProductssFromGrid | json}}</pre>-->
+    <!--<pre>{{allSelectedChecks | json}}</pre>
+    <pre>Product Count: {{products.length | json}}</pre>
+    <pre>Selected Count: {{selectedProductssFromGrid.length | json}}</pre>-->
     <ul class="grid-header clearfix">
         <li class="actions">
             <button security actions="ProductSummaryCreateProduct" ui-sref="SearchMyView.Tabs.ProductsTab.StepsModal.CreateProduct" class="btn btn-default"><span class="icon create-product"></span>Create Product</button>
-            <button security actions="ProductSummaryCreateLicense" ui-sref="SearchMyView.Tabs.ProductsTab.StepsModal.CreateLicense({products:selectedProductssFromGrid})" ng-disabled="products | isNoneSelected" class="btn btn-default"><span class="icon create-license"></span>Create License</button>
+            <button security actions="ProductSummaryCreateLicense" ui-sref="SearchMyView.Tabs.ProductsTab.StepsModal.CreateLicense({products:selectedProductssFromGrid})" ng-disabled="selectedProductssFromGrid.length === 0" class="btn btn-default"><span class="icon create-license"></span>Create License</button>
         </li>
         <li class="pagination">
             <pagination total-items="pagination.totalItems" items-per-page="pagination.numPerPage" ng-model="pagination.currentPage" ng-change="pageChanged()" max-size="pagination.maxSize" class="pagination-sm" boundary-links="true"
@@ -47,7 +52,7 @@
     <table class="table" ng-if="products.length > 0" edit-columns="columns" hidden-columns="hiddenColumns" results-data="products">
         <thead>
             <tr>
-                <th class="one-percent" data-type="select"><input type="checkbox" ng-click="selectAllProducts()" ng-checked="products | isAllSelected" /></th>
+                <th class="one-percent" data-type="select"><input type="checkbox" checklist-model="selectedProductssFromGrid" checklist-value="product" ng-checked="allSelectedChecks"   ng-click="selectAllProducts()" /></th>
                 <th class="twentyfive-percent" data-default="true"><a href="" ng-click="sortSearch('title')">Product Title<span ng-if="sortBy=='title'" class="{{sortArrow}}"></span></a></th>
                 <th class="twenty-percent"><a href="" ng-click="sortSearch('artist')">Artist<span ng-if="sortBy=='artist'" class="{{sortArrow}}"></span></a></th>
                 <th class="twentyfive-percent"><a href="" ng-click="sortSearch('upc')">UPC<span ng-if="sortBy=='upc'" class="{{sortArrow}}"></span></a></th>
@@ -61,18 +66,18 @@
         <tbody>
             <tr ng-repeat-start="product in products" class="editColumnsSelectable">
 
-                <td class="one-percent"><input type="checkbox" ng-model="product.selected" ng-click="selectProductFromGrid(product)" /></td>
+                <td class="one-percent"><input type="checkbox"  checklist-model="selectedProductssFromGrid" checklist-value="product" ng-click="optionToggled()"/></td>
                 <td class="twentyfive-percent"><a ui-sref="SearchMyView.DetailProduct({productId: product.product_id})"><span ng-bind="product.title"></span></a></td>
                 <td class="twenty-percent"><span ng-bind="product.recsArtist.name"></span></td>
                 <td class="twentyfive-percent">
-                    <span ng-repeat="con in product.productHeader.configurations | emptyOrNull ">
+                    <span ng-repeat="con in product.productHeader.configurations | emptyOrNullUpc ">
 
                         <!--<span ng-if="con.upc != null ">{{con.upc}}{{$last ? "" : ", "}}</span>-->
                         <span ng-class="con.configuration.id | returnConfigurationIcon"></span>{{con.configuration.name}}<span><span ng-if="con.upc != null">({{con.upc}}){{$last ? "" : ", "}}</span></span>
                     </span>
                 </td>
                 <td class="ten-percent">
-                    <span ng-repeat="con in product.productHeader.configurations | emptyOrNull ">
+                    <span ng-repeat="con in product.productHeader.configurations | emptyOrNullCatalogNumber ">
                         <span ng-if="con.catalogNumber.length > 4">{{con.catalogNumber}}{{$last ? "" : ", "}}</span>
                     </span>
                 </td>

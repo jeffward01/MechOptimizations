@@ -76,7 +76,7 @@ app.factory('filesService', ['$http', 'ngAuthSettings', '$state', 'localStorageS
         while (i < files.length && newFile == null) {
             var j = 0;
             while (j < file.files.length && newFile == null) {
-                if ((files[i].fileName + files[i].fileType) === (file.files[j].name) || (files[i].fileName + '.pdf') === (file.files[j].name) || (files[i].fileName + '.txt') === (file.files[j].name)) {
+                if ((files[i].fileName + files[i].fileType) === (file.files[j].name)) {
                     newFile = file.files[j].name;
                 }
                 j++;
@@ -85,8 +85,6 @@ app.factory('filesService', ['$http', 'ngAuthSettings', '$state', 'localStorageS
         }
         return newFile;
     }
-
- 
 
     var _isFileSelected = function (fileElementId) {
         var file = document.getElementById(fileElementId);

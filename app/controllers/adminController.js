@@ -12,6 +12,11 @@ app.controller('adminController', ['$scope', 'licenseesService', 'contactsServic
         isCollapsed: true
     };
 
+    $scope.checkWorking = function () {
+        alert("VIsitied!");
+        console.log("THis works");
+    }
+
     $scope.showCollapseButton = toggleCollapseAll();
 
     $scope.initialContacts = [];

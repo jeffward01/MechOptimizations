@@ -41,7 +41,10 @@ app.controller('executeLicenseController', ['$scope', '$stateParams', 'ngAuthSet
 
     $scope.selectAttachmentType = function (attachmentType) {
         $scope.chosenAttachment = attachmentType;
+        $scope.isCollapsed = !$scope.isCollapsed;
+        $scope.setCaret($scope.isCollapsed);
         attachmentValidation();
+   
     }
 
     var dateErrorMessage = function (evt) {
@@ -50,7 +53,6 @@ app.controller('executeLicenseController', ['$scope', '$stateParams', 'ngAuthSet
     }
     
     $scope.ok = function () {
-        console.log(JSON.stringify($scope.licenseDetail));
         var form1 = $scope.someForm11;
         var form2 = $scope.someForm12;
         var form3 = $scope.someForm13;

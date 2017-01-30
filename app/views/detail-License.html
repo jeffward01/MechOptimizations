@@ -1,7 +1,8 @@
 ﻿<section class="details pull-left clearfix">
-    <section class="license-overview shadow">
-        <section class="license-header">
-            <span class="writers-status">
+<!--<pre>{{products | json}}</pre>-->
+<section class="license-overview shadow">
+    <section class="license-header">
+        <span class="writers-status">
                 <span class="mechanical-report">
                     <input type="checkbox" securitydisable actions="LicenseDetailsStatusReport" ng-model="licenseDetail.statusReport" ng-click="changeLicenseProductConfiguration()" /><label>Status Report</label>
                 </span>
@@ -12,167 +13,184 @@
                     <span ng-bind="status.lU_SpecialStatuses.specialStatus"></span>
                 </span>
             </span>
-            <span class="license-icon"></span>
-            <h2><span ng-bind="licenseDetail.licenseName"></span></h2>
-            <span class="license-status">
+        <span class="license-icon"></span>
+        <h2><span ng-bind="licenseDetail.licenseName"></span></h2>
+        <span class="license-status">
                 <span ng-class="'status-icon-lg '+ licenseDetail.licenseStatus.licenseStatus.toLowerCase()"></span>
                 <span ng-bind="licenseDetail.licenseStatus.licenseStatus"></span>
             </span>
-            <h3><span ng-bind="licenseDetail.contact.fullName"></span></h3>
-        </section><!-- End License Header -->
-        <section class="license-info">
-            <section>
-                <button class="btn btn-default" security actions="LicenseDetailAssign" ng-click="openAssignModal('sm','LicenseDetails')"><span class="icon assign"></span>Assign</button>
-                <button class="btn btn-default" security actions="LicenseDetailIssue" ng-disabled="noProductsOnLicense" ng-show="buttons.issueLicense" ng-click="generateDetailLicenseDoc(licenseDetail,licenseAttachments, products )"><span class="status-icon issued"></span>Issue</button>
-                <button class="btn btn-default" security actions="LicenseDetailHold" ng-disabled="noProductsOnLicense" ng-show="buttons.holdLicense" ng-click="holdLicense()"><span class="status-icon hold"></span><span ng-bind="holdButtonName"></span></button>
-                <button class="btn btn-default" security actions="LicenseDetailVoid" ng-disabled="noProductsOnLicense" ng-show="buttons.voidLicense" ng-click="voidLicense()"><span class="status-icon voided"></span><span ng-bind="voidButtonName"></span></button>
-                <button class="btn btn-default" security actions="LicenseDetailExecute" ng-disabled="noProductsOnLicense" ng-show="buttons.executeLicense" ng-click="executeDoc(licenseDetail, licenseAttachments)"><span class="status-icon executed"></span>Execute</button>
-                <button class="btn btn-default" security actions="LicenseDetailReverify" ng-disabled="noProductsOnLicense" ng-show="buttons.verifyLicense" ng-click="verifyLicense()"><span class="status-icon verifying"></span>Re-Verify</button>
-                <button class="btn btn-default" security actions="LicenseDetailAddendum" ng-show="buttons.addendumLicense" ng-click="addendumLicense()"><span class="status-icon issued"></span>Addendum</button>
-                <button class="btn btn-default" security actions="LicenseDetailAccept" ng-disabled="noProductsOnLicense" ng-show="buttons.acceptLicense" ng-click="acceptLicense()"><span class="status-icon accepted"></span>Accept</button>
-                <button class="btn btn-default" ng-show="buttons.rejectLicense" ng-click="rejectLicense()"><span class="status-icon rejected"></span>Reject</button>
-                <button class="btn btn-default" security actions="LicenseDetailCopy" ng-show="buttons.copyLicense" ng-click="copyLicense()"><span class="icon copy-license"></span>Copy</button>
-                <button class="btn btn-default" security actions="LicenseDetailProforma" ng-disabled="noProductsOnLicense" ng-show="buttons.proformaLicense" ng-click="proformaLicense()"><span class="icon proforma"></span>ProForma</button>
-            </section>
-            <ul>
-
-                <li><label>Priority</label><span ng-bind="licenseDetail.licensePriority.priority"></span></li>
-                <li><label>Created Date</label><span ng-bind="licenseDetail.createdDate | date:'MM/dd/yyyy'"></span></li>
-                <li><label>License Type</label><span ng-bind="licenseDetail.licenseType.licenseType"></span></li>
-                <li><label>Modified Date</label><span ng-bind="licenseDetail.modifiedDate | date:'MM/dd/yyyy'"></span></li>
-                <li><label>License Method</label><span ng-bind="licenseDetail.licenseMethod.licenseMethod"></span></li>
-                <li><label>Effective Date</label><span ng-bind="licenseDetail.effectiveDate | timezone | date:'MM/dd/yyyy'"></span></li>
-                <li><label>License #</label><span ng-bind="licenseDetail.licenseNumber"></span></li>
-                <li><label>Received Date</label><span ng-bind="licenseDetail.receivedDate | timezone | date:'MM/dd/yyyy'"></span></li>
-                <li><label>Licensee</label><span ng-bind="licenseDetail.licensee.name"></span></li>
-                <!--<li><label>Product</label><span ng-bind="licenseDetail.productRollup}}</span></li>-->
-                <!-- changed to show licenseDetail.effective Date per Ryan-->
-                <li><label>Signed Date</label><span ng-bind="licenseDetail.signedDate | timezone | date:'MM/dd/yyyy'"></span></li>
-                <li><label>Contact</label><span ng-bind="licenseDetail.licenseeContact.fullName"></span></li>
-                <li ng-if="licenseDetail.amsLegacyPath.length > 0"><label>AMS</label><span><a href="{{licenseDetail.amsLegacyPath}}" target="_blank">legacy link</a></span></li>
-                <li>&nbsp;</li>
-            </ul>
+        <h3><span ng-bind="licenseDetail.contact.fullName"></span></h3>
+    </section><!-- End License Header -->
+    <section class="license-info">
+        <section>
+            <button class="btn btn-default" security actions="LicenseDetailAssign" ng-click="openAssignModal('sm','LicenseDetails')"><span class="icon assign"></span>Assign</button>
+            <button class="btn btn-default" security actions="LicenseDetailIssue" ng-disabled="noProductsOnLicense" ng-show="buttons.issueLicense" ng-click="generateDetailLicenseDoc(licenseDetail,licenseAttachments, products )"><span class="status-icon issued"></span>Issue</button>
+            <button class="btn btn-default" security actions="LicenseDetailHold" ng-disabled="noProductsOnLicense" ng-show="buttons.holdLicense" ng-click="holdLicense()"><span class="status-icon hold"></span><span ng-bind="holdButtonName"></span></button>
+            <button class="btn btn-default" security actions="LicenseDetailVoid" ng-disabled="noProductsOnLicense" ng-show="buttons.voidLicense" ng-click="voidLicense()"><span class="status-icon voided"></span><span ng-bind="voidButtonName"></span></button>
+            <button class="btn btn-default" security actions="LicenseDetailExecute" ng-disabled="noProductsOnLicense" ng-show="buttons.executeLicense" ng-click="executeDoc(licenseDetail, licenseAttachments)"><span class="status-icon executed"></span>Execute</button>
+            <button class="btn btn-default" security actions="LicenseDetailReverify" ng-disabled="noProductsOnLicense || !received" ng-show="buttons.verifyLicense" ng-click="verifyLicense()"><span class="status-icon verifying"></span>Re-Verify</button>
+            <button class="btn btn-default" security actions="LicenseDetailAddendum" ng-show="buttons.addendumLicense" ng-click="addendumLicense()"><span class="status-icon issued"></span>Addendum</button>
+            <button class="btn btn-default" security actions="LicenseDetailAccept" ng-disabled="noProductsOnLicense" ng-show="buttons.acceptLicense" ng-click="acceptLicense()"><span class="status-icon accepted"></span>Accept</button>
+            <button class="btn btn-default" ng-show="buttons.rejectLicense" ng-click="rejectLicense()"><span class="status-icon rejected"></span>Reject</button>
+            <button class="btn btn-default" security actions="LicenseDetailCopy" ng-show="buttons.copyLicense" ng-click="copyLicense()"><span class="icon copy-license"></span>Copy</button>
+            <button class="btn btn-default" security actions="LicenseDetailProforma" ng-disabled="noProductsOnLicense" ng-show="buttons.proformaLicense" ng-click="proformaLicense()"><span class="icon proforma"></span>ProForma</button>
         </section>
+        <ul>
 
-        <section class="license-configurations shadow">
-            <table class="table fixed_headers" sticky-headers="productConfigurations" id="configurationTable">
-                <thead>
-                    <tr>
-                        <th>Product</th>
-                        <th>Configuration (UPC)</th>
-                        <th>Catalog #</th>
-                        <th class="centered">Unlicensed</th>
-                        <th class="centered">Licensed</th>
-                        <th class="centered">Total Comp</th>
-                        <th class="centered">Released</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <li><label>Priority</label><span ng-bind="licenseDetail.licensePriority.priority"></span></li>
+            <li><label>Created Date</label><span ng-bind="licenseDetail.createdDate | date:'MM/dd/yyyy'"></span></li>
+            <li><label>License Type</label><span ng-bind="licenseDetail.licenseType.licenseType"></span></li>
+            <li><label>Modified Date</label><span ng-bind="licenseDetail.modifiedDate | date:'MM/dd/yyyy'"></span></li>
+            <li><label>License Method</label><span ng-bind="licenseDetail.licenseMethod.licenseMethod"></span></li>
+            <li><label>Effective Date</label><span ng-bind="licenseDetail.effectiveDate | timezone | date:'MM/dd/yyyy'"></span></li>
+            <li><label>License #</label><span ng-bind="licenseDetail.licenseNumber"></span></li>
+            <li><label>Received Date</label><span ng-bind="licenseDetail.receivedDate | timezone | date:'MM/dd/yyyy'"></span></li>
+            <li><label>Licensee</label><span ng-bind="licenseDetail.licensee.name"></span></li>
+            <!--<li><label>Product</label><span ng-bind="licenseDetail.productRollup}}</span></li>-->
+            <!-- changed to show licenseDetail.effective Date per Ryan-->
+            <li><label>Signed Date</label><span ng-bind="licenseDetail.signedDate | timezone | date:'MM/dd/yyyy'"></span></li>
+            <li><label>Contact</label><span ng-bind="licenseDetail.licenseeContact.fullName"></span></li>
+            <li ng-if="licenseDetail.amsLegacyPath.length > 0"><label>AMS</label><span><a href="{{licenseDetail.amsLegacyPath}}" target="_blank">legacy link</a></span></li>
+            <li>&nbsp;</li>
+        </ul>
+    </section>
 
-                    <tr ng-repeat="productConfiguration in productConfigurations | orderBy:['title','configuration_name']  track by $index ">
-                        <td class="top"><span ng-bind="productConfiguration.title"></span>&nbsp;</td>
-                        <td>
-                            <span class="icon config-physical" ng-class="productConfiguration.configuration_id | returnConfigurationIcon"></span><span ng-bind="productConfiguration.configuration_name"></span>&nbsp;<span ng-if="productConfiguration.upc">(<span ng-bind="productConfiguration.upc"></span>)</span>
-                        </td>
-                        <td><span ng-bind="productConfiguration.catalogNumber"></span>&nbsp;</td>
-                        <td class="centered"><span ng-bind="productConfiguration.notLicensedAmount/100 | number:4"></span>&nbsp;</td>
-                        <td class="centered"><span ng-bind="productConfiguration.licensedAmount/100 | number:4"></span>&nbsp;</td>
-                        <td class="centered"><span ng-bind="productConfiguration.totalAmount/100 | number:4"></span>&nbsp;</td>
-                        <td class="centered"><span ng-bind="productConfiguration.release_date  | timezone | date:'MM/dd/yyyy'"></span>&nbsp;</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section><!-- End License Configurations -->
+    <section class="license-configurations shadow">
+        <table class="table fixed_headers" sticky-headers="productConfigurations" id="configurationTable">
+            <thead>
+            <tr>
+                <th>Product</th>
+                <th>Configuration (UPC)</th>
+                <th>Catalog #</th>
+                <th class="centered">Unlicensed</th>
+                <th class="centered">Licensed</th>
+                <th class="centered">Total Comp</th>
+                <th class="centered">Released</th>
+            </tr>
+            </thead>
+            <tbody>
 
-    </section><!-- End License Oveview -->
+            <tr ng-repeat="productConfiguration in productConfigurations | orderBy:['title','configuration_name']  track by $index ">
+                <td class="top"><span ng-bind="productConfiguration.title"></span>&nbsp;</td>
+                <td>
+                    <span class="icon config-physical" ng-class="productConfiguration.configuration_id | returnConfigurationIcon"></span><span ng-bind="productConfiguration.configuration_name"></span>&nbsp;<span ng-if="productConfiguration.upc">(<span ng-bind="productConfiguration.upc"></span>)</span>
+                </td>
+                <td><span ng-bind="productConfiguration.catalogNumber"></span>&nbsp;</td>
+                <td class="centered"><span ng-bind="productConfiguration.notLicensedAmount/100 | number:4"></span>&nbsp;</td>
+                <td class="centered"><span ng-bind="productConfiguration.licensedAmount/100 | number:4"></span>&nbsp;</td>
+                <td class="centered"><span ng-bind="productConfiguration.totalAmount/100 | number:4"></span>&nbsp;</td>
+                <td class="centered"><span ng-bind="productConfiguration.release_date  | timezone | date:'MM/dd/yyyy'"></span>&nbsp;</td>
+            </tr>
+            </tbody>
+        </table>
+    </section><!-- End License Configurations -->
 
-    <tabset class="license-content clearfix">
-        <tab heading="License Content">
-            <section class="actions clearfix">
-                <!--IF License == VERIFYING -->
-                <button class="btn btn-default" security actions="LicenseDetailCreateLicense" ng-click="createLicense()"><span class="icon create-license"></span>Create License</button>
-                <button class="btn btn-default" ng-show="buttons.editLicense" security actions="LicenseDetailEditLicense" ng-click="editLicenseModal(licenseDetail,2,products)"><span class="icon edit-license"></span>Edit License</button>
-                <button class="btn btn-default" security actions="LicenseDetailDeleteLicense" ng-show="buttons.deleteLicense" ng-click="deleteLicense()"><span class="icon delete"></span>Delete License</button>
-                <button class="btn btn-default" security actions="LicenseDetailEditProducts" ng-show="buttons.addRemoveProducts" ng-click="addLicProducts(licenseDetail, products)"><span class="icon add-product"></span>Edit Lic Products</button>
-                <!--
-                <button class="btn btn-default" ng-show="buttons.editConfig" ui-sref="SearchMyView.DetailLicense.StepsModal.EditConfigs({licenseData: licenseDetail, products: products})"><span class="icon edit-configurations"></span>Edit Configs</button>
-                -->
-                <button class="btn btn-default" security actions="LicenseDetailEditConfig" ng-show="buttons.editConfig" ng-click="editConfigs(licenseDetail,products)"><span class="icon edit-configurations"></span>Edit Configs</button>
-                <button class="btn btn-default" security actions="LicenseDetailBulkEditRates" ng-disabled="noProductsOnLicense" ng-show="buttons.editRates" ng-click="editRatesModal(licenseDetail,products)"><span class="icon edit-rates"></span>Edit Rates</button>
-                <button class="btn btn-default glowingBorder" ng-disabled="noProductsOnLicense" ng-show="dataHarmonizationChanges.length > 0" ng-click="seeRecChanges()"><i class="fa fa-eye" aria-hidden="true"></i>&nbsp;See Rec Changes</button>
-                <div class="dropdown pull-right" dropdown is-open="status.isopen">
-                    <!--<button class="btn btn-default" ng-click="expandAll()">Expand All</button>
-                    <button class="btn btn-default" ng-click="collapseAll()">Collapse All</button>-->
+</section><!-- End License Oveview -->
 
-                    <button class="btn btn-default" security actions="LicenseDetailIssue" ng-disabled="noProductsOnLicense" ng-click="generateDocumentPreview(licenseDetail, '', products, directPreviewPageObject)"><span class="status-icon issued"></span>Preview page</button>
-                    <button class="btn btn-default" ng-click="toggleCollapsedWriters()" ng-show="expandAll"><span  class="icon add"></span>Expand All Writers</button>
-                    <button class="btn btn-default" ng-click="toggleCollapsedWriters()" ng-show="!expandAll"><span  class="icon remove"></span>Collapse All Writers</button>
-                    <button type="button" class="dropdown-toggle btn btn-default" id="schedule" data-toggle="dropdown" ng-click="isSelectWritersCollapsed=!isSelectWritersCollapsed">
-                        <span ng-if="selectedWriterFilter.Name.length > 3"><span ng-bind="selectedWriterFilter.Name"></span><span class="{{setCaret(isSelectWritersCollapsed)}}"></span></span>
-                        <span ng-if="selectedWriterFilter.Name == null"><span>Select Writer Filter</span><span class="{{setCaret(isSelectWritersCollapsed)}}"></span></span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li ng-repeat="writerFilter in writerFilters | orderBy:['Id'] track by $index" ng-click="updateWriters();selectWriterFilter(writerFilter);isSelectWritersCollapsed=true;">
-                            <a href=""><span ng-bind="writerFilter.Name" ng-click=""></span></a>
-                        </li>
-                    </ul>
-                </div>
-            </section>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th class="one-percent centered top">Schedule</th>
-                        <th class="twenty-percent top">Product Title</th>
-                        <th class="twenty-percent top">Artist</th>
-                        <th class="ten-percent centered top">Tracks</th>
-                        <th class="fifteen-percent top">Label</th>
-                        <th class="twentyfive-percent top">Configuration (UPC)</th>
-                        <th class="five-percent centered top">Licensed</th>
-                        <th class="five-percent top">Paid Quarter</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat-start="product in products | orderBy:'scheduleId' track by $index">
-                        <td class="one-percent centered top">
-                            <div class="dropdown pull-left" dropdown ng-show="products.length>1">
-                                <button type="button" class="dropdown-toggle btn btn-default btn-sm" id="schedule" data-toggle="dropdown" ng-click="loadSchedules();product.isScheduleCollapsed=!product.isScheduleCollapsed" securitydisable actions="ProductSchedulesList">
-                                <!--<button type="button" class="dropdown-toggle btn btn-default btn-sm" id="schedule" data-toggle="dropdown" ng-click="product.isScheduleCollapsed=!product.isScheduleCollapsed" securitydisable actions="ProductSchedulesList">  || This loads schedules upfront-->
-                                    <span ng-bind="product.schedule.scheduleName"></span><span class="{{setCaret(product.isScheduleCollapsed)}}"></span>
-                                </button>
-                                <ul class="dropdown-menu schedules" role="menu">
-                                    <li ng-repeat="schedule in scheduleList track by $index">
-                                        <a href="" ng-click="selectSchedule(schedule, product);product.isScheduleCollapsed=true"><span ng-bind="schedule.scheduleName"></span></a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </td>
-                        <td class="twenty-percent top">
-                            <a href="#/search-MyView/detail-Product/{{ product.productHeader.id }}"><span ng-bind="product.productHeader.title"></span></a>
-                            &nbsp;
-                            <!--<span ng-if="product.licensePRecordingsNo != product.recordings.length" class="badge claim pull-left" title="tracks have been added/removed to this product after it was added to the license">!</span>-->
-                            <span ng-if="product.licensePRecordingsNo != product.recordings.length" class="badge warning pull-left" title="tracks have been added/removed to this product after it was added to the license">!</span>
-                            <!--&nbsp;<span ng-if="licenseDetail.claimException.length >= 0" class="badge claim pull-right">{{licenseDetail.claimException}}</span>-->
-                        </td>
+<tabset class="license-content clearfix">
+<tab heading="License Content">
+<section class="actions clearfix">
+    <!--IF License == VERIFYING -->
+    <button class="btn btn-default" security actions="LicenseDetailCreateLicense" ng-click="createLicense()"><span class="icon create-license"></span>Create License</button>
+    <button class="btn btn-default" ng-show="buttons.editLicense" security actions="LicenseDetailEditLicense" ng-click="editLicenseModal(licenseDetail,2,products)"><span class="icon edit-license"></span>Edit License</button>
+    <button class="btn btn-default" security actions="LicenseDetailDeleteLicense" ng-show="buttons.deleteLicense" ng-click="deleteLicense()"><span class="icon delete"></span>Delete License</button>
+    <button class="btn btn-default" security actions="LicenseDetailEditProducts" ng-show="buttons.addRemoveProducts" ng-click="addLicProducts(licenseDetail, products)"><span class="icon add-product"></span>Edit Lic Products</button>
+    <!--
+    <button class="btn btn-default" ng-show="buttons.editConfig" ui-sref="SearchMyView.DetailLicense.StepsModal.EditConfigs({licenseData: licenseDetail, products: products})"><span class="icon edit-configurations"></span>Edit Configs</button>
+    -->
+    <button class="btn btn-default" security actions="LicenseDetailEditConfig" ng-show="buttons.editConfig" ng-click="editConfigs(licenseDetail,products)"><span class="icon edit-configurations"></span>Edit Configs</button>
+    <button class="btn btn-default" security actions="LicenseDetailBulkEditRates" ng-disabled="noProductsOnLicense" ng-show="buttons.editRates" ng-click="editRatesModal(licenseDetail,products)"><span class="icon edit-rates"></span>Edit Rates</button>
+    <button class="btn btn-default" ng-class="glowingClass" ng-disabled="noProductsOnLicense" ng-show="dataHarmonizationChanges.length > 0" ng-click="seeRecChanges()"><i class="fa fa-eye" aria-hidden="true"></i>&nbsp;See Rec Changes</button>
+    <!--<button class="btn btn-default" ng-class="glowingClass" ng-disabled="noProductsOnLicense" ng-show="dataHarmonizationChanges.length > 0 && !hideRecDiffResults" ng-click="seeRecChanges()"><i class="fa fa-eye" aria-hidden="true"></i>&nbsp;See Rec Changes</button>-->
+    <!--<button class="btn btn-default" ng-disabled="noProductsOnLicense" ng-show="dataHarmonizationChanges.length > 0 && !hideRecDiffResults" ng-click="getRecDataHarmonizationComparison()"><i class="fa fa-exchange" aria-hidden="true"></i>&nbsp;Get Most Recent Changes</button>-->
+    
+    <!--<span title="Recs has been changed, however we cannot locate the trackIds in Recs.  Please contact support for more information."><button class="btn btn-default" ng-disabled="true" ng-show="(dataHarmonizationChanges.length === 0) && RecsOutOfSync"><i class="icon-warning-sign icon-yellow" aria-hidden="true"></i>&nbsp;Unable to locate tracks in Recs</button></span>-->
+    <button class="btn btn-default" ng-show="InProcess" ng-disabled="InProcess"><i class="fa fa-refresh rotate-360" aria-hidden="true"></i>&nbsp;Snapshot Processing</button>
+    <button class="btn btn-default" ng-show="!InProcess && dataHarmonizationChanges.length === 0 && IsLicenseEIA && snapshotExistAndComplteted && !received" ng-disabled="snapshotExistAndComplteted"><i class="fa fa-refresh rotate-360" aria-hidden="true"></i>&nbsp;Waiting for Recs...</button>
+    <button class="btn btn-default" ng-show="!InProcess && dataHarmonizationChanges.length === 0 && IsLicenseV && !received && removedTracks" ng-disabled="IsLicenseV"><i class="fa fa-refresh rotate-360" aria-hidden="true"></i>&nbsp;Waiting for Recs...</button>
+    <button class="btn btn-default" ng-show="!InProcess && dataHarmonizationChanges.length === 0 && IsLicenseEIA && snapshotExistAndComplteted && received && !hideRecDiffResults" ng-disabled="snapshotExistAndComplteted"><i class="fa fa-thumbs-up icon-green" aria-hidden="true"></i>&nbsp;No Recs Changes Detected</button>
+    <!--<button class="btn btn-default" ng-show="!InProcess && dataHarmonizationChanges.length === 0 && IsLicenseEIA && snapshotExistAndComplteted && received && !hideRecDiffResults" ng-click="getRecDataHarmonizationComparison()"><i class="fa fa-exchange" aria-hidden="true"></i>&nbsp;Find Changes</button>-->
 
-                        <!--&nbsp;<span ng-if="licenseDetail.claimException.length >= 0" class="badge claim pull-right">{{licenseDetail.claimException}}</span>--><!--</td>-->
-                        <td class="twenty-percent top"><span ng-bind="product.productHeader.artist.name"></span></td>
-                        <td class="ten-percent centered top"><button class="btn-default" ng-disabled="product.licensePRecordingsNo == 0" ng-click="toggleProductCollapse(product);checkRecordings(isCollapsed,product.licenseProductId);"><span ng-bind="product.licensePRecordingsNo"></span><span class="{{setCaret(product.isCollapsed)}}"></span></button></td>
-                        <td class="fifteen-percent top"><span ng-bind="product.productHeader.recordLabel.name"></span></td>
-                        <!--<td class="ten-percent centered">{{ product.recsProduct.release_date  | timezone | date:'MM/dd/yyyy' }}</td>-->
-                        <td class="twentyfive-percent top">
-                            <span ng-repeat="config in product.productHeader.configurations | filter:{licenseProductConfiguration: '!!'} track by $index" class="product-config-tag">
+    <pre>Snapshot In Process: {{InProcess | json}}</pre>
+    <pre>Is License Executed or Accepted: {{ IsLicenseEIA | json}}</pre>
+    <pre>Exists and Compete: {{ snapshotExistAndComplteted | json}}</pre>
+    <pre>DH Response recieved: {{received | json}}</pre>
+
+    <div class="dropdown pull-right" dropdown is-open="status.isopen">
+
+        <!--<button class="btn btn-default" ng-click="expandAll()">Expand All</button>
+        <button class="btn btn-default" ng-click="collapseAll()">Collapse All</button>-->
+
+        <button class="btn btn-default" security actions="LicenseDetailIssue" ng-disabled="noProductsOnLicense" ng-click="generateDocumentPreview(licenseDetail, '', products, directPreviewPageObject)"><span class="status-icon issued"></span>Preview page</button>
+        <button class="btn btn-default" ng-click="toggleCollapsedWriters()" ng-show="expandAll"><span class="icon add"></span>Expand All Writers</button>
+        <button class="btn btn-default" ng-click="toggleCollapsedWriters()" ng-show="!expandAll"><span class="icon remove"></span>Collapse All Writers</button>
+        <button type="button" class="dropdown-toggle btn btn-default" id="schedule" data-toggle="dropdown" ng-click="isSelectWritersCollapsed=!isSelectWritersCollapsed">
+            <span ng-if="selectedWriterFilter.Name.length > 3"><span ng-bind="selectedWriterFilter.Name"></span><span class="{{setCaret(isSelectWritersCollapsed)}}"></span></span>
+            <span ng-if="selectedWriterFilter.Name == null"><span>Select Writer Filter</span><span class="{{setCaret(isSelectWritersCollapsed)}}"></span></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li ng-repeat="writerFilter in writerFilters | orderBy:['Id'] track by $index" ng-click="updateWriters();selectWriterFilter(writerFilter);isSelectWritersCollapsed=true;">
+                <a href=""><span ng-bind="writerFilter.Name" ng-click=""></span></a>
+            </li>
+        </ul>
+    </div>
+</section>
+<table class="table">
+<thead>
+<tr>
+    <th class="one-percent centered top">Schedule</th>
+    <th class="twenty-percent top">Product Title</th>
+    <th class="twenty-percent top">Artist</th>
+    <th class="ten-percent centered top">Tracks</th>
+    <th class="fifteen-percent top">Label</th>
+    <th class="twentyfive-percent top">Configuration (UPC)</th>
+    <th class="five-percent centered top">Licensed</th>
+    <th class="five-percent top">Paid Quarter</th>
+</tr>
+</thead>
+<tbody>
+<tr ng-repeat-start="product in products | orderBy:'scheduleId' track by $index">
+    
+    <td class="one-percent centered top">
+        <div class="dropdown pull-left" dropdown ng-show="products.length>1">
+            <button type="button" class="dropdown-toggle btn btn-default btn-sm" id="schedule" data-toggle="dropdown" ng-click="loadSchedules();product.isScheduleCollapsed=!product.isScheduleCollapsed" securitydisable actions="ProductSchedulesList">
+                <!--<button type="button" class="dropdown-toggle btn btn-default btn-sm" id="schedule" data-toggle="dropdown" ng-click="product.isScheduleCollapsed=!product.isScheduleCollapsed" securitydisable actions="ProductSchedulesList"> || This loads schedules upfront-->
+                <span ng-bind="product.schedule.scheduleName"></span><span class="{{setCaret(product.isScheduleCollapsed)}}"></span>
+            </button>
+            <ul class="dropdown-menu schedules" role="menu">
+                <li ng-repeat="schedule in scheduleList track by $index">
+                    <a href="" ng-click="selectSchedule(schedule, product);product.isScheduleCollapsed=true"><span ng-bind="schedule.scheduleName"></span></a>
+                </li>
+            </ul>
+        </div>
+    </td>
+    <td class="twenty-percent top">
+        <a href="#/search-MyView/detail-Product/{{ product.productHeader.id }}"><span ng-bind="product.productHeader.title"></span></a>
+        &nbsp;
+        <!--<span ng-if="product.licensePRecordingsNo != product.recordings.length" class="badge claim pull-left" title="tracks have been added/removed to this product after it was added to the license">!</span>-->
+        <span ng-if="product.licensePRecordingsNo != product.recordings.length" class="badge warning pull-left" title="tracks have been added/removed to this product after it was added to the license">!</span>
+        <!--&nbsp;<span ng-if="licenseDetail.claimException.length >= 0" class="badge claim pull-right">{{licenseDetail.claimException}}</span>-->
+    </td>
+
+    <!--&nbsp;<span ng-if="licenseDetail.claimException.length >= 0" class="badge claim pull-right">{{licenseDetail.claimException}}</span>--><!--</td>-->
+    <td class="twenty-percent top"><span ng-bind="product.productHeader.artist.name"></span></td>
+    <td class="ten-percent centered top"><button class="btn-default" ng-disabled="product.licensePRecordingsNo == 0" ng-click="toggleProductCollapse(product);checkRecordings(isCollapsed,product.licenseProductId);"><span ng-bind="product.licensePRecordingsNo"></span><span class="{{setCaret(product.isCollapsed)}}"></span></button></td>
+    <td class="fifteen-percent top"><span ng-bind="product.productHeader.recordLabel.name"></span></td>
+    <!--<td class="ten-percent centered">{{ product.recsProduct.release_date | timezone | date:'MM/dd/yyyy' }}</td>-->
+    <td class="twentyfive-percent top">
+        <span ng-repeat="config in product.productHeader.configurations | filter:{licenseProductConfiguration: '!!'} track by $index" class="product-config-tag">
                                 <span class="icon config-physical" ng-class="config.licenseProductConfiguration.configuration_id | returnConfigurationIcon"></span><span ng-bind="config.licenseProductConfiguration.configuration_name"></span><span ng-if="config.upc">(<span ng-bind="config.upc"></span>)</span>
                             </span>
-                        </td>
-                        <td class="one-percent centered top no-wrap licensed">
-                            <span ng-if="product.totalLicenseLiteral=='Licensed'" class="badge success">Licensed</span>
-                            <span ng-if="product.totalLicenseLiteral=='Partial'" class="badge warning">Partial</span>
-                            <span ng-if="product.totalLicenseLiteral=='None'" class="badge none">Unlicensed</span>
-                            <!--
-                            <br/> { {product.totalLicenseConfigAmount | number:2} }%
-                            { {product.totalLicenseConfigAmount | number:2} }%<br/>
-                            { { (product.licensedRollup / product.umpgRollup) * 100 | number:2} }%
-                            <span ng-repeat="config in product.productHeader.configurations | filter:{licenseProductConfiguration: '!!'}">
+    </td>
+    <td class="one-percent centered top no-wrap licensed">
+        <span ng-if="product.totalLicenseLiteral=='Licensed'" class="badge success">Licensed</span>
+        <span ng-if="product.totalLicenseLiteral=='Partial'" class="badge warning">Partial</span>
+        <span ng-if="product.totalLicenseLiteral=='None'" class="badge none">Unlicensed</span>
+        <!--
+        <br/> { {product.totalLicenseConfigAmount | number:2} }%
+        { {product.totalLicenseConfigAmount | number:2} }%<br/>
+        { { (product.licensedRollup / product.umpgRollup) * 100 | number:2} }%
+        <span ng-repeat="config in product.productHeader.configurations | filter:{licenseProductConfiguration: '!!'}">
                                     <span ng-init="licAmt = config.licenseProductConfiguration.licensedAmount;itemTotal = config.licenseProductConfiguration.totalAmount; controller.Total = controller.Total + itemTotal">
                                         <span ng-if="licAmt==0">
                                             0%
@@ -182,37 +200,37 @@
                                         </span>
                                     </span>
                                 </span>
-                            -->
-                        </td>
-                        <td class="one-percent centered top no-wrap"><span ng-bind="product.paidQuarter"></span></td>
-                    </tr>
-                    <tr ng-repeat-end="product in products track by $index">
+        -->
+    </td>
+    <td class="one-percent centered top no-wrap"><span ng-bind="product.paidQuarter"></span></td>
+</tr>
+<tr ng-repeat-end="product in products track by $index">
 
-                        <td class="nested light shadow" colspan="12" ng-show="!product.isCollapsed">
-                            <table class="table nested light">
-                                <thead>
-                                    <tr>
-                                        <th class="one-percent centered no-wrap">Vol. / Track</th>
-                                        <th class="twentyfive-percent" colspan="2">Title</th>
-                                        <th class="twentyfive-percent">Artist</th>
-                                        <th class="five-percent centered">Writers</th>
-                                        <th class="five-percent centered no-wrap">Length</th>
-                                        <th class="five-percent centered no-wrap">UMPG %</th>
-                                        <th class="five-percent no-wrap">PIPS #</th>
-                                        <th class="ten-percent no-wrap">ISRC</th>
-                                        <th class="one-percent centered no-wrap">Licensed</th>
-                                        <th class="one-percent centered no-wrap">Paid Quarter</th>
-                                    </tr>
-                                </thead>
-                                <tbody ng-repeat="recording in product.recordings track by $index | filter:{licenseRecording:'!!'}">
+<td class="nested light shadow" colspan="12" ng-show="!product.isCollapsed">
+<table class="table nested light">
+<thead>
+<tr>
+    <th class="one-percent centered no-wrap">Vol. / Track</th>
+    <th class="twentyfive-percent" colspan="2">Title</th>
+    <th class="twentyfive-percent">Artist</th>
+    <th class="five-percent centered">Writers</th>
+    <th class="five-percent centered no-wrap">Length</th>
+    <th class="five-percent centered no-wrap">UMPG %</th>
+    <th class="five-percent no-wrap">PIPS #</th>
+    <th class="ten-percent no-wrap">ISRC</th>
+    <th class="one-percent centered no-wrap">Licensed</th>
+    <th class="one-percent centered no-wrap">Paid Quarter</th>
+</tr>
+</thead>
+<tbody ng-repeat="recording in product.recordings track by $index | filter:{licenseRecording:'!!'}">
 
-                                    <tr>
-                                        <td class="one-percent centered top"><span ng-bind="recording.cdNumber"></span>-<span ng-bind="recording.index"></span></td>
-                                        <td class="twentyfive-percent top">
-                                            <span class="bold-font" ng-bind="recording.track.title"></span>
-                                            <!-- IF Contains Sample || I made up the names for sampled.recording.track.title and sampled.recording.track.artist.name below ||-->
-                                            <br ng-if="recording.hasSample"><br />
-                                            <span ng-if="recording.hasSample">
+<tr>
+    <td class="one-percent centered top"><span ng-bind="recording.cdNumber"></span>-<span ng-bind="recording.index"></span></td>
+    <td class="twentyfive-percent top">
+        <span class="bold-font" ng-bind="recording.track.title"></span>
+        <!-- IF Contains Sample || I made up the names for sampled.recording.track.title and sampled.recording.track.artist.name below ||-->
+        <br ng-if="recording.hasSample"><br/>
+        <span ng-if="recording.hasSample">
                                                 (Contains sample(s) of
                                                 <span ng-repeat="sample in recording.track.copyrights[0].sampledWorks  track by $index" class="sample-track">
                                                     "<span ng-bind="sample.title"></span>"<span ng-if="!$last">, </span>
@@ -220,75 +238,76 @@
                                                 )
                                             </span>
 
-                                        </td>
-                                        <td class="top no-wrap">
-                                            <!-- I also moved these down and made them badges -->
-                                            <span ng-if="recording.hasSample" class="badge sample pull-right">SAMPLE</span>
-                                            <span ng-if="recording.licenseRecording.trackTypeId==2" class="badge medley pull-right">MEDLEY</span>
-                                            <span ng-repeat="status in recording.recStatRollup  track by $index" class="badge pull-right"><span ng-bind="status"></span></span>
-                                            <span ng-if="recording.track.claimException==true" class="badge claim pull-right"><span ng-bind="licenseDetail.claimException"></span></span>
-                                        </td>
-                                        <td class="twentyfive-percent top"><span ng-bind="recording.track.artist.name"></span></td>
-                                        <td class="five-percent centered top">
-                                            <!--
-                                            <button class="btn-default" ng-disabled="recording.computedWritersCount == 0" ng-click="collapseWriters(recording)"><span ng-bind="recording.computedWritersCount"></span><span class="{{setCaret(recording.writersCollapsed)}}"></span></button>
-                                            -->
-                                            <button class="btn-default" ng-disabled="recording.computedWritersCount == 0  " ng-click="collapseWriters3(recording)"><span ng-bind="recording.licensePRWriterCount"></span><span class="{{setCaret(recording.writersCollapsed)}}"></span></button>
-                                            <!--|| recording.licensePRWriterCount == 0-->
-                                        </td>
-                                        <td class="five-percent centered top"><span ng-bind="recording.track.duration | limitTo:-5"></span></td>
-                                        <td class="five-percent centered top"><span ng-bind="recording.umpgPercentageRollup | percentage:2"></span></td>
-                                        <td class="five-percent top"><span ng-bind="recording.track.copyrights[0].workCode"></span></td>
-                                        <td class="ten-percent top"><span ng-bind="recording.track.isrc"></span></td>
-                                        <td class="one-percent centered no-wrap top licensed">
-                                            <span ng-if="recording.licenseLiteral=='Licensed'" class="badge success">Licensed</span>
-                                            <span ng-if="recording.licenseLiteral=='Partial'" class="badge warning">Partial</span>
-                                            <span ng-if="recording.licenseLiteral=='None'" class="badge none">Unlicensed</span>
-                                            <!--
-                                            <br/>
-                                            <span ng-bind="recording.licensedRollup/100 | number:4"></span>&nbsp;/&nbsp;<span ng-bind="recording.umpgPercentageRollup/100 | number:4"></span>
-                                            -->
-                                        </td>
-                                        <td class="one-percent centered no-wrap top"><span ng-bind="recording.licenseRecording.paidQuarter"></span></td>
-                                    </tr>
-                                <tr>
-                                <!--<td colspan="11" class="nested dark shadow" ng-show="!recording.writersCollapsed" collapse="recording.writersCollapsed">-->
-                                <td colspan="11" class="nested dark shadow"   ng-show="!recording.writersCollapsed" id="{{recording.id}}">
-                                <table class="table nested dark">
+    </td>
+    <td class="top no-wrap">
+        <!-- I also moved these down and made them badges -->
+        <span ng-if="recording.hasSample" class="badge sample pull-right">SAMPLE</span>
+        <span ng-if="recording.licenseRecording.trackTypeId==2" class="badge medley pull-right">MEDLEY</span>
+        <span ng-repeat="status in recording.recStatRollup  track by $index" class="badge pull-right"><span ng-bind="status"></span></span>
+        <span ng-if="recording.track.claimException==true" class="badge claim pull-right"><span ng-bind="licenseDetail.claimException"></span></span>
+        
+    </td>
+    <td class="twentyfive-percent top"><span ng-bind="recording.track.artist.name"></span></td>
+    <td class="five-percent centered top">
+        <!--
+        <button class="btn-default" ng-disabled="recording.computedWritersCount == 0" ng-click="collapseWriters(recording)"><span ng-bind="recording.computedWritersCount"></span><span class="{{setCaret(recording.writersCollapsed)}}"></span></button>
+        -->
+        <button class="btn-default" ng-disabled="recording.computedWritersCount == 0  " ng-click="collapseWriters3(recording)"><span ng-bind="recording.licensePRWriterCount"></span><span class="{{setCaret(recording.writersCollapsed)}}"></span></button>
+        <!--|| recording.licensePRWriterCount == 0-->
+    </td>
+    <td class="five-percent centered top"><span ng-bind="recording.track.duration | limitTo:-5"></span></td>
+    <td class="five-percent centered top"><span ng-bind="recording.umpgPercentageRollup | percentage:2"></span></td>
+    <td class="five-percent top"><span ng-bind="recording.track.copyrights[0].workCode"></span></td>
+    <td class="ten-percent top"><span ng-bind="recording.track.isrc"></span></td>
+    <td class="one-percent centered no-wrap top licensed">
+        <span ng-if="recording.licenseLiteral=='Licensed'" class="badge success">Licensed</span>
+        <span ng-if="recording.licenseLiteral=='Partial'" class="badge warning">Partial</span>
+        <span ng-if="recording.licenseLiteral=='None'" class="badge none">Unlicensed</span>
+        <!--
+        <br/>
+        <span ng-bind="recording.licensedRollup/100 | number:4"></span>&nbsp;/&nbsp;<span ng-bind="recording.umpgPercentageRollup/100 | number:4"></span>
+        -->
+    </td>
+    <td class="one-percent centered no-wrap top"><span ng-bind="recording.licenseRecording.paidQuarter"></span></td>
+</tr>
+<tr>
+<!--<td colspan="11" class="nested dark shadow" ng-show="!recording.writersCollapsed" collapse="recording.writersCollapsed">-->
+<td colspan="11" class="nested dark shadow" ng-show="!recording.writersCollapsed" id="{{recording.id}}">
+<table class="table nested dark">
 
-                                <thead>
-                                <tr>
-                                    <th class="ten-percent">Writer ({{recording.licensePRWriters.length}}) </th>
-                                    <th class="one-percent"></th><!-- Leave Empty the cell is for spacing of the sample badge -->
-                                    <th class="twentyfive-percent">Publisher(s) (Affiliation)</th>
-                                    <th class="ten-percent no-wrap" ng-if="recording.track.claimException==true">C/E</th>
-                                    <th class="ten-percent no-wrap">Collectable %</th>
-                                    <th class="ten-percent no-wrap" ng-if="licenseDetail.licenseStatusId == 5 || licenseDetail.licenseStatusId == 7">Executed Collectable %</th>
-                                    <th class="twentyeight-percent">Recent Writer Note</th>
-                                    <th class="one-percent">Notes</th>
-                                    <th class="one-percent">Rates</th>
-                                </tr>
-                                </thead>
-                                <!--This is the area that expands down from the UI-->
-                                <tbody id="writerBody" ng-bind-html="recording.writerHtml" compile-template elem-Ready="goToLastModified()"></tbody>
-                                           
-                                               
-                                <!--
-                                <tbody ng-repeat="writer in recording.licensePRWriters | filter:writerFilter track by $index">
-                                <!==<tr ng-class="{'background:pink': writer.controlled == '0'}">==>
-                                <tr ng-style="{{writerBackground(writer.controlled)}}" class="details-writer-row">
-                                    <td class="ten-percent top">
-                                        <span ng-bind="writer.name"></span>
-                                    </td>
-                                    <td class="one-percent top">
-                                        <span ng-if="isSampleWriter(writer.name, recording.track.copyrights)" class="badge sample pull-right">SAMPLE</span>
-                                        <!==<span ng-if="isSampleWriter(writer.name, recording.track.copyrights[0].sampledWorks[0].writers)" class="badge sample pull-right">SAMPLE</span>==>
-                                    </td>
-                                    <!==<td class="five-percent top"> Jeff Commented this out. I added a Badge (line 251) instead.
-                                        <span class="badge">{{writer.sample}}</span>
-                                    </td>==>
-                                    <td class="twentyfive-percent top">
-                                        <span ng-repeat="originalPublisher in writer.originalPublishers | filter:{zeroValue:false} track by $index">
+<thead>
+<tr>
+    <th class="ten-percent">Writer ({{recording.licensePRWriters.length}}) </th>
+    <th class="one-percent"></th><!-- Leave Empty the cell is for spacing of the sample badge -->
+    <th class="twentyfive-percent">Publisher(s) (Affiliation)</th>
+    <th class="ten-percent no-wrap" ng-if="recording.track.claimException==true">C/E</th>
+    <th class="ten-percent no-wrap">Collectable %</th>
+    <th class="ten-percent no-wrap" ng-if="licenseDetail.licenseStatusId == 5 || licenseDetail.licenseStatusId == 7">Executed Collectable %</th>
+    <th class="twentyeight-percent">Recent Writer Note</th>
+    <th class="one-percent">Notes</th>
+    <th class="one-percent">Rates</th>
+</tr>
+</thead>
+<!--This is the area that expands down from the UI-->
+<tbody id="writerBody" ng-bind-html="recording.writerHtml" compile-template elem-Ready="goToLastModified()"></tbody>
+
+
+<!--
+<tbody ng-repeat="writer in recording.licensePRWriters | filter:writerFilter track by $index">
+<!==<tr ng-class="{'background:pink': writer.controlled == '0'}">==>
+<tr ng-style="{{writerBackground(writer.controlled)}}" class="details-writer-row">
+    <td class="ten-percent top">
+        <span ng-bind="writer.name"></span>
+    </td>
+    <td class="one-percent top">
+        <span ng-if="isSampleWriter(writer.name, recording.track.copyrights)" class="badge sample pull-right">SAMPLE</span>
+        <!==<span ng-if="isSampleWriter(writer.name, recording.track.copyrights[0].sampledWorks[0].writers)" class="badge sample pull-right">SAMPLE</span>==>
+    </td>
+    <!==<td class="five-percent top"> Jeff Commented this out. I added a Badge (line 251) instead.
+        <span class="badge">{{writer.sample}}</span>
+    </td>==>
+    <td class="twentyfive-percent top">
+        <span ng-repeat="originalPublisher in writer.originalPublishers | filter:{zeroValue:false} track by $index">
                                                                         <span class="float-left-subpub" ng-repeat="administrator in originalPublisher.administrators  track by $index">
                                                                             <span ng-if='!originalPublisher.SeExists && administrator.capacityCode=="AM" && !originalPublisher.zeroValue'>
                                                                                <span ng-bind="administrator.name"></span><span style="margin-left: 4px; margin-right: 4px">/</span>
@@ -311,381 +330,384 @@
                                                                         </span>
                                                                         <br />
                                                                     </span>
-                                        <div><!==num pubs:{{writer.originalPublishers.length}},controlled:{{writer.controlled}}}==></div>
-                                    </td>
-                                    <td class="ten-percent top" ng-if="recording.track.claimException==true">
-                                        <!== Override ==>
-                                        <span ng-if="writer.licenseProductRecordingWriter.claimExceptionOverride != null">
+        <div><!==num pubs:{{writer.originalPublishers.length}},controlled:{{writer.controlled}}}==></div>
+    </td>
+    <td class="ten-percent top" ng-if="recording.track.claimException==true">
+        <!== Override ==>
+        <span ng-if="writer.licenseProductRecordingWriter.claimExceptionOverride != null">
                                                                       <span ng-bind="writer.licenseProductRecordingWriter.claimExceptionOverride | percentage:2"></span>
                                                                     </span>
-                                    </td>
-                                    <td class="ten-percent top">
-                                        <!== Override ==>
-                                        <span ng-if="writer.licenseProductRecordingWriter.splitOverride >= 0 && writer.licenseProductRecordingWriter.splitOverride !=null" class="strike-through">
+    </td>
+    <td class="ten-percent top">
+        <!== Override ==>
+        <span ng-if="writer.licenseProductRecordingWriter.splitOverride >= 0 && writer.licenseProductRecordingWriter.splitOverride !=null" class="strike-through">
                                                                         <span ng-bind="writer.contribution | percentage:2"></span>
                                                                     </span>
-                                        <span ng-if="writer.licenseProductRecordingWriter.splitOverride >= 0 && writer.licenseProductRecordingWriter.splitOverride !=null" class="override"> <span ng-bind="writer.licenseProductRecordingWriter.splitOverride | percentage:2"></span></span>
-                                        <!== No Override ==>
-                                        <span ng-if="writer.licenseProductRecordingWriter.splitOverride==null"> <span ng-bind="writer.contribution | percentage:2"></span></span>
-                                    </td>
-                                    <td class="ten-percent top" ng-if="licenseDetail.licenseStatusId == 5 || licenseDetail.licenseStatusId == 7">
-                                        <div ng-if="writer.licenseProductRecordingWriter.executedSplit>=0"><span ng-bind="writer.licenseProductRecordingWriter.executedSplit | percentage:2"></span></div>
-                                    </td>
-                                    <td class="twentyeight-percent top">
-                                        <span ng-bind="writer.licenseProductRecordingWriter.mostRecentNote"></span>
-                                    </td>
-                                    <td class="one-percent top">
-                                        <button ng-show="buttons.writerNoteBtn && writer.controlled" security actions="LicenseDetailWriterNote" class="btn btn-default btn-sm" ng-if="writer.licenseProductRecordingWriter.writerNoteCount > 0" ng-click="collapseWriterNotes(writer)"><span ng-bind="writer.licenseProductRecordingWriter.writerNoteCount"></span><span class=" caret"></span></button>
-                                        <button ng-show="buttons.writerNoteBtn && writer.controlled" security actions="LicenseDetailWriterNote" class="btn btn-default btn-sm notes-btn" ng-if="writer.licenseProductRecordingWriter.writerNoteCount == 0" ng-click="collapseWriterNotes(writer)">New Note<span class=" caret"></span></button>
-                                    </td>
-                                    <td class="one-percent top">
-                                        <button ng-show="buttons.editIndividualRates && writer.controlled" class="btn btn-default btn-sm" security actions="LicenseDetailEditIndivdualRate" ng-click="editWriterRate(licenseDetail, licenseDetail.licenseTypeId, licenseDetail.licenseId, writer, product.productId, recording.id, recording.track.duration,recording.track.claimException,licenseDetail.statusesRollup,recording.licenseRecording.statusRollup)">Edit Rates</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="12" class="table writer-notes" collapse="!writer.writerNotesCollapsed">
-                                        <table class="table" ng-show="writer.licenseProductRecordingWriter.writerNotes.length == 0" security actions="LicenseDetailWriterNote">
-                                            <tr>
-                                                <td><textarea class="writer-note" ng-model-options="{debounce:1000}" ng-model="writer.newWriterNote"></textarea></td>
-                                                <td class="one-percent top no-wrap">
-                                                    <button class="btn btn-default btn-sm narrow" ng-click="saveWriterNote(writer, 43, {}, writer.newWriterNote, -1)" ng-disabled="writer.newWriterNote | isEmpty"><span class="icon save"></span></button>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        <table class="table" ng-show="writer.licenseProductRecordingWriter.writerNotes.length > 0" security actions="LicenseDetailWriterNote">
-                                            <thead>
-                                            <tr>
-                                                <th class="ten-percent">Created Date</th>
-                                                <th class="fifteen-percent">Created By</th>
-                                                <th class="seventyfive-percent">Note</th>
-                                                <th class="ten-percent centered">Actions</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
+        <span ng-if="writer.licenseProductRecordingWriter.splitOverride >= 0 && writer.licenseProductRecordingWriter.splitOverride !=null" class="override"> <span ng-bind="writer.licenseProductRecordingWriter.splitOverride | percentage:2"></span></span>
+        <!== No Override ==>
+        <span ng-if="writer.licenseProductRecordingWriter.splitOverride==null"> <span ng-bind="writer.contribution | percentage:2"></span></span>
+    </td>
+    <td class="ten-percent top" ng-if="licenseDetail.licenseStatusId == 5 || licenseDetail.licenseStatusId == 7">
+        <div ng-if="writer.licenseProductRecordingWriter.executedSplit>=0"><span ng-bind="writer.licenseProductRecordingWriter.executedSplit | percentage:2"></span></div>
+    </td>
+    <td class="twentyeight-percent top">
+        <span ng-bind="writer.licenseProductRecordingWriter.mostRecentNote"></span>
+    </td>
+    <td class="one-percent top">
+        <button ng-show="buttons.writerNoteBtn && writer.controlled" security actions="LicenseDetailWriterNote" class="btn btn-default btn-sm" ng-if="writer.licenseProductRecordingWriter.writerNoteCount > 0" ng-click="collapseWriterNotes(writer)"><span ng-bind="writer.licenseProductRecordingWriter.writerNoteCount"></span><span class=" caret"></span></button>
+        <button ng-show="buttons.writerNoteBtn && writer.controlled" security actions="LicenseDetailWriterNote" class="btn btn-default btn-sm notes-btn" ng-if="writer.licenseProductRecordingWriter.writerNoteCount == 0" ng-click="collapseWriterNotes(writer)">New Note<span class=" caret"></span></button>
+    </td>
+    <td class="one-percent top">
+        <button ng-show="buttons.editIndividualRates && writer.controlled" class="btn btn-default btn-sm" security actions="LicenseDetailEditIndivdualRate" ng-click="editWriterRate(licenseDetail, licenseDetail.licenseTypeId, licenseDetail.licenseId, writer, product.productId, recording.id, recording.track.duration,recording.track.claimException,licenseDetail.statusesRollup,recording.licenseRecording.statusRollup)">Edit Rates</button>
+    </td>
+</tr>
+<tr>
+    <td colspan="12" class="table writer-notes" collapse="!writer.writerNotesCollapsed">
+        <table class="table" ng-show="writer.licenseProductRecordingWriter.writerNotes.length == 0" security actions="LicenseDetailWriterNote">
+            <tr>
+                <td><textarea class="writer-note" ng-model-options="{debounce:1000}" ng-model="writer.newWriterNote"></textarea></td>
+                <td class="one-percent top no-wrap">
+                    <button class="btn btn-default btn-sm narrow" ng-click="saveWriterNote(writer, 43, {}, writer.newWriterNote, -1)" ng-disabled="writer.newWriterNote | isEmpty"><span class="icon save"></span></button>
+                </td>
+            </tr>
+        </table>
+        <table class="table" ng-show="writer.licenseProductRecordingWriter.writerNotes.length > 0" security actions="LicenseDetailWriterNote">
+            <thead>
+            <tr>
+                <th class="ten-percent">Created Date</th>
+                <th class="fifteen-percent">Created By</th>
+                <th class="seventyfive-percent">Note</th>
+                <th class="ten-percent centered">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
 
-                                            <tr ng-repeat-start="writernote in writer.licenseProductRecordingWriter.writerNotes">
-                                                <td class="ten-percent top"><span ng-bind="writernote.createdDate | timezone | date:'MM/dd/yyyy'"></span><!==({{writernote.licenseWriterId}})==></td>
-                                                <td class="fifteen-percent top"><span ng-bind="writernote.createdBy"></span></td>
-                                                <td class="seventyfive-percent top"><span ng-bind="writernote.note"></span></td>
-                                                <td class="ten-percent top no-wrap">
-                                                    <button ng-show="buttons.writerNoteBtn && writer.controlled" class="btn btn-default btn-sm narrow" title="New Note" ng-click="collapseWriterAddNotes(writer, writernote)"><span class="icon add-note"></span></button>
-                                                    <button ng-show="buttons.writerNoteBtn && writer.controlled" class="btn btn-default btn-sm narrow" title="Edit Note" ng-click="collapseEditNote(writer, writernote)"><span class="icon edit"></span></button>
-                                                    <button ng-show="buttons.writerNoteBtn && writer.controlled" class="btn btn-default btn-sm narrow" title="Delete Note" ng-click="removeWriterNote(writer, writernote.licenseWriterNoteId)"><span class="icon delete"></span></button>
-                                                    <input type="hidden" ng-model="currentWriteNoteId"/>
-                                                </td>
-                                            </tr>
-                                            <tr ng-repeat-end="writernote in writer.licenseProductRecordingWriter.writerNotes">
+            <tr ng-repeat-start="writernote in writer.licenseProductRecordingWriter.writerNotes">
+                <td class="ten-percent top"><span ng-bind="writernote.createdDate | timezone | date:'MM/dd/yyyy'"></span><!==({{writernote.licenseWriterId}})==></td>
+                <td class="fifteen-percent top"><span ng-bind="writernote.createdBy"></span></td>
+                <td class="seventyfive-percent top"><span ng-bind="writernote.note"></span></td>
+                <td class="ten-percent top no-wrap">
+                    <button ng-show="buttons.writerNoteBtn && writer.controlled" class="btn btn-default btn-sm narrow" title="New Note" ng-click="collapseWriterAddNotes(writer, writernote)"><span class="icon add-note"></span></button>
+                    <button ng-show="buttons.writerNoteBtn && writer.controlled" class="btn btn-default btn-sm narrow" title="Edit Note" ng-click="collapseEditNote(writer, writernote)"><span class="icon edit"></span></button>
+                    <button ng-show="buttons.writerNoteBtn && writer.controlled" class="btn btn-default btn-sm narrow" title="Delete Note" ng-click="removeWriterNote(writer, writernote.licenseWriterNoteId)"><span class="icon delete"></span></button>
+                    <input type="hidden" ng-model="currentWriteNoteId"/>
+                </td>
+            </tr>
+            <tr ng-repeat-end="writernote in writer.licenseProductRecordingWriter.writerNotes">
 
-                                                <td class="writer-add-note" colspan="12" ng-show="writernote.editNoteVisible">
-                                                    <table class="table writer-notes">
-                                                        <tr>
-                                                            <td class="onehundred-percent"><textarea class="writer-note" ng-model-options="{debounce:1000}" ng-model="writernote.editNoteValue"></textarea></td>
-                                                            <td class="one-percent no-wrap">
-                                                                <button class="btn btn-default btn-sm narrow" ng-click="saveWriterNote(writer, 43, writernote, writernote.editNoteValue,writernote.licenseWriterNoteId)" ng-disabled="writernote.editNoteValue | isEmpty"><span class="icon save"></span></button>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
+                <td class="writer-add-note" colspan="12" ng-show="writernote.editNoteVisible">
+                    <table class="table writer-notes">
+                        <tr>
+                            <td class="onehundred-percent"><textarea class="writer-note" ng-model-options="{debounce:1000}" ng-model="writernote.editNoteValue"></textarea></td>
+                            <td class="one-percent no-wrap">
+                                <button class="btn btn-default btn-sm narrow" ng-click="saveWriterNote(writer, 43, writernote, writernote.editNoteValue,writernote.licenseWriterNoteId)" ng-disabled="writernote.editNoteValue | isEmpty"><span class="icon save"></span></button>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
 
-                                                <td class="writer-add-note" colspan="12" ng-show="writer.addNewNoteVisible">
-                                                    <table class="table writer-notes">
-                                                        <tr>
-                                                            <td class="onehundred-percent"><textarea class="writer-note" ng-model-options="{debounce:1000}" ng-model="writer.newWriterNote"></textarea></td>
-                                                            <td class="one-percent no-wrap">
-                                                                <button class="btn btn-default btn-sm narrow" ng-click="saveWriterNote(writer, 43,{}, writer.newWriterNote, -1)" ng-disabled="writer.newWriterNote | isEmpty"><span class="icon save"></span></button>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="12" class="nested light shadow">
-                                    <table class="table nested light">
-                                        <thead>
-                                        <tr>
-                                            <th class="one-percent no-wrap centered">License</th>
-                                            <th class="fifteen-percent"> <span>Configuration (UPC)</span></th>
-                                            <th class="one-percent">Consent</th>
-                                            <th class="fifteen-percent no-wrap">Writer Status</th>
-                                            <th class="fifteen-percent">Rate Type</th>
-                                            <th class="five-percentage nowrap top centered" ng-show="writer.statPrcentageVisible == true">% of Stat</th>
-                                            <th class="ten-percent" ng-show="writer.escalatedRateVisible == true">Threshold</th>
-                                            <th class="five-percent" ng-show="writer.escalatedRateVisible == true">Rate</th>
-                                            <th class="five-percent">Pro-Rata Rate</th>
-                                            <th class="five-percent">Per Song Rate</th>
-                                            <!==Not: NOI, Advice Letter or Gratis==>
-                                            <th ng-if="licenseDetail.licenseTypeId!=2 && licenseDetail.licenseTypeId!=3 && licenseDetail.licenseTypeId!=4" class="ten-percent no-wrap">License Date</th>
-                                            <th ng-if="licenseDetail.licenseTypeId==4 && (licenseDetail.licenseStatusId == 5 || licenseDetail.licenseStatusId == 6)" class="ten-percent no-wrap">License Date</th>
-                                            <!==License NOI type==>
-                                            <th ng-if="licenseDetail.licenseTypeId==2" class="ten-percent no-wrap">Effective Date</th>
-                                            <!==License Advice Letter or Gratis type==>
-                                            <th ng-if="licenseDetail.licenseTypeId==3 || (licenseDetail.licenseTypeId==4 && licenseDetail.licenseStatusId != 5 && licenseDetail.licenseStatusId != 6)" class="ten-percent no-wrap">Signed Date</th>
-                                            <th class="ten-percent no-wrap centered">Paid Quarter</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody ng-repeat="rateConfiguration in writer.licenseProductRecordingWriter.ratesByConfiguration  track by $index">
-                                        <tr ng-repeat="rate in rateConfiguration.rates">
-                                            <td class="one-percent no-wrap centered">
-                                                <span ng-show="writer.controlled && $index == 0" title="" data-toggle="tooltip">
+                <td class="writer-add-note" colspan="12" ng-show="writer.addNewNoteVisible">
+                    <table class="table writer-notes">
+                        <tr>
+                            <td class="onehundred-percent"><textarea class="writer-note" ng-model-options="{debounce:1000}" ng-model="writer.newWriterNote"></textarea></td>
+                            <td class="one-percent no-wrap">
+                                <button class="btn btn-default btn-sm narrow" ng-click="saveWriterNote(writer, 43,{}, writer.newWriterNote, -1)" ng-disabled="writer.newWriterNote | isEmpty"><span class="icon save"></span></button>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="12" class="nested light shadow">
+    <table class="table nested light">
+        <thead>
+        <tr>
+            <th class="one-percent no-wrap centered">License</th>
+            <th class="fifteen-percent"> <span>Configuration (UPC)</span></th>
+            <th class="one-percent">Consent</th>
+            <th class="fifteen-percent no-wrap">Writer Status</th>
+            <th class="fifteen-percent">Rate Type</th>
+            <th class="five-percentage nowrap top centered" ng-show="writer.statPrcentageVisible == true">% of Stat</th>
+            <th class="ten-percent" ng-show="writer.escalatedRateVisible == true">Threshold</th>
+            <th class="five-percent" ng-show="writer.escalatedRateVisible == true">Rate</th>
+            <th class="five-percent">Pro-Rata Rate</th>
+            <th class="five-percent">Per Song Rate</th>
+            <!==Not: NOI, Advice Letter or Gratis==>
+            <th ng-if="licenseDetail.licenseTypeId!=2 && licenseDetail.licenseTypeId!=3 && licenseDetail.licenseTypeId!=4" class="ten-percent no-wrap">License Date</th>
+            <th ng-if="licenseDetail.licenseTypeId==4 && (licenseDetail.licenseStatusId == 5 || licenseDetail.licenseStatusId == 6)" class="ten-percent no-wrap">License Date</th>
+            <!==License NOI type==>
+            <th ng-if="licenseDetail.licenseTypeId==2" class="ten-percent no-wrap">Effective Date</th>
+            <!==License Advice Letter or Gratis type==>
+            <th ng-if="licenseDetail.licenseTypeId==3 || (licenseDetail.licenseTypeId==4 && licenseDetail.licenseStatusId != 5 && licenseDetail.licenseStatusId != 6)" class="ten-percent no-wrap">Signed Date</th>
+            <th class="ten-percent no-wrap centered">Paid Quarter</th>
+        </tr>
+        </thead>
+        <tbody ng-repeat="rateConfiguration in writer.licenseProductRecordingWriter.ratesByConfiguration  track by $index">
+        <tr ng-repeat="rate in rateConfiguration.rates">
+            <td class="one-percent no-wrap centered">
+                <span ng-show="writer.controlled && $index == 0" title="" data-toggle="tooltip">
                                                                                         <button ng-disabled="licenseDetail.licenseStatusId != 2" securitydisable actions="LicenseDetailsIncludeExclude" class="btn btn-default btn-icon narrow" data-toggle="modal" ui-sref="SearchMyView.DetailLicense.StepsModal.WritersIsIncluded({config:rate,files:licenseAttachments,recording:recording,writer:writer,product:product,modalSize:'sm',rate:rateConfiguration })">
                                                                                             <span class="icon include" ng-show="rate.writerRateInclude"></span>
                                                                                             <span class="icon exclude" ng-show="!rate.writerRateInclude"></span>
                                                                                         </button>
                                                                                     </span>
-                                            </td>
-                                            <td class="fifteen-percent"><span ng-show="$index == 0"><span ng-class="rate.configuration_id | returnConfigurationIcon"></span><span ng-bind="rate.configuration_name"></span><span ng_if="rate.configuration_upc">(<span ng-bind="rate.configuration_upc"></span>)</span></span></td>
-                                            <td>
-                                                <span ng-show="writer.controlled && $index == 0" title="{{rate.writersConsentType.description}}" data-toggle="tooltip" data-placement="right">
+            </td>
+            <td class="fifteen-percent"><span ng-show="$index == 0"><span ng-class="rate.configuration_id | returnConfigurationIcon"></span><span ng-bind="rate.configuration_name"></span><span ng_if="rate.configuration_upc">(<span ng-bind="rate.configuration_upc"></span>)</span></span></td>
+            <td>
+                <span ng-show="writer.controlled && $index == 0" title="{{rate.writersConsentType.description}}" data-toggle="tooltip" data-placement="right">
                                                                                         <button ng-disabled="!buttons.writerConsentBtn" securitydisable actions="LicenseDetailWriterConsent" class="btn btn-default btn-sm" data-toggle="modal" ui-sref="SearchMyView.DetailLicense.StepsModal.WritersConsent({config:rate,files:licenseAttachments,recording:recording,writer:writer,product:product,modalSize:'md' })">
                                                                                             <span ng-bind="rate.writersConsentType.writersConsentType"></span>
                                                                                         </button>
                                                                                     </span>
-                                            </td>
-                                            <td class="fifteen-percent top">
-                                                <span ng-show="$index == 0">
+            </td>
+            <td class="fifteen-percent top">
+                <span ng-show="$index == 0">
                                                                                         <span ng-repeat="status in rateConfiguration.specialStatusList" class="badge">
                                                                                             <span ng-if="status.lU_SpecialStatuses"><span ng-bind="status.lU_SpecialStatuses.specialStatus"></span></span>
                                                                                             <span ng-if="!status.lU_SpecialStatuses"><span ng-bind="status.specialStatus"></span></span>
                                                                                         </span>
                                                                                     </span>
-                                            </td>
-                                            <td class="fifteen-percent" ng-if="writer.controlled == true"><span ng-show="$index == 0"><span ng-bind="rate.rateType.rateType"></span></span></td>
-                                            <td class="fifteen-percent" ng-if="writer.controlled == false"><span ng-show="$index == 0">N/A</span></td>
-                                            <td class="five-percent" ng-if="writer.controlled == false">N/A</td>
-                                            <td class="five-percent centered" ng-if="writer.controlled == true" ng-show="writer.statPrcentageVisible == true"><span ng-bind="rate.percentOfStat"></span></td>
-                                            <td class="ten-percent" ng-if="writer.controlled == true" ng-show="writer.escalatedRateVisible == true"><span ng-bind="rate.escalatedRate"></span></td>
-                                            <td class="five-percent" ng-if="writer.controlled == false">N/A</td>
-                                            <td class="five-percent" ng-if="writer.controlled == true" ng-show="writer.escalatedRateVisible == true"><span ng-bind="rate.rate"></span></td>
-                                            <td class="five-percent" ng-if="writer.controlled == true"><span ng-bind="rate.proRataRate"></span></td>
-                                            <td class="five-percent" ng-if="writer.controlled == false">N/A</td>
-                                            <td class="five-percent" ng-if="writer.controlled == true"><span ng-bind="rate.perSongRate"></span></td>
-                                            <td class="ten-percent centered" ng-if="writer.controlled == false">N/A</td>
-                                            <!==Display License Date, Signed Date or Effective Date==>
-                                            <td class="ten-percent" ng-show="writer.controlled == true && $index==0"><span ng-bind="rate.licenseDate | timezone | date:'MM/dd/yyyy'"></span></td>
+            </td>
+            <td class="fifteen-percent" ng-if="writer.controlled == true"><span ng-show="$index == 0"><span ng-bind="rate.rateType.rateType"></span></span></td>
+            <td class="fifteen-percent" ng-if="writer.controlled == false"><span ng-show="$index == 0">N/A</span></td>
+            <td class="five-percent" ng-if="writer.controlled == false">N/A</td>
+            <td class="five-percent centered" ng-if="writer.controlled == true" ng-show="writer.statPrcentageVisible == true"><span ng-bind="rate.percentOfStat"></span></td>
+            <td class="ten-percent" ng-if="writer.controlled == true" ng-show="writer.escalatedRateVisible == true"><span ng-bind="rate.escalatedRate"></span></td>
+            <td class="five-percent" ng-if="writer.controlled == false">N/A</td>
+            <td class="five-percent" ng-if="writer.controlled == true" ng-show="writer.escalatedRateVisible == true"><span ng-bind="rate.rate"></span></td>
+            <td class="five-percent" ng-if="writer.controlled == true"><span ng-bind="rate.proRataRate"></span></td>
+            <td class="five-percent" ng-if="writer.controlled == false">N/A</td>
+            <td class="five-percent" ng-if="writer.controlled == true"><span ng-bind="rate.perSongRate"></span></td>
+            <td class="ten-percent centered" ng-if="writer.controlled == false">N/A</td>
+            <!==Display License Date, Signed Date or Effective Date==>
+            <td class="ten-percent" ng-show="writer.controlled == true && $index==0"><span ng-bind="rate.licenseDate | timezone | date:'MM/dd/yyyy'"></span></td>
 
-                                            <td class="ten-percent centered" ng-show="writer.controlled == true">
-                                                <span ng-show="$index==0">
+            <td class="ten-percent centered" ng-show="writer.controlled == true">
+                <span ng-show="$index==0">
                                                                                         <button ng-disabled="paidQuarterDisabled" securitydisable actions="LicenseDetailsPaidQuarter" class="btn btn-default btn-sm" ui-sref="SearchMyView.DetailLicense.StepsModal.PaidQuarter({licenseId:licenseDetail.licenseId,config:rate,recording:recording,writer:writer,product:product, modalSize:'sm' })">
                                                                                             <span ng-bind="rateConfiguration.paidQuarter"></span>
                                                                                         </button>
                                                                                     </span>
-                                            </td>
-                                        </tr>
+            </td>
+        </tr>
 
-                                        </tbody>
-                                    </table>
-                                </tr>
-                                </tbody>
-                                -->
-                                </table><!-- END Writer Table-->
-                                </td>
-                                </tr>
-                              
-                                </tbody>
-                            </table><!-- END Track Table-->
-                        </td>
-                    </tr>
-                </tbody>
-            </table><!-- END Product Table-->
-        </tab>
-        <tab heading="License Notes" securityhide>
-            <section class="actions clearfix">
-                <button securityreadonlyhide ng-show="buttons.addNotes" class="btn btn-default" ng-click="openAddNote('sm')"><span class="icon add-note"></span>Add Note</button>
-                <button securityreadonlyhide ng-show="buttons.editNotes" class="btn btn-default" ng-disabled="licenseDetail.licenseNoteList | isSingleSelected" ng-click="openEditNote('sm')"><span class="icon edit"></span>Edit Note</button>
-                <button securityreadonlyhide ng-show="buttons.deleteNotes" class="btn btn-default" ng-disabled="licenseDetail.licenseNoteList | isNoneSelected" ng-click="deleteNotes()"><span class="icon remove-note"></span>Delete Note</button>
-            </section>
+        </tbody>
+    </table>
+</tr>
+</tbody>
+-->
+</table><!-- END Writer Table-->
+</td>
+</tr>
 
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th securityreadonlyhide class="one-percent centered"><input type="checkbox" ng-click="selectAllNotes()" ng-checked="licenseDetail.licenseNoteList | isAllSelected" ng-if="licenseDetail.licenseStatus.licenseStatusId !=5" /></th>
-                        <th class="eight-percent">Date Added</th>
-                        <th class="eight-percent">Type</th>
-                        <th class="eight-percent">Created By</th>
-                        <th class="seventyfive-percent">Note</th>
-                    </tr>
-                </thead>
-                <tbody ng-repeat="licenseNote in licenseDetail.licenseNoteList">
-                    <tr>
-                        <td securityreadonlyhide class="one-percent centered"><input type="checkbox" ng-model-options="{debounce:350}" ng-model="licenseNote.selected" ng-if="licenseNote.displayNote" /></td>
-                        <td class="eight-percent"><span ng-bind="licenseNote.createdDate | timezone | date:'MM/dd/yyyy'"></span></td>
-                        <td class="eight-percent"><span ng-bind="licenseNote.noteType.noteType"></span></td>
-                        <td class="eight-percent"><span ng-bind="licenseNote.contact.fullName"></span></td>
-                        <td class="seventyfive-percent" style="white-space: pre-wrap;"><span ng-bind="licenseNote.note"></span></td>
+</tbody>
+</table><!-- END Track Table-->
+</td>
+</tr>
+</tbody>
+</table><!-- END Product Table-->
+</tab>
+<tab heading="License Notes" securityhide>
+    <section class="actions clearfix">
+        <button securityreadonlyhide ng-show="buttons.addNotes" class="btn btn-default" ng-click="openAddNote('sm')"><span class="icon add-note"></span>Add Note</button>
+        <button securityreadonlyhide ng-show="buttons.editNotes" class="btn btn-default" ng-disabled="licenseDetail.licenseNoteList | isSingleSelected" ng-click="openEditNote('sm')"><span class="icon edit"></span>Edit Note</button>
+        <button securityreadonlyhide ng-show="buttons.deleteNotes" class="btn btn-default" ng-disabled="licenseDetail.licenseNoteList | isNoneSelected" ng-click="deleteNotes()"><span class="icon remove-note"></span>Delete Note</button>
+    </section>
 
-                    </tr>
-                </tbody>
-            </table>
-        </tab>
-        <tab heading="Attachments" securityhide ng-click="licenseAttachmentsTabClick()">
-            <section class="actions clearfix">
-                <button class="btn btn-default" ng-show="buttons.addAttachment" ui-sref="SearchMyView.DetailLicense.StepsModal.UploadDocument({licenseId:licenseDetail.licenseId, files:licenseAttachments, modalSize:'md'  })"><span class="icon upload-doc"></span>Upload Document</button>
-                <button class="btn btn-default" ng-show="buttons.downloadAttachment" ng-click="downloadAttachments()" ng-disabled="licenseAttachments | isSingleSelected"><span class="icon download-doc"></span>Download Selected</button>
-                <button securityreadonlyhide ng-show="buttons.deleteAttachment" class="btn btn-default" ng-click="removeSelectedAttachments()" ng-disabled="licenseAttachments | isNoneSelected"><span class="icon delete"></span>Delete Selected</button>
-            </section>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th class="one-percent centered"><input type="checkbox" ng-click="selectAllAttachments()" ng-checked="licenseAttachments | isAllSelected" /></th>
-                        <th class="eight-percent">Date Added</th>
-                        <th class="ten-percent">Added By</th>
-                        <th class="eight-percent">File Name</th>
-                        <th class="eight-percent">Attachment Type</th>
-                        <th class="five-percent">File Type</th>
-                        <th class="fifty-percent">Path</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="attachment in licenseAttachments" ng-if="licenseAttachments.length >=1">
-                    <td class="one-percent centered">
-                        <input type="checkbox" ng-model-options="{debounce:350}" ng-model="attachment.selected" />
-                    </td>
-                    <td class="eigth-percent"><span ng-bind="attachment.uploaddedDate | timezone | date:'MM/dd/yyyy'"></span></td>
-                    <td class="ten-percent"><span ng-bind="attachment.contact.fullName"></span></td>
-                    <td class="eight-percent">
-                        <a href="" ng-click="downloadAttachments(attachment)" target="_blank"><span ng-bind="attachment.fileName"></span></a>
-                    </td>
-                    <td class="eight-percent">
-                        <span>{{attachment.attachmentType.attachmentType}}</span>
-                    </td>
-                    <td class="five-percent"><span ng-bind="attachment.fileType"></span></td>
-                    <td class="fifty-percent"><span ng-bind="attachment.virtualFilePath"></span></td>
-                </tr>
-                <tr ng-if="licenseAttachments.length == 0">
-                    <td colspan="7" class="center-text">
-                        <span>No License Attachments</span>
-                    </td>
+    <table class="table">
+        <thead>
+        <tr>
+            <th securityreadonlyhide class="one-percent centered"><input type="checkbox" ng-click="selectAllNotes()" ng-checked="licenseDetail.licenseNoteList | isAllSelected" ng-if="licenseDetail.licenseStatus.licenseStatusId !=5"/></th>
+            <th class="eight-percent">Date Added</th>
+            <th class="eight-percent">Type</th>
+            <th class="eight-percent">Created By</th>
+            <th class="seventyfive-percent">Note</th>
+        </tr>
+        </thead>
+        <tbody ng-repeat="licenseNote in licenseDetail.licenseNoteList">
+        <tr>
+            <td securityreadonlyhide class="one-percent centered"><input type="checkbox" ng-model-options="{debounce:350}" ng-model="licenseNote.selected" ng-if="licenseNote.displayNote"/></td>
+            <td class="eight-percent"><span ng-bind="licenseNote.createdDate | timezone | date:'MM/dd/yyyy'"></span></td>
+            <td class="eight-percent"><span ng-bind="licenseNote.noteType.noteType"></span></td>
+            <td class="eight-percent"><span ng-bind="licenseNote.contact.fullName"></span></td>
+            <td class="seventyfive-percent" style="white-space: pre-wrap;"><span ng-bind="licenseNote.note"></span></td>
 
-                </tr>
-                </tbody>
-            </table>
-        </tab>
-        <tab heading="History" security actions="LicenseDetailHistory">
-            <section class="actions clearfix">
-                <ul class="history-actions">
-                    <!-- <li>
-                         <label>Action Type: </label>
-                     </li>
-                     <li>
-                         <div class="dropdown" dropdown is-open="status.isopen">
-                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                 Please Select <span class="caret"></span>
-                             </button>
-                             <ul class="dropdown-menu" role="menu">
-                                 <li><a>Update</a></li>
-                                 <li><a>Insert</a></li>
-                                 <li><a>Delete</a></li>
-                             </ul>
-                         </div>
-                     </li>-->
-                    <li>
-                        <label>Within: </label>
-                    </li>
-                    <li>
-                        <div class="dropdown pull-left">
-                            <button class="dropdown-toggle btn btn-default paid-quarter" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-                                <span ng-bind="selectedTable"></span>
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                                <li ng-repeat="table in auditTables">
-                                    <a href="" ng-click="selectTable(table)"><span ng-bind="table"></span></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="min-width:175px;">
-                        <form class="form-horizontal" name="someFormA" role="form" novalidate>
-                            <p class="input-group" ng-class="{ 'has-error': someFormA.dateA.$invalid && someFormA.dateA.$dirty}">
-                                <label>From</label>
-                                <input type="text" id="dateA" name="dateA" aw-datepicker-pattern="^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$" placeholder="mm/dd/yyyy" class="date-field form-control" clear-text="Clear" datepicker-popup="{{format}}" ng-model="::dt.from" ng-model-options="{debounce:350}" is-open="isOpenTo" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close" />
-                                <button type="button" class="btn btn-default narrow" ng-click="openAuditFrom($event); isOpenTo = true"><span class="icon calendar"></span></button>
-                            </p>
-                        </form>
-                    </li>
-                    <li class="min-width:175px;">
+        </tr>
+        </tbody>
+    </table>
+</tab>
+<tab heading="Attachments" securityhide ng-click="licenseAttachmentsTabClick()">
+    <section class="actions clearfix">
+        <button class="btn btn-default" ng-show="buttons.addAttachment" ui-sref="SearchMyView.DetailLicense.StepsModal.UploadDocument({licenseId:licenseDetail.licenseId, files:licenseAttachments, modalSize:'md', state: 'upload'  })"><span class="icon upload-doc"></span>Upload Document</button>
+        <button class="btn btn-default" ng-show="buttons.editAttachment" ui-sref="SearchMyView.DetailLicense.StepsModal.UploadDocument({licenseId:licenseDetail.licenseId, files:licenseAttachments, modalSize:'md', state: 'edit'  })" ng-click="editAttachment()" ng-disabled="licenseAttachments | isSingleSelected">
+            <span class="icon edit"></span>Edit Selected
+        </button>
+        <button class="btn btn-default" ng-show="buttons.downloadAttachment" ng-click="downloadAttachments()" ng-disabled="licenseAttachments | isSingleSelected"><span class="icon download-doc"></span>Download Selected</button>
+        <button securityreadonlyhide ng-show="buttons.deleteAttachment" class="btn btn-default" ng-click="removeSelectedAttachments()" ng-disabled="licenseAttachments | isNoneSelected"><span class="icon delete"></span>Delete Selected</button>
+    </section>
+    <table class="table">
+        <thead>
+        <tr>
+            <th class="one-percent centered"><input type="checkbox" ng-click="selectAllAttachments()" ng-checked="licenseAttachments | isAllSelected"/></th>
+            <th class="eight-percent">Date Added</th>
+            <th class="ten-percent">Added By</th>
+            <th class="eight-percent">File Name</th>
+            <th class="eight-percent">Attachment Type</th>
+            <th class="five-percent">File Type</th>
+            <th class="fifty-percent">Path</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="attachment in licenseAttachments" ng-if="licenseAttachments.length >=1">
+            <td class="one-percent centered">
+                <input type="checkbox" ng-model-options="{debounce:350}" ng-model="attachment.selected"/>
+            </td>
+            <td class="eigth-percent"><span ng-bind="attachment.uploaddedDate | timezone | date:'MM/dd/yyyy'"></span></td>
+            <td class="ten-percent"><span ng-bind="attachment.contact.fullName"></span></td>
+            <td class="eight-percent">
+                <a href="" ng-click="downloadAttachments(attachment)" target="_blank"><span ng-bind="attachment.fileName"></span></a>
+            </td>
+            <td class="eight-percent">
+                <span>{{attachment.attachmentType.attachmentType}}</span>
+            </td>
+            <td class="five-percent"><span ng-bind="attachment.fileType"></span></td>
+            <td class="fifty-percent"><span ng-bind="attachment.virtualFilePath"></span></td>
+        </tr>
+        <tr ng-if="licenseAttachments.length == 0">
+            <td colspan="7" class="center-text">
+                <span>No License Attachments</span>
+            </td>
 
-                        <form class="form-horizontal" name="someFormB" role="form" novalidate>
-                            <p class="input-group" ng-class="{ 'has-error': someFormB.dateB.$invalid && someFormB.dateB.$dirty}">
-                                <label>To</label>
-                                <input type="text" id="dateB" name="dateB" aw-datepicker-pattern="^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$" placeholder="mm/dd/yyyy" class="date-field form-control" datepicker-popup="{{format}}" ng-model="::dt.to" ng-model-options="{debounce:350}" is-open="isOpenFrom" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" required close-text="Close" />
-                                <button type="button" class="btn btn-default narrow" ng-click="openAuditTo($event); isOpenFrom = true"><span class="icon calendar"></span></button>
-                            </p>
-                        </form>
-                    </li>
-                    <li>
-                        <button class="btn btn-default" ng-click="auditSearch()"><span></span>Search</button>
-                    </li>
-                </ul>
-            </section>
-            <table ng-if="selectedTable=='License'" class="table">
-                <thead>
-                    <tr>
-                        <th class="fifteen-percent">License Name</th>
-                        <th class="fifteen-percent">Modified Date</th>
-                        <th class="ten-percent">License #</th>
-                        <th class="ten-percent">Assigned To</th>
-                        <th class="ten-percent">Status</th>
-                        <th class="ten-percent">Eff Date</th>
-                        <th class="ten-percent">Signed Date</th>
-                        <th class="ten-percent">Rec Date</th>
-                        <th class="ten-percent">Method</th>
-                        <th class="ten-percent">Type</th>
-                        <th class="five-percent">Modified By</th>
-                        <th class="five-percent">Created By</th>
-                        <th class="five-percent">Source</th>
+        </tr>
+        </tbody>
+    </table>
+</tab>
+<tab heading="History" security actions="LicenseDetailHistory">
+    <section class="actions clearfix">
+        <ul class="history-actions">
+            <!-- <li>
+                <label>Action Type: </label>
+            </li>
+            <li>
+                <div class="dropdown" dropdown is-open="status.isopen">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        Please Select <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a>Update</a></li>
+                        <li><a>Insert</a></li>
+                        <li><a>Delete</a></li>
+                    </ul>
+                </div>
+            </li>-->
+            <li>
+                <label>Within: </label>
+            </li>
+            <li>
+                <div class="dropdown pull-left">
+                    <button class="dropdown-toggle btn btn-default paid-quarter" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                        <span ng-bind="selectedTable"></span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                        <li ng-repeat="table in auditTables">
+                            <a href="" ng-click="selectTable(table)"><span ng-bind="table"></span></a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="min-width:175px;">
+                <form class="form-horizontal" name="someFormA" role="form" novalidate>
+                    <p class="input-group" ng-class="{ 'has-error': someFormA.dateA.$invalid && someFormA.dateA.$dirty}">
+                        <label>From</label>
+                        <input type="text" id="dateA" name="dateA" aw-datepicker-pattern="^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$" placeholder="mm/dd/yyyy" class="date-field form-control" clear-text="Clear" datepicker-popup="{{format}}" ng-model="::dt.from" ng-model-options="{debounce:350}" is-open="isOpenTo" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" close-text="Close"/>
+                        <button type="button" class="btn btn-default narrow" ng-click="openAuditFrom($event); isOpenTo = true"><span class="icon calendar"></span></button>
+                    </p>
+                </form>
+            </li>
+            <li class="min-width:175px;">
 
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="licenseAudit in auditDetail.licenseAudit">
-                        <td class="five-percent" ng-class="{'highlight': isColumnModified(licenseAudit.highlightColumns,'LicenseName'), 'highlight-live':licenseAudit.source == 'Live'}"><span ng-bind="licenseAudit.licenseName"></span></td>
-                        <td class="fifteen-percent" ng-class="{'highlight': isColumnModified(licenseAudit.highlightColumns,'ModifiedDate'), 'highlight-live':licenseAudit.source == 'Live'}"></td>
-                        <td class="five-percent" ng-class="{'highlight': isColumnModified(licenseAudit.highlightColumns,'LicenseNumber'), 'highlight-live':licenseAudit.source == 'Live'}"><span ng-bind="licenseAudit.licenseNumber"></span></td>
-                        <td class="ten-percent" ng-class="{'highlight': isColumnModified(licenseAudit.highlightColumns,'AssignedToId'), 'highlight-live':licenseAudit.source == 'Live'}"><span ng-bind="licenseAudit.assignedToId"></span></td>
-                        <td class="ten-percent" ng-class="{'highlight': isColumnModified(licenseAudit.highlightColumns,'LicenseStatusId'), 'highlight-live':licenseAudit.source == 'Live'}"><span ng-bind="licenseAudit.licenseStatusId"></span></td>
-                        <td class="ten-percent" ng-class="{'highlight': isColumnModified(licenseAudit.highlightColumns,'EffectiveDate'), 'highlight-live':licenseAudit.source == 'Live'}"><span ng-bind="licenseAudit.effectiveDate | date:'MM/dd/yyyy HH:mm:ss'"></span></td>
-                        <td class="ten-percent" ng-class="{'highlight': isColumnModified(licenseAudit.highlightColumns,'SignedDate'), 'highlight-live':licenseAudit.source == 'Live'}"><span ng-bind="licenseAudit.signedDate | date:'MM/dd/yyyy HH:mm:ss'"></span></td>
-                        <td class="ten-percent" ng-class="{'highlight': isColumnModified(licenseAudit.highlightColumns,'ReceivedDate'), 'highlight-live':licenseAudit.source == 'Live'}"><span ng-bind="licenseAudit.receivedDate | date:'MM/dd/yyyy HH:mm:ss'"></span></td>
-                        <td class="ten-percent" ng-class="{'highlight': isColumnModified(licenseAudit.highlightColumns,'LicenseMethodId'), 'highlight-live':licenseAudit.source == 'Live'}"><span ng-bind="licenseAudit.licenseMethodId"></span></td>
-                        <td class="ten-percent" ng-class="{'highlight': isColumnModified(licenseAudit.highlightColumns,'LicenseTypeId'), 'highlight-live':licenseAudit.source == 'Live'}"><span ng-bind="licenseAudit.licenseTypeId"></span></td>
-                        <td class="ten-percent" ng-class="{'highlight': isColumnModified(licenseAudit.highlightColumns,'ModifiedBy'), 'highlight-live':licenseAudit.source == 'Live'}"><span ng-bind="licenseAudit.modifiedBy"></span></td>
-                        <td class="ten-percent" ng-class="{'highlight': isColumnModified(licenseAudit.highlightColumns,'CreatedBy'), 'highlight-live':licenseAudit.source == 'Live'}"><span ng-bind="licenseAudit.createdBy"></span></td>
-                        <td class="ten-percent" ng-class="{'highlight-live':licenseAudit.source == 'Live'}">{{licenseAudit.source}}</td>
+                <form class="form-horizontal" name="someFormB" role="form" novalidate>
+                    <p class="input-group" ng-class="{ 'has-error': someFormB.dateB.$invalid && someFormB.dateB.$dirty}">
+                        <label>To</label>
+                        <input type="text" id="dateB" name="dateB" aw-datepicker-pattern="^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$" placeholder="mm/dd/yyyy" class="date-field form-control" datepicker-popup="{{format}}" ng-model="::dt.to" ng-model-options="{debounce:350}" is-open="isOpenFrom" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" show-weeks="false" ng-required="true" required close-text="Close"/>
+                        <button type="button" class="btn btn-default narrow" ng-click="openAuditTo($event); isOpenFrom = true"><span class="icon calendar"></span></button>
+                    </p>
+                </form>
+            </li>
+            <li>
+                <button class="btn btn-default" ng-click="auditSearch()"><span></span>Search</button>
+            </li>
+        </ul>
+    </section>
+    <table ng-if="selectedTable=='License'" class="table">
+        <thead>
+        <tr>
+            <th class="fifteen-percent">License Name</th>
+            <th class="fifteen-percent">Modified Date</th>
+            <th class="ten-percent">License #</th>
+            <th class="ten-percent">Assigned To</th>
+            <th class="ten-percent">Status</th>
+            <th class="ten-percent">Eff Date</th>
+            <th class="ten-percent">Signed Date</th>
+            <th class="ten-percent">Rec Date</th>
+            <th class="ten-percent">Method</th>
+            <th class="ten-percent">Type</th>
+            <th class="five-percent">Modified By</th>
+            <th class="five-percent">Created By</th>
+            <th class="five-percent">Source</th>
 
-                    </tr>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="licenseAudit in auditDetail.licenseAudit">
+            <td class="five-percent" ng-class="{'highlight': isColumnModified(licenseAudit.highlightColumns,'LicenseName'), 'highlight-live':licenseAudit.source == 'Live'}"><span ng-bind="licenseAudit.licenseName"></span></td>
+            <td class="fifteen-percent" ng-class="{'highlight': isColumnModified(licenseAudit.highlightColumns,'ModifiedDate'), 'highlight-live':licenseAudit.source == 'Live'}"></td>
+            <td class="five-percent" ng-class="{'highlight': isColumnModified(licenseAudit.highlightColumns,'LicenseNumber'), 'highlight-live':licenseAudit.source == 'Live'}"><span ng-bind="licenseAudit.licenseNumber"></span></td>
+            <td class="ten-percent" ng-class="{'highlight': isColumnModified(licenseAudit.highlightColumns,'AssignedToId'), 'highlight-live':licenseAudit.source == 'Live'}"><span ng-bind="licenseAudit.assignedToId"></span></td>
+            <td class="ten-percent" ng-class="{'highlight': isColumnModified(licenseAudit.highlightColumns,'LicenseStatusId'), 'highlight-live':licenseAudit.source == 'Live'}"><span ng-bind="licenseAudit.licenseStatusId"></span></td>
+            <td class="ten-percent" ng-class="{'highlight': isColumnModified(licenseAudit.highlightColumns,'EffectiveDate'), 'highlight-live':licenseAudit.source == 'Live'}"><span ng-bind="licenseAudit.effectiveDate | date:'MM/dd/yyyy HH:mm:ss'"></span></td>
+            <td class="ten-percent" ng-class="{'highlight': isColumnModified(licenseAudit.highlightColumns,'SignedDate'), 'highlight-live':licenseAudit.source == 'Live'}"><span ng-bind="licenseAudit.signedDate | date:'MM/dd/yyyy HH:mm:ss'"></span></td>
+            <td class="ten-percent" ng-class="{'highlight': isColumnModified(licenseAudit.highlightColumns,'ReceivedDate'), 'highlight-live':licenseAudit.source == 'Live'}"><span ng-bind="licenseAudit.receivedDate | date:'MM/dd/yyyy HH:mm:ss'"></span></td>
+            <td class="ten-percent" ng-class="{'highlight': isColumnModified(licenseAudit.highlightColumns,'LicenseMethodId'), 'highlight-live':licenseAudit.source == 'Live'}"><span ng-bind="licenseAudit.licenseMethodId"></span></td>
+            <td class="ten-percent" ng-class="{'highlight': isColumnModified(licenseAudit.highlightColumns,'LicenseTypeId'), 'highlight-live':licenseAudit.source == 'Live'}"><span ng-bind="licenseAudit.licenseTypeId"></span></td>
+            <td class="ten-percent" ng-class="{'highlight': isColumnModified(licenseAudit.highlightColumns,'ModifiedBy'), 'highlight-live':licenseAudit.source == 'Live'}"><span ng-bind="licenseAudit.modifiedBy"></span></td>
+            <td class="ten-percent" ng-class="{'highlight': isColumnModified(licenseAudit.highlightColumns,'CreatedBy'), 'highlight-live':licenseAudit.source == 'Live'}"><span ng-bind="licenseAudit.createdBy"></span></td>
+            <td class="ten-percent" ng-class="{'highlight-live':licenseAudit.source == 'Live'}">{{licenseAudit.source}}</td>
 
-                </tbody>
-            </table>
-            <table ng-if="selectedTable=='LicenseProduct'" class="table">
-                <thead>
-                    <tr>
-                        <th class="fifteen-percent">Paid Quarter</th>
-                        <th class="fifteen-percent">Modified Date</th>
-                        <th class="five-percent">Modified By</th>
-                        <th class="five-percent">Created By</th>
-                        <th class="five-percent">Source</th>
+        </tr>
 
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="productAudit in auditDetail.licenseProductAudit">
-                        <td class="five-percent" ng-class="{'highlight': isColumnModified(productAudit.highlightColumns,'PaidQuarter'), 'highlight-live':productAudit.source == 'Live'}"><span ng-bind="productAudit.paidQuarter"></span></td>
-                        <td class="fifteen-percent" ng-class="{'highlight': isColumnModified(productAudit.highlightColumns,'ModifiedDate'), 'highlight-live':productAudit.source == 'Live'}"></td>
-                        <td class="ten-percent" ng-class="{'highlight': isColumnModified(productAudit.highlightColumns,'ModifiedBy'), 'highlight-live':productAudit.source == 'Live'}"><span ng-bind="productAudit.modifiedBy"></span></td>
-                        <td class="ten-percent" ng-class="{'highlight': isColumnModified(productAudit.highlightColumns,'CreatedBy'), 'highlight-live':productAudit.source == 'Live'}"><span ng-bind="productAudit.createdBy"></span></td>
-                        <td class="ten-percent" ng-class="{'highlight-live':productAudit.source == 'Live'}"><span ng-bind="productAudit.source"></span></td>
+        </tbody>
+    </table>
+    <table ng-if="selectedTable=='LicenseProduct'" class="table">
+        <thead>
+        <tr>
+            <th class="fifteen-percent">Paid Quarter</th>
+            <th class="fifteen-percent">Modified Date</th>
+            <th class="five-percent">Modified By</th>
+            <th class="five-percent">Created By</th>
+            <th class="five-percent">Source</th>
 
-                    </tr>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="productAudit in auditDetail.licenseProductAudit">
+            <td class="five-percent" ng-class="{'highlight': isColumnModified(productAudit.highlightColumns,'PaidQuarter'), 'highlight-live':productAudit.source == 'Live'}"><span ng-bind="productAudit.paidQuarter"></span></td>
+            <td class="fifteen-percent" ng-class="{'highlight': isColumnModified(productAudit.highlightColumns,'ModifiedDate'), 'highlight-live':productAudit.source == 'Live'}"></td>
+            <td class="ten-percent" ng-class="{'highlight': isColumnModified(productAudit.highlightColumns,'ModifiedBy'), 'highlight-live':productAudit.source == 'Live'}"><span ng-bind="productAudit.modifiedBy"></span></td>
+            <td class="ten-percent" ng-class="{'highlight': isColumnModified(productAudit.highlightColumns,'CreatedBy'), 'highlight-live':productAudit.source == 'Live'}"><span ng-bind="productAudit.createdBy"></span></td>
+            <td class="ten-percent" ng-class="{'highlight-live':productAudit.source == 'Live'}"><span ng-bind="productAudit.source"></span></td>
 
-                </tbody>
-            </table>
-        </tab>
-    </tabset>
+        </tr>
+
+        </tbody>
+    </table>
+</tab>
+</tabset>
 </section><!-- End License Details -->

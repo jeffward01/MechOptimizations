@@ -2,48 +2,49 @@
 
 <section class="search-filters" ng-include="'app/views/partials/search-Filters.html'"></section>
 
-<ul class="grid-header clearfix">
-    <li class="actions">
-        <button security actions="MyViewAssign" ng-click="sendReport()" class="btn btn-default"><span class="icon"></span>Export to CSV</button>
-    </li>
-    <li class="pagination">
-        <pagination total-items="pagination.totalItems" items-per-page="pagination.numPerPage" ng-model="pagination.currentPage" ng-change="pageChanged()" max-size="pagination.maxSize" class="pagination-sm" boundary-links="true"
-                    previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" isCollapsed="true"></pagination>
-    </li>
-    <li class="records">
-        <span class="pull-left" ng-if="licenses.length>0">Viewing {{(((pagination.currentPage-1)*pagination.numPerPage)+1)}} - {{(((pagination.currentPage-1)*pagination.numPerPage)+1)+(licenses.length)-1}} of {{pagination.totalItems}}</span>
-        <span class="pull-left" ng-if="licenses.length==0">Viewing 0 results</span>
-        <div class="dropdown">
-            <button class="dropdown-toggle btn btn-default" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" ng-click="pagination.isCollapsed=!pagination.isCollapsed">
-                {{pagination.numPerPage}}
-                <span class="{{setCaret(pagination.isCollapsed)}}"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                <li role="presentation" ng-click="changePageSize(pageSize);pagination.isCollapsed=true" ng-repeat="pageSize in pagination.pageSizeList"><a role="menuitem" tabindex="-1" href="">{{pageSize}}</a></li>
-            </ul>
-        </div>
-        <span class="pull-left"> results per page</span>
-    </li>
-    <li class="edit-columns">
-        <div class="dropdown" dropdown on-toggle="editColumnsDropdown(open);isEditColumnsCollapsed=!isEditColumnsCollapsed">
-            <button type="button" id="dropdownMenu1" class="btn btn-default" dropdown-toggle drop aria-expanded="true">
-                Edit Columns
-                <span class="{{setCaret(isEditColumnsCollapsed)}}"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" multiselect-dropdown>
-                <li><label class="checkbox disabled">Required</label></li>
-                <li ng-repeat="column in columns | filter:{isDefault:true}">
-                    <label class="checkbox disabled" for="#{{column.name}}-editcolumns"><input type="checkbox" ng-model="column.selected" ng-disabled="true" id="{{column.name}}-editcolumns" />{{column.name}}</label>
-                </li>
-                <li><hr /></li>
-                <li ng-repeat="column in columns | filter:{isDefault:false}" ng-click="showHideColumn(column, $event)">
-                    <label class="checkbox" for="#{{column.name}}-editcolumns"><input type="checkbox" ng-model="column.selected" ng-disabled="column.isDefault" id="{{column.name}}-editcolumns" />{{column.name}}</label>
-                </li>
+    <ul class="grid-header clearfix">
+        <li class="actions">
+                <button security actions="MyViewAssign" ng-disabled="pagination.totalItems == 0 || pagination.totalItems > 200" ng-click="sendReport()" class="btn btn-default"><span class="icon"></span>Export to CSV</button>
+                <span ng-if="pagination.totalItems > 200"> a maximum 200 licenses can be exported</span>
+        </li>
+        <li class="pagination">
+            <pagination total-items="pagination.totalItems" items-per-page="pagination.numPerPage" ng-model="pagination.currentPage" ng-change="pageChanged()" max-size="pagination.maxSize" class="pagination-sm" boundary-links="true"
+                        previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" isCollapsed="true"></pagination>
+        </li>
+        <li class="records">
+            <span class="pull-left" ng-if="licenses.length>0">Viewing {{(((pagination.currentPage-1)*pagination.numPerPage)+1)}} - {{(((pagination.currentPage-1)*pagination.numPerPage)+1)+(licenses.length)-1}} of {{pagination.totalItems}}</span>
+            <span class="pull-left" ng-if="licenses.length==0">Viewing 0 results</span>
+            <div class="dropdown">
+                <button class="dropdown-toggle btn btn-default" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" ng-click="pagination.isCollapsed=!pagination.isCollapsed">
+                    {{pagination.numPerPage}}
+                    <span class="{{setCaret(pagination.isCollapsed)}}"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                    <li role="presentation" ng-click="changePageSize(pageSize);pagination.isCollapsed=true" ng-repeat="pageSize in pagination.pageSizeList"><a role="menuitem" tabindex="-1" href="">{{pageSize}}</a></li>
+                </ul>
+            </div>
+            <span class="pull-left"> results per page</span>
+        </li>
+        <li class="edit-columns">
+            <div class="dropdown" dropdown on-toggle="editColumnsDropdown(open);isEditColumnsCollapsed=!isEditColumnsCollapsed">
+                <button type="button" id="dropdownMenu1" class="btn btn-default" dropdown-toggle drop aria-expanded="true">
+                    Edit Columns
+                    <span class="{{setCaret(isEditColumnsCollapsed)}}"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" multiselect-dropdown>
+                    <li><label class="checkbox disabled">Required</label></li>
+                    <li ng-repeat="column in columns | filter:{isDefault:true}">
+                        <label class="checkbox disabled" for="#{{column.name}}-editcolumns"><input type="checkbox" ng-model="column.selected" ng-disabled="true" id="{{column.name}}-editcolumns" />{{column.name}}</label>
+                    </li>
+                    <li><hr /></li>
+                    <li ng-repeat="column in columns | filter:{isDefault:false}" ng-click="showHideColumn(column, $event)">
+                        <label class="checkbox" for="#{{column.name}}-editcolumns"><input type="checkbox" ng-model="column.selected" ng-disabled="column.isDefault" id="{{column.name}}-editcolumns" />{{column.name}}</label>
+                    </li>
 
-            </ul>
-        </div>
-    </li>
-</ul>
+                </ul>
+            </div>
+        </li>
+    </ul>
     <table class="table" ng-if="licenses.length > 0" edit-columns="columns" hidden-columns="hiddenColumns" results-data="licenses">
         <thead>
             <tr>

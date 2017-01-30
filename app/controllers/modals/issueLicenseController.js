@@ -138,7 +138,7 @@ app.controller('issueLicenseController', ['$scope', 'licensesService', 'licenseP
     }
 
     $scope.ok = function () {
-        console.log(JSON.stringify($scope.selectedLicense));
+
         $scope.selectedLicense.licenseStatusId = 6;
         $scope.selectedLicense.licenseStatus.licenseStatus = "Issued";
         removeOutForSignatureAttachments();

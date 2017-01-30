@@ -1,10 +1,11 @@
 ﻿'use strict';
-app.factory('productsService', ['$http', 'ngAuthSettings', '$state', function ($http, ngAuthSettings, $state) {
+app.factory('productsService', ['$http', 'ngAuthSettings', '$state','headerProvider', function ($http, ngAuthSettings, $state,headerProvider) {
 
     var serviceBase = ngAuthSettings.apiServiceBaseUri;
 
     var productsServiceFactory = {};
-
+    var xModifiedByHeader = headerProvider.configureXModifedByHeader();
+    
     var _getProducts = function (searchParams) {
 
         return $http.get(serviceBase + 'api/RECsCTRL/products').then(function (results) {
@@ -176,7 +177,7 @@ app.factory('productsService', ['$http', 'ngAuthSettings', '$state', function ($
 
     var _saveProduct = function (request) {
         var url = serviceBase + 'api/RECsCTRL/Products/SaveProduct';
-        return $http.post(url, request)
+        return $http.post(url, request, xModifiedByHeader)
         .then(function (response) {
             return response;
         });
@@ -184,7 +185,7 @@ app.factory('productsService', ['$http', 'ngAuthSettings', '$state', function ($
 
     var _saveProductLink = function (request) {
         var url = serviceBase + 'api/RECsCTRL/Products/SaveProductLink';
-        return $http.post(url, request)
+        return $http.post(url, request, xModifiedByHeader)
         .then(function (response) {
             return response;
         });
@@ -224,7 +225,7 @@ app.factory('productsService', ['$http', 'ngAuthSettings', '$state', function ($
 
     var _updateProductPriority = function (request) {
         var url = serviceBase + 'api/RECsCTRL/Products/UpdateProductPriority';
-        return $http.post(url, request)
+        return $http.post(url, request, xModifiedByHeader)
         .then(function (response) {
             return response;
         });

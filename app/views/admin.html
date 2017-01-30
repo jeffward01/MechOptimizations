@@ -4,6 +4,8 @@
             <label>Admin</label></li>
     </ul>
 </nav>
+<pre>{{licensees | json}}</pre>
+<button type="button" ng-click="checkWorking()" placeholder="TEST">TEST</button>
 <ul class="grid-header clearfix">
     <li class="actions">
         
@@ -87,7 +89,7 @@
         <button class="btn btn-default btn-sm narrow" ng-click="closeSaveNewLicensee()"><span class="icon cancel narrow"></span></button>
     </td>
 </tr>
-<tr ng-repeat-start="licensee in licensees">
+<tr ng-repeat-start="licensee in licensees | filter:unique">
     <td ng-if="!licensee.editLicenseeVisible"><span ng-bind="licensee.name"></span></td>
     <!--<td>12345 Some Street</td>
     <td>STE #777</td>
@@ -220,7 +222,8 @@
                     <input type="text" ng-model="link.newContact.contactAddress.country" letters-only />
                 </td>
                 <td ng-if="link.editContactVisible" class="five-percent centered no-wrap">
-                    <input type="text" ng-model="link.newContact.contactAddress.postalCode" digits-only />
+                    <input type="text" ng-model="link.newContact.contactAddress.postalCode" digits-only/>
+                  
                 </td>
                 <td ng-if="link.editContactVisible" class="one-percent centered no-wrap">
                     <button class="btn btn-default btn-sm narrow" ng-click="saveEditedLicenseeContact(licensee,link)"><span class="icon save narrow"></span></button>

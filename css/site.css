@@ -713,10 +713,15 @@ td.licensed .badge.none {background-color:#990000;}
     white-space: nowrap;
 }
 
+.glowingBorder:hover {
+    animation: pulse-orange;
+}
 
-.glowingBorder { border-color: #f9ef1a; box-shadow:0 0 10px #f9ef1a; animation: pulse 5s infinite }
+/*Data Harmonization*/
+.glowingBorder-infinite { animation: pulse-orange 3s infinite;  }
 
-@keyframes pulse {
+
+@keyframes pulse-yellow {
     0% {
     border: solid 1px  #AEAEAE; box-shadow:0 0 1px transparent;
   }
@@ -734,6 +739,111 @@ td.licensed .badge.none {background-color:#990000;}
   }
 }
 
+
+
+@keyframes pulse-orange {
+    
+    0% {
+        color: black;
+    border: solid 1px  #AEAEAE; box-shadow:0 0 1px transparent;
+        background-color: #efefef;
+
+  }
+        25% {
+    
+     background-color: #EC5353;
+             color: white;
+
+       }
+
+   30% {
+         background-color: #E34A4A;
+        color: white;
+   }
+      35% {
+         background-color: #DA4141;
+        color: white;
+   }
+   40% {
+         background-color: #D13838;
+        color: white;      
+       }
+   45% {
+          background-color: #B51C1C;
+        color: white;    
+       
+   }
+     50% {
+   
+         background-color: #B51C1C;
+                 color: white;
+
+  }
+     55% {
+            background-color: #B51C1C;
+        color: white;
+     }
+      60% {
+            background-color: #D13838;
+        color: white;
+     }
+       65% {
+            background-color: #DA4141;
+        color: white;
+     }
+        70% {
+            background-color: #E34A4A;
+        color: white;
+     }
+       75% {
+  
+         /*background-color: #990000;*/
+        background-color: #EC5353;
+             color: white;
+
+  }
+  100% {color: black;
+    border: solid 1px  #AEAEAE; box-shadow:0 0 1px transparent;
+    background-color: #efefef;  
+  }
+}
+
+
+.rotate-360 {
+    -webkit-animation:spin 4s linear infinite;
+    -moz-animation:spin 4s linear infinite;
+    animation:spin 4s linear infinite;
+}
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+
+
 .fa-check {
   color: green;
 }
+
+.icon-green {
+    color: #336600;
+}
+
+.icon-yellow {
+    color :#FF9900;
+}
+
+.blank-dropdownWidth {
+    min-width: 100.49px;
+}
+
+.blank-dropdownHeight {
+    min-height: 21.2px;
+}
+.blank-dropdownMargin {
+    margin-left: 70px;
+}
+
+
+/*Modal - Upload Doc*/
+.uploadDoc-dropdown { margin-top: 25px;position: relative;float: right; margin-bottom: -20px }
+
